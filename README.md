@@ -3,7 +3,14 @@
 REDMAGICと同じ思想(自社シリコン・冷却技術・ゲーミング特化)を持つ架空の日本企業
 「株式会社朱雀(SUZAKU Inc.)」のコーポレートサイトです。
 2022年5月1日創業、2023年5月1日初製品発表という設定で、製品・技術・法人・開発者・
-サポート・法務まで154ページをフル構成で実装しています。
+サポート・法務・コラボレーションまで **約228ページ** をフル構成で実装しています。
+
+主な領域:
+
+- **一般製品**: スマホ/タブレット4ライン・全世代、アクセサリ、比較ツール、ストア(カート〜チェックアウト)
+- **法人向け(一般と完全分離・`/business/` 配下)**: 法人専用スマホ「KANAME B1」・法人専用ストア(見積フロー)・法人専用OS
+- **コラボレーション**: 第1弾4作品(原神/鳴潮/NTE/エンドフィールド)の専用LP+専用SoC、第2弾ティザー(相手非公開)、コラボタブレット予告
+- **技術/OS/ニュース/サポート/法務/企業情報**、管理ボード(`/admin/`)
 
 **すべてのコンテンツ・企業・製品・数値はフィクションです。**
 
@@ -17,21 +24,28 @@ REDMAGICと同じ思想(自社シリコン・冷却技術・ゲーミング特�
 /
 ├── index.html ほか各ページ     # 生成物(ディレクトリ = ルート)
 ├── assets/
-│   ├── css/   tokens / base / components / animations
+│   ├── css/   tokens / base / components / animations /
+│   │          collab-core・collab-{genshin,wuwa,nte,endfield,next}(コラボLP専用)
 │   ├── js/    keys(sz_*キー一元管理) / fmt(esc・yen共通ヘルパー) /
-│   │          main(nav・Cookie同意・演出) / charts(SVGグラフ) / store(カート・購入) /
-│   │          pages(FAQ・検索ほか) / auth-core・auth-guard・auth-account・
-│   │          auth-admin・auth-status(認証・アクセス制御・管理ボード、責務ごとに分割)
+│   │          main(nav・Cookie同意・演出) / charts(SVGグラフ) / store(カート・購入・比較) /
+│   │          biz(法人機の構成プレビュー・store非依存) / pages(FAQ・検索・もしかして) /
+│   │          collab-core+collab-{slug}(コラボLP・カウントダウン・ティザー演出) /
+│   │          auth-core・auth-guard・auth-account・auth-admin・auth-status(認証・管理ボード)
 │   └── img/   全SVG自動生成(製品画像・ダイアグラム)
-├── data/products.js            # クライアント用データ(自動生成)
+├── data/products.js            # クライアント用データ(自動生成・法人機は含めない)
 ├── src/pages/                  # フラグメント(本文のみのHTML+METAコメント)
+├── project-notes/              # 内部メモ(構成監査・コラボ調査・backlog。配信対象外)
 └── scripts/
     ├── gen.py                  # 静的サイトジェネレータ(このリポジトリの心臓)
-    ├── data_products.py        # 製品データ(単一ソース)
+    ├── data_products.py        # 製品データ(単一ソース。一般 + 法人 BIZ_PRODUCTS + 法人OS)
+    ├── data_collab.py          # コラボデータ(第1弾/第2弾ティザー/専用シリコン/タブレット予告)
     ├── data_tech.py            # 技術・OSデータ
     ├── data_misc.py            # ニュース・FAQ・沿革
-    ├── svg_art.py              # SVGアート生成
-    └── check_links.py          # リンク切れ検査
+    ├── data_docs.py            # 開発者ドキュメント
+    ├── svg_art.py              # SVGアート生成(製品・シルエット・ダイアグラム)
+    ├── check_links.py          # リンク切れ検査
+    ├── audit.js                # 全ページ監査(Playwright)
+    └── shot.js / interact.js   # スクショ / 主要インタラクションの実地検証(QA用)
 ```
 
 ## ページの編集・再生成
@@ -57,7 +71,9 @@ node scripts/audit.js           # AUDIT_WIDTH=1440 でPC幅、AUDIT_BASE で配�
 
 Cookie同意バナー(カテゴリ別設定) / カート / 多段チェックアウト(Luhn検証・
 支払方法・配送日時指定・注文番号発行) / 注文照会 / 修理受付と照会 / 比較ツール
-(スペック表+レーダーチャート) / FAQ検索 / ニュースフィルタ / サイト内検索 /
+(実測ダッシュボード+最良値ハイライト+レーダーチャート) / 法人機の構成プレビュー
+(色・容量・カメラ切替→画像/価格連動、`biz.js`) / FAQ検索 / ニュースフィルタ /
+サイト内検索(「もしかして」表記ゆれサジェスト付き) / コラボ発表カウントダウン /
 各種お問い合わせフォーム / SVGチャート(棒・折れ線・レーダー・ドーナツ、表フォールバック付き) /
 アカウント・ログイン / メンテナンスシステム / サイトお知らせバナー / 表示設定(`/settings/`)
 
@@ -106,6 +122,35 @@ WAI-ARIA Tabsパターン(自動アクティベーション・roving tabindex・
 URLが変わるため、CDN・ブラウザの古いキャッシュを確実に回避できる
 (`vercel.json` の `/assets/` は `immutable` で長期キャッシュ)。
 利用者は Cookie設定ページ(`/legal/cookie/`)からキャッシュを手動削除もできる。
+
+### 法人向けエリア(一般ラインと完全分離)
+
+法人向けは一般ラインと **完全に分離** している。`data_products.py` で法人機を
+`BIZ_PRODUCTS` として `PHONES` から抽出し、`ALL_PRODUCTS`(=一般ストア/製品ハブ/比較/
+検索/サイトマップの母集団)からは除外する。法人コンテンツは `/business/` 配下でのみ提供する:
+
+- `/business/kaname-b1/`(+`/specs/`) — 法人専用スマホ「KANAME B1」。カート購入ではなく
+  **見積・導入相談フロー**。構成プレビューは `store.js` 非依存の専用 `biz.js`(`data-biz` 属性)
+- `/business/store/` — 法人専用ストア(導入相談・お見積り)
+- `/business/os/` — 法人専用OS「SUZAKU OS for Business」(`BIZ_OS` 単一ソース)
+
+### コラボレーション(`/collab/`)
+
+- **第1弾(公開・受付中)**: 原神/鳴潮/NTE/エンドフィールドの4作品。作品ごとに
+  **完全個別のLPレイアウト**(`gen.py` の `_collab_lp_{slug}`)+ 専用SoC等のシリコンページ。
+  配色・フォントは各作品のトークン(`collab-{slug}.css` / `COLLAB_FONTS`)で切り替える
+- **第2弾ティザー(相手非公開)**: `/collab/next{,-2,-3,-4}/`。共通の `_collab_lp_teaser` と
+  `collab-next.css`(`.collab--next`)を **`assets_slug` で共有** しつつ、発表カウントダウン・
+  ヒント・「言えること」・進捗バー・マーキー・通知CTAを掲載。ヒーロー背景と一部UIは
+  `nx--{slug}` フックで **作品ごとに意匠を一部だけ変える**(相手名は一切出さない)
+- **コラボタブレット予告**: `/collab/{slug}/tablet/`。第1弾4作品の続きを各作品テーマで予告
+- ハブ `/collab/` は「第1弾(受付中)/第2弾(COMING SOON)/タブレット予告」を整理。
+  ダーク背景で見えにくい暗いアクセント色(例: エンドフィールドの `#141412`)は
+  `_hub_card_style()` が `accent2` を表示色に採用して可読性を担保する
+
+> コラボ相手・用語の表記根拠は `project-notes/collab-research.md`、未着手アイデアは
+> `project-notes/backlog.md` を参照(いずれも `.vercelignore` で配信対象外)。
+> 第2弾の相手作品名はリポジトリのどこにも記載しない方針。
 
 ## Next.js(App Router)への移行ガイド
 
