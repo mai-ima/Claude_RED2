@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>製品を比較する | SUZAKU(朱雀)</title>
-<meta name="description" content="SUZAKUの全スマートフォン・タブレットを最大3機種まで並べてスペック比較。ディスプレイ、SoC、冷却、バッテリーを一覧で。">
+<meta name="description" content="SUZAKUの全スマートフォン・タブレットを最大3機種まで並べてスペック比較。AnTuTu・冷却・カメラ・充電に加え、30分後fps維持率・タッチ遅延・コスパの実測ダッシュボードで、最良値をひと目で。">
 <meta property="og:title" content="製品を比較する | SUZAKU(朱雀)">
-<meta property="og:description" content="SUZAKUの全スマートフォン・タブレットを最大3機種まで並べてスペック比較。ディスプレイ、SoC、冷却、バッテリーを一覧で。">
+<meta property="og:description" content="SUZAKUの全スマートフォン・タブレットを最大3機種まで並べてスペック比較。AnTuTu・冷却・カメラ・充電に加え、30分後fps維持率・タッチ遅延・コスパの実測ダッシュボードで、最良値をひと目で。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SUZAKU(朱雀)">
 <meta name="theme-color" content="#0b0b10">
@@ -15,10 +15,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=fef411114f">
-<link rel="stylesheet" href="/assets/css/base.css?v=fef411114f">
-<link rel="stylesheet" href="/assets/css/components.css?v=fef411114f">
-<link rel="stylesheet" href="/assets/css/animations.css?v=fef411114f">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=c6ad26b670">
+<link rel="stylesheet" href="/assets/css/base.css?v=c6ad26b670">
+<link rel="stylesheet" href="/assets/css/components.css?v=c6ad26b670">
+<link rel="stylesheet" href="/assets/css/animations.css?v=c6ad26b670">
 
 </head>
 <body class="page-products-compare">
@@ -260,20 +260,80 @@
   <div class="hero__inner hero-enter">
     <p class="eyebrow">COMPARE</p>
     <h1 class="t-h1">どのモデルが、あなた向き?</h1>
-    <p class="t-soft" style="max-width:640px">スマートフォン・タブレット全機種(歴代モデル含む)を最大3台まで並べて比較できます。</p>
+    <p class="t-soft" style="max-width:640px">スマートフォン・タブレット全機種(歴代・コラボ含む)を最大3台まで並べて比較。スペックに加え、実測ダッシュボードで持続性能・タッチ遅延・コスパまで見比べられます。</p>
   </div>
 </section>
 
 <section class="section--sm section--flush-top" style="padding-top:var(--sp-5)">
+  <div class="container">
+    <div class="section-head" style="text-align:left"><p class="eyebrow">QUICK COMPARE</p><h2 class="t-h3">ワンタップ比較プリセット</h2>
+    <p class="t-soft t-small">よくある組み合わせをワンタップで。下のセレクトは自由に差し替えられます。</p></div>
+    <div class="cmp-presets" id="comparePresets">
+      <button type="button" class="cmp-preset" data-preset="suzaku-4,zankyo"><span class="cmp-preset__k">旗艦対決</span><span class="cmp-preset__s">SUZAKU 4 vs 残響</span></button>
+      <button type="button" class="cmp-preset" data-preset="neo-3,tsubame-3"><span class="cmp-preset__k">コスパ対決</span><span class="cmp-preset__s">Neo 3 vs TSUBAME 3</span></button>
+      <button type="button" class="cmp-preset" data-preset="suzaku-4,suzaku-3,suzaku-2"><span class="cmp-preset__k">世代比較</span><span class="cmp-preset__s">SUZAKU 4 / 3 / 2</span></button>
+      <button type="button" class="cmp-preset" data-preset="pad-2,pad-neo"><span class="cmp-preset__k">タブレット旗艦</span><span class="cmp-preset__s">Pad 2 vs Pad Neo</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="section--sm" style="padding-top:0">
   <div class="container" id="compareTool">
-    <div class="compare-picker" style="margin-bottom:32px">
+    <div class="compare-picker" style="margin-bottom:28px">
       <div class="field"><label>モデル 1</label><select class="select compare-select" aria-label="比較する機種1"></select></div>
       <div class="field"><label>モデル 2</label><select class="select compare-select" aria-label="比較する機種2"></select></div>
       <div class="field"><label>モデル 3</label><select class="select compare-select" aria-label="比較する機種3"></select></div>
     </div>
+
+    <div class="section-head" style="text-align:left"><p class="eyebrow">DASHBOARD</p><h2 class="t-h3">実測ダッシュボード</h2>
+    <p class="t-soft t-small">数値バーで一目で比較。<strong>最良値には王冠</strong>が付きます。持続性能・充電時間は当社試験環境の推定値です。</p></div>
+    <div id="compareDash" aria-live="polite"></div>
+
+    <div class="section-head" style="text-align:left;margin-top:var(--sp-6)"><p class="eyebrow">FULL SPEC</p><h2 class="t-h3">スペック全比較</h2>
+    <p class="t-soft t-small">最良値をハイライトし、他機種は最良値との差を併記します。</p></div>
     <div id="compareResult" aria-live="polite"></div>
+
     <div class="chart-grid" style="margin-top:var(--sp-6)">
       <figure class="chart" id="compareRadar" hidden></figure>
+    </div>
+  </div>
+</section>
+
+<div class="band-light" data-theme="light">
+<section class="section--sm">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">HOW TO READ</p><h2 class="t-h2">比較の読み方</h2>
+    <p class="t-soft">数字の意味を知っておくと、選びやすくなります。</p></div>
+    <div class="grid grid--3 reveal-stagger">
+      <div class="card"><h3 class="t-h4">AnTuTu / コスパ</h3><p class="t-small t-soft">AnTuTuは総合性能の目安。「コスパ(1万円あたりAnTuTu)」は価格で割った指標で、<strong>大きいほど割安</strong>。去年の旗艦を継ぐNeoラインが高く出やすい項目です。</p></div>
+      <div class="card"><h3 class="t-h4">30分後fps維持率</h3><p class="t-small t-soft">連続プレイ30分後に、平均fpsのどれだけを保てるか。<strong>冷却の実力</strong>が出る項目で、ゲーミング系ほど高くなります。一般・エントリー機は対象外(—)です。</p></div>
+      <div class="card"><h3 class="t-h4">タッチ遅延 / 充電時間</h3><p class="t-small t-soft">どちらも<strong>小さいほど良い</strong>指標。タッチ遅延はリフレッシュレートから、0→50%充電は容量と充電Wから算出した推定値です。</p></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="section--sm">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">RECOMMENDED</p><h2 class="t-h2">用途で選ぶなら</h2>
+    <p class="t-soft">迷ったら、重視するポイントから。</p></div>
+    <div class="grid grid--4 grid--cards reveal-stagger">
+      <a class="card card--hover" href="/products/phone/suzaku-4/"><p class="eyebrow">ゲーム重視</p><h3 class="t-h4">SUZAKU 4</h3><p class="t-small t-soft">175Hzと氷刃V4の多層冷却。30分後も落ちない持続性能を最優先するなら旗艦を。</p><p class="link-arrow">見る</p></a>
+      <a class="card card--hover" href="/products/phone/tsubame-3/"><p class="eyebrow">カメラ重視</p><h3 class="t-h4">TSUBAME 3</h3><p class="t-small t-soft">旗艦と同じ大型センサー「天眼 RS-2+」を178gに。写真画質は妥協したくない人へ。</p><p class="link-arrow">見る</p></a>
+      <a class="card card--hover" href="/products/phone/neo-3/"><p class="eyebrow">コスパ重視</p><h3 class="t-h4">SUZAKU Neo 3</h3><p class="t-small t-soft">去年の旗艦の性能と冷却を8万円以下で。コスパ指標がもっとも高く出るライン。</p><p class="link-arrow">見る</p></a>
+      <a class="card card--hover" href="/products/phone/tsubame-lite-2/"><p class="eyebrow">価格重視</p><h3 class="t-h4">TSUBAME Lite 2</h3><p class="t-small t-soft">3万円台で120Hz・5,000mAh・4年更新。はじめての一台にも2台目にも。</p><p class="link-arrow">見る</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="section--sm">
+  <div class="container container--narrow">
+    <div class="section-head"><p class="eyebrow">Q&amp;A</p><h2 class="t-h2">比較でよくある質問</h2></div>
+    <div class="accordion">
+      <div class="accordion__item"><button class="accordion__q" aria-expanded="false"><span>「コスパ(1万円あたりAnTuTu)」はどう見ればいい?</span></button><div class="accordion__a"><div class="accordion__a-inner"><div class="accordion__a-body"><p>AnTuTuスコアを本体価格(万円)で割った、1万円あたりの性能値です。数字が大きいほど、価格に対して性能が高い=割安であることを意味します。去年のフラッグシップSoCを受け継ぐNeoラインや、価格を抑えたエントリー機で高く出やすい指標です。</p></div></div></div></div>
+      <div class="accordion__item"><button class="accordion__q" aria-expanded="false"><span>30分後fps維持率が「—」の機種があるのはなぜ?</span></button><div class="accordion__a"><div class="accordion__a-inner"><div class="accordion__a-body"><p>30分後fps維持率は、ゲーミング系ラインの持続性能を示す当社試験値です。一般向け・エントリー機は高負荷ゲームの連続計測対象外のため「—」と表示しています。ゲーム性能を重視する場合は、この値が高いゲーミング系(SUZAKU・Neo・Pad・コラボ)からお選びください。</p></div></div></div></div>
+      <div class="accordion__item"><button class="accordion__q" aria-expanded="false"><span>タッチ遅延・充電時間は実測値ですか?</span></button><div class="accordion__a"><div class="accordion__a-inner"><div class="accordion__a-body"><p>ダッシュボードのタッチ遅延・0→50%充電時間は、各機種のリフレッシュレート・バッテリー容量・有線充電Wという公表仕様から算出した推定値です。実際の値は使用環境・充電器・温度により変動します。いずれも数字が小さいほど良い指標です。</p></div></div></div></div>
+      <div class="accordion__item"><button class="accordion__q" aria-expanded="false"><span>法人向けの KANAME B1 は比較できますか?</span></button><div class="accordion__a"><div class="accordion__a-inner"><div class="accordion__a-body"><p>KANAME B1 は法人専用モデルのため、この一般向け比較ツールには含めていません。仕様の確認・他構成との比較は<a href="/business/kaname-b1/">KANAME B1 製品ページ</a>、導入のご相談は<a href="/business/store/">法人向けストア</a>をご覧ください。</p></div></div></div></div>
     </div>
   </div>
 </section>
@@ -342,18 +402,19 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="/assets/js/keys.js?v=fef411114f" defer></script>
-<script src="/assets/js/fmt.js?v=fef411114f" defer></script>
-<script src="/data/products.js?v=fef411114f" defer></script>
-<script src="/assets/js/main.js?v=fef411114f" defer></script>
-<script src="/assets/js/charts.js?v=fef411114f" defer></script>
-<script src="/assets/js/store.js?v=fef411114f" defer></script>
-<script src="/assets/js/pages.js?v=fef411114f" defer></script>
-<script src="/assets/js/auth-core.js?v=fef411114f" defer></script>
-<script src="/assets/js/auth-guard.js?v=fef411114f" defer></script>
-<script src="/assets/js/auth-account.js?v=fef411114f" defer></script>
-<script src="/assets/js/auth-admin.js?v=fef411114f" defer></script>
-<script src="/assets/js/auth-status.js?v=fef411114f" defer></script>
+<script src="/assets/js/keys.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/fmt.js?v=c6ad26b670" defer></script>
+<script src="/data/products.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/main.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/charts.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/store.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/biz.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/pages.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/auth-core.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/auth-guard.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/auth-account.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/auth-admin.js?v=c6ad26b670" defer></script>
+<script src="/assets/js/auth-status.js?v=c6ad26b670" defer></script>
 
 </body>
 </html>

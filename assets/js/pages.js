@@ -211,8 +211,46 @@
       return out;
     }
 
+    /* 「もしかして」用: 各同義語グループの代表表示名。かな/ラテン表記で入力されたら
+       正式表記(漢字・作品名)を提案する。variants は szNorm 済みで持つ。 */
+    var SUGGEST_GROUPS = [
+      { display: "朱雀", variants: ["すざく", "朱雀", "suzaku"] },
+      { display: "雷", variants: ["らい", "雷", "rai"] },
+      { display: "燕", variants: ["つばめ", "燕", "tsubame"] },
+      { display: "七耀", variants: ["しちよう", "七耀", "shichiyo"] },
+      { display: "残響", variants: ["ざんきょう", "残響", "zankyo"] },
+      { display: "夜行", variants: ["やこう", "夜行", "yako"] },
+      { display: "前線", variants: ["ぜんせん", "前線", "zensen"] },
+      { display: "原神", variants: ["げんしん", "原神", "genshin"] },
+      { display: "鳴潮", variants: ["めいちょう", "鳴潮", "wuwa"] },
+      { display: "NTE", variants: ["えぬてぃーいー", "nte"] },
+      { display: "エンドフィールド", variants: ["えんどふぃーるど", "endfield", "エンドフィールド"] }
+    ].map(function (g) { return { display: g.display, nvar: g.variants.map(szNorm) }; });
+
+    /* 生クエリの各語について、別表記なら代表表示名へ置換した提案文字列を返す(なければ null)。 */
+    function suggestFor(raw) {
+      var changed = false;
+      var out = String(raw).trim().split(/\s+/).map(function (rt) {
+        var n = szNorm(rt);
+        for (var i = 0; i < SUGGEST_GROUPS.length; i++) {
+          var g = SUGGEST_GROUPS[i];
+          if (g.nvar.indexOf(n) !== -1 && szNorm(g.display) !== n) { changed = true; return g.display; }
+        }
+        return rt;
+      });
+      return changed ? out.join(" ") : null;
+    }
+    function suggestHtml(raw) {
+      var s = suggestFor(raw);
+      if (!s) return "";
+      return '<div class="did-you-mean">もしかして: <button type="button" class="dym-chip" data-suggest="' +
+        esc(s) + '">' + esc(s) + "</button></div>";
+    }
+
     function doSearch(q) {
-      q = szNorm(q.trim());
+      var raw = String(q).trim();
+      var sug = suggestHtml(raw);
+      q = szNorm(raw);
       var info = $("#searchInfo");
       if (!q) {
         searchResults.innerHTML = "";
@@ -234,12 +272,12 @@
         });
         return { item: item, score: score };
       }).filter(Boolean).sort(function (a, b) { return b.score - a.score; }).slice(0, 40);
-      if (info) info.textContent = '「' + q + '」の検索結果: ' + hits.length + "件";
+      if (info) info.textContent = '「' + raw + '」の検索結果: ' + hits.length + "件";
       if (!hits.length) {
-        searchResults.innerHTML = '<div class="empty"><p class="empty__icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></p><p>一致する結果が見つかりませんでした。別のキーワードをお試しください。</p></div>';
+        searchResults.innerHTML = sug + '<div class="empty"><p class="empty__icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></p><p>一致する結果が見つかりませんでした。別のキーワードをお試しください。</p></div>';
         return;
       }
-      searchResults.innerHTML = hits.map(function (h) {
+      searchResults.innerHTML = sug + hits.map(function (h) {
         return '<a class="card card--hover" href="' + h.item.url + '">' +
           '<p class="t-micro" style="color:var(--accent);font-weight:700">' + esc(h.item.type) + "</p>" +
           '<h2 class="t-h4">' + esc(h.item.title) + "</h2>" +
@@ -249,6 +287,19 @@
     if (input) {
       input.addEventListener("input", function () { doSearch(input.value); });
     }
+    // 「もしかして」チップ: クリックで代表表記に置換して再検索(URLも更新)
+    searchResults.addEventListener("click", function (e) {
+      var chip = e.target.closest ? e.target.closest("[data-suggest]") : null;
+      if (!chip) return;
+      e.preventDefault();
+      var s = chip.getAttribute("data-suggest");
+      if (input) input.value = s;
+      if (window.history && history.replaceState) {
+        history.replaceState(null, "", "?q=" + encodeURIComponent(s));
+      }
+      doSearch(s);
+      if (input) input.focus();
+    });
     doSearch(q0);
   }
 
