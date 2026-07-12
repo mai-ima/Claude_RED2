@@ -3412,7 +3412,7 @@ def _collab_lp_teaser(cfg, phone, accs):
     sib_links = "".join(
         f'<a class="nx-sib" style="--cl-accent:{c["tokens"]["accent"]}" href="/collab/{c["slug"]}/">'
         f'<span class="nx-sib__q">???</span>'
-        f'<span class="nx-sib__d">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
+        f'<span class="nx-sib__d" data-reveal="{esc(c.get("reveal_at", ""))}" data-soon="まもなく発表">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
         f'<span class="nx-sib__go">ティザーを見る →</span></a>'
         for c in sibs)
     reveal = cfg.get("reveal_at", "")
@@ -3444,6 +3444,7 @@ def _collab_lp_teaser(cfg, phone, accs):
         <span class="cl-count__unit"><b data-c="s">--</b><i>秒</i></span>
       </div>
       <p class="cl-count__end">{esc(reveal[:10].replace('-', '/'))} 20:00 (JST) 発表予定</p>
+      <p class="cl-count__soon" hidden>発表準備中 — まもなく公開します。</p>
     </div>
   </div>
 </section>
@@ -3571,6 +3572,7 @@ def build_collab_tablet_teaser(cfg):
         <span class="cl-count__unit"><b data-c="s">--</b><i>秒</i></span>
       </div>
       <p class="cl-count__end">{esc(reveal[:10].replace('-', '/'))} 20:00 (JST) 発表予定</p>
+      <p class="cl-count__soon" hidden>発表準備中 — まもなく公開します。</p>
     </div>
   </div>
 </section>
@@ -3627,7 +3629,7 @@ def build_collab_hub():
                 f'<a class="collab-card collab-card--soon" style="{style}" href="/collab/{cfg["slug"]}/">'
                 f'<span class="collab-card__game">{esc(cfg["game"])}</span>'
                 f'<span class="collab-card__edition">{esc(cfg["edition"])}</span>'
-                f'<span class="collab-card__tag">{reveal_tag}</span>'
+                f'<span class="collab-card__tag" data-reveal="{esc(cfg.get("reveal_at", ""))}" data-soon="まもなく公開 — 発表準備中">{reveal_tag}</span>'
                 f'<span class="collab-card__go">ティザーを見る →</span></a>')
 
     # コラボタブレット予告(第1弾の続き)。ページは未公開のため表示のみ。
@@ -3640,7 +3642,8 @@ def build_collab_hub():
             continue
         tok = cfg["tokens"]
         style = _hub_card_style(tok)
-        trv = cfg.get("tablet", {}).get("reveal_at", "")[:10].replace("-", ".")
+        trv_iso = cfg.get("tablet", {}).get("reveal_at", "")
+        trv = trv_iso[:10].replace("-", ".")
         tab_tag = f"COMING SOON — {trv} 発表予定" if trv else "COMING SOON"
         tab_href = f'/collab/{cfg["slug"]}/tablet/' if cfg.get("tablet") else f'/collab/{cfg["slug"]}/'
         tab_dev = cfg.get("tablet", {}).get("device", "")
@@ -3649,7 +3652,7 @@ def build_collab_hub():
             f'{tab_icon}'
             f'<span class="collab-tabcard__game">SUZAKU × {esc(cfg["game"])}</span>'
             f'<span class="collab-tabcard__name">{esc(tab_dev) if tab_dev else "コラボレーションタブレット"}</span>'
-            f'<span class="collab-tabcard__tag">{tab_tag}</span>'
+            f'<span class="collab-tabcard__tag" data-reveal="{esc(trv_iso)}" data-soon="COMING SOON — まもなく発表">{tab_tag}</span>'
             f'<span class="collab-tabcard__go">予告を見る →</span></a>')
     body = f"""
 <section class="hero hero--sub">

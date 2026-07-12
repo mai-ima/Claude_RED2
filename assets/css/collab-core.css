@@ -210,6 +210,17 @@
 
 .cl-count__end { margin-top: 10px; font-size: 0.78rem; color: var(--cl-soft); }
 
+/* 発表後グレース状態(第2弾/タブレットの発表カウントダウンのみ) */
+.cl-count.is-ended .cl-count__row { opacity: 0.32; filter: saturate(0.4); }
+.cl-count__soon {
+  margin-top: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--cl-accent);
+}
+.cl-count.is-ended .cl-count__end { color: var(--cl-accent); font-weight: 600; }
+
 .cl-stock__bar {
   height: 12px;
   border-radius: 999px;

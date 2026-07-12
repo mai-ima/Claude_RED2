@@ -453,5 +453,22 @@
     });
   });
 
+  /* ---------- 発表日ラベルの発表後差し替え(コラボ第2弾ハブ/兄弟/タブレット等) ----------
+     data-reveal(ISO日時)が現在時刻を過ぎたら、data-soon の文言へ差し替える。
+     reveal_at 自体は変えず、実時間の経過で「発表予定→まもなく発表」に見せる。
+     コラボLPだけでなくハブ(main.jsのみ読込)でも動くよう、ここに置く。 */
+  (function revealLabels() {
+    var now = Date.now();
+    $$("[data-reveal][data-soon]").forEach(function (el) {
+      var rv = el.getAttribute("data-reveal");
+      if (!rv) return;
+      var t = new Date(rv).getTime();
+      if (!isNaN(t) && now >= t) {
+        el.textContent = el.getAttribute("data-soon");
+        el.classList.add("is-soon");
+      }
+    });
+  })();
+
   szUpdateCartBadge();
 })();

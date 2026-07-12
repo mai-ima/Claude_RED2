@@ -22,6 +22,10 @@
       s: countEl.querySelector('[data-c="s"]')
     };
     var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+    // 第2弾/タブレットの「発表カウントダウン」だけに存在する発表後グレース枠。
+    // アクティブなコラボの「受付終了カウントダウン」には無いため、この有無で用途を判別する。
+    var soonEl = countEl.querySelector(".cl-count__soon");
+    var endEl = countEl.querySelector(".cl-count__end");
     var timer = null;
     var tick = function () {
       var diff = until - Date.now();
@@ -31,6 +35,11 @@
         if (slots.m) slots.m.textContent = "00";
         if (slots.s) slots.s.textContent = "00";
         countEl.classList.add("is-ended");
+        // 発表日時を過ぎたら、相手は伏せたまま「発表準備中」の受け皿へ切り替える。
+        if (soonEl) {
+          soonEl.hidden = false;
+          if (endEl) endEl.textContent = "まもなく発表(準備中)";
+        }
         if (timer) clearInterval(timer);
         return;
       }
