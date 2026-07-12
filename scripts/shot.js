@@ -20,7 +20,8 @@ const path = require('path');
     browser = await chromium.launch();
   }
   // reduced-motion にするとカウントアップ演出がスキップされ、統計値が最終値で描画される
-  const ctx = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
+  const dsf = parseFloat(process.env.SHOT_DSF || '2');
+  const ctx = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: dsf, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   for (const p of paths) {
     const url = base + p;
