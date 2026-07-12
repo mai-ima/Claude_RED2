@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from data_products import ALL_PRODUCTS, PHONES, TABLETS, ACCESSORIES, LINES  # noqa: E402
+from data_products import ALL_PRODUCTS, PHONES, TABLETS, ACCESSORIES, LINES, BIZ_PRODUCTS, BIZ_OS  # noqa: E402
 from data_collab import COLLABS, COLLAB_SILICON, COLLAB_SOC_CLOCK, collab_by_slug  # noqa: E402
 from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
@@ -213,7 +213,7 @@ def acc_compat_table(p):
 LINE_FAQ = {
     "biz": [
         ("個人でも購入できますか?",
-         "はい、購入自体は可能です。ただし要 KANAME B1 は法人運用(MDM管理・キッティング・保守契約)を前提に設計されており、ボリュームディスカウントや引取交換保守などは<a href='/business/contact/'>法人窓口</a>経由のご契約が対象です。"),
+         "KANAME B1 は法人運用(MDM管理・キッティング・保守契約)を前提に設計された法人専用モデルで、個人向けの単体販売は行っていません。導入は<a href='/business/store/'>法人向けストア</a>のお見積り・ご相談から、<a href='/business/contact/'>法人窓口</a>経由のご契約が対象です。"),
         ("カメラレス仕様は後からカメラを追加できますか?",
          "できません。カメラレス仕様はソフトウェアでの無効化ではなく、カメラモジュールを物理的に搭載しない構成です。撮影禁止区域の持ち込み審査でも、背面のSECURE刻印と型番で判別できます。"),
         ("MDMは何に対応していますか?",
@@ -871,6 +871,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 <script src="/assets/js/main.js?v={ASSET_V}" defer></script>
 <script src="/assets/js/charts.js?v={ASSET_V}" defer></script>
 <script src="/assets/js/store.js?v={ASSET_V}" defer></script>
+<script src="/assets/js/biz.js?v={ASSET_V}" defer></script>
 <script src="/assets/js/pages.js?v={ASSET_V}" defer></script>
 <script src="/assets/js/auth-core.js?v={ASSET_V}" defer></script>
 <script src="/assets/js/auth-guard.js?v={ASSET_V}" defer></script>
@@ -1391,6 +1392,237 @@ def build_product_page(p):
         render_page(url + "specs/", f"{p['name']} 仕様", f"{p['name']}の詳細スペック一覧。サイズ、性能、ディスプレイ、カメラ、バッテリー、通信仕様。",
                     spec_body, "dark", crumbs[:-1] + [(p["name"], url), ("仕様", None)], "製品",
                     layout="collab" if collab_cfg else None, collab=collab_cfg, collab_lp=False)
+
+
+# ==========================================================================
+# 法人向け(一般ラインと完全分離・/business/ 配下)
+# ==========================================================================
+
+BIZ_GLOW = "#4a7ac8"
+
+
+def biz_url(p):
+    return f"/business/{p['id']}/"
+
+
+def biz_buy_module(p):
+    """法人機の構成プレビュー(色/容量/カメラ+背面正面トグル)。カートではなく見積導線。
+    store.js の .buy-grid[data-product] とは衝突しないよう data-biz 属性で分離し、biz.js が制御する。"""
+    swatches = "".join(
+        f'<button type="button" class="swatch{" is-active" if i == 0 else ""}" data-color-index="{i}" '
+        f'aria-pressed="{"true" if i == 0 else "false"}" style="--swatch:{c["hex"]}" '
+        f'aria-label="{esc(c["name"])}" title="{esc(c["name"])}"></button>'
+        for i, c in enumerate(p["colors"]))
+    storages = "".join(f"""
+      <label class="choice">
+        <input type="radio" name="bizstorage" value="{i}" data-delta="{s['delta']}" {"checked" if i == 0 else ""}>
+        <span class="choice__radio"></span>
+        <span class="choice__body"><span class="choice__title">{esc(s['label'])}</span></span>
+        <span class="choice__price">{yen(p['price'] + s['delta'])}</span>
+      </label>""" for i, s in enumerate(p["storage"]))
+    camopts = "".join(f"""
+      <label class="choice">
+        <input type="radio" name="bizcam" value="{i}" {"checked" if i == 0 else ""}>
+        <span class="choice__radio"></span>
+        <span class="choice__body"><span class="choice__title">{esc(o['label'])}</span>
+        <span class="choice__sub t-micro t-faint">{esc(o.get('note', ''))}</span></span>
+        <span class="choice__price">{('+' + yen(o['delta'])) if o.get('delta') else '±¥0'}</span>
+      </label>""" for i, o in enumerate(p.get("camera_options", [])))
+    color_names = " / ".join(c["name"] for c in p["colors"])
+    return f"""
+<section class="section--sm" id="config">
+  <div class="container">
+    <div class="buy-grid" data-biz="{p['id']}" data-base="{p['price']}" data-v="{ASSET_V}">
+      <div class="buy-media reveal-l">
+        <img id="bizImage" src="{pimg(p['id'])}" alt="{esc(p['name'])}" width="360" height="640">
+        <div class="buy-view" role="group" aria-label="表示切替">
+          <button type="button" class="buy-view__btn is-active" data-bizview="back" aria-pressed="true">背面</button>
+          <button type="button" class="buy-view__btn" data-bizview="front" data-front-src="{pimg_front(p['id'])}" data-front-nc-src="/assets/img/products/{p['id']}-nc-front.svg?v={ASSET_V}" aria-pressed="false">正面</button>
+        </div>
+      </div>
+      <div class="stack reveal-r">
+        <p class="eyebrow">法人専用モデル — お見積り</p>
+        <h2 class="t-h3">{esc(p['name'])} を構成する</h2>
+        <div class="field"><label>カラー — <span id="bizColorName">{esc(p['colors'][0]['name'])}</span>(全{len(p['colors'])}色: {esc(color_names)})</label>
+          <div class="cluster">{swatches}</div></div>
+        <div class="field"><label>メモリとストレージ</label><div class="choice-grid">{storages}</div></div>
+        <div class="field"><label>カメラ構成</label><div class="choice-grid">{camopts}</div></div>
+        <p class="buy-price"><span id="bizPrice">{yen(p['price'])}</span> <small class="t-faint">〜(税別・法人参考価格)</small></p>
+        <div class="cluster">
+          <a class="btn btn--primary btn--lg" href="/business/store/">導入のご相談・お見積り</a>
+          <a class="btn btn--ghost btn--lg" href="{biz_url(p)}specs/">仕様を見る</a>
+        </div>
+        <p class="t-micro t-faint">法人契約(MDM・保守)前提のモデルです。個人向けの単体販売は行っていません。数量・構成に応じたお見積りは法人窓口で承ります。</p>
+      </div>
+    </div>
+  </div>
+</section>"""
+
+
+def biz_os_callout():
+    return f"""
+<section class="section--sm"><div class="container">
+  <div class="feature-split">
+    <div class="feature-split__media reveal-scale">{svg_art.svg_art('shield', BIZ_GLOW)}</div>
+    <div class="stack reveal">
+      <p class="eyebrow">{esc(BIZ_OS['name'])}</p>
+      <h2 class="t-h2">{esc(BIZ_OS['tagline'])}</h2>
+      <p class="t-soft">{esc(BIZ_OS['lead'])}</p>
+      <a class="link-arrow" href="/business/os/">法人専用OSの詳細を見る</a>
+    </div>
+  </div>
+</div></section>"""
+
+
+def build_biz_product_page(p):
+    """法人専用モデルのページ(/business/{id}/)。一般の build_product_page とは分離し、
+    カートではなく見積・導入相談へ誘導する。カメラ構成トグルは biz.js が担当。"""
+    line = LINES[p["line"]]
+    glow = p.get("glow") or line["glow"]
+    url = biz_url(p)
+    body = f"""
+<section class="hero hero--sub" style="--line-glow:{glow}">
+  <div class="hero__bg hero__bg--glow" style="background:
+    radial-gradient(52% 42% at 50% 66%, {glow}44, transparent 70%),
+    var(--bg-deep)"></div>
+  <div class="hero__inner hero-enter">
+    <p class="eyebrow eyebrow--center">{line['label']} — 法人専用</p>
+    <h1 class="t-hero">{esc(p['name'])}</h1>
+    <p class="t-lead" style="max-width:640px">{esc(p['tagline'])}<br><span class="t-small">{esc(p['sub'])}</span></p>
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="#config">構成とお見積り</a>
+      <a class="btn btn--ghost btn--lg" href="/business/os/">法人専用OSを見る</a>
+    </div>
+    <img class="hero-device" src="{pimg(p['id'])}" alt="{esc(p['name'])}" width="340" height="600">
+  </div>
+</section>
+<section class="section--sm"><div class="container">{stats_html(p['stats'])}</div></section>
+{biz_buy_module(p)}
+{sections_html(p['sections'], glow)}
+{biz_os_callout()}
+<section class="section--sm"><div class="container"><div class="card t-center" style="padding:clamp(32px,5vw,56px)">
+  <h2 class="t-h3">すべての仕様を確認する</h2>
+  <p class="t-soft">サイズ・性能・カメラ・法人機能・通信仕様の完全なリストをご用意しています。</p>
+  <div class="cluster cluster--center"><a class="btn btn--primary" href="{url}specs/">{esc(p['name'])} の仕様を見る</a><a class="btn btn--ghost" href="/business/store/">法人向けストアへ</a></div>
+</div></div></section>
+{cta_band('導入は、お見積りから。', 'MDMキッティング・ボリュームディスカウント・引取交換保守まで、法人窓口が一括でご案内します。', [('導入のご相談・お見積り', '/business/store/', 'btn--primary'), ('法人お問い合わせ', '/business/contact/', 'btn--ghost')])}
+"""
+    crumbs = [("法人のお客様", "/business/"), (p["name"], None)]
+    render_page(url, f"{p['name']} — {p['tagline']}", p["sub"], body, "dark", crumbs, "法人")
+
+    spec_body = f"""
+<section class="hero hero--page">
+  <div class="hero__inner hero-enter">
+    <p class="eyebrow">{line['label']} — 法人専用</p>
+    <h1 class="t-h1">{esc(p['name'])} — 仕様</h1>
+    <p class="t-soft">発売日: {p['release']} / 法人参考価格 税別 {yen(p['price'])}〜</p>
+    <div class="cluster">
+      <a class="btn btn--primary" href="{url}#config">構成とお見積り</a>
+      <a class="btn btn--ghost" href="/business/store/">法人向けストア</a>
+    </div>
+  </div>
+</section>
+<section class="section--sm"><div class="container container--narrow reveal">{spec_tables_html(p['specs'])}
+<p class="t-micro t-faint" style="margin-top:28px">記載の数値は当社測定条件による設計値です。本サイトは架空企業のデモであり、記載のすべての製品・数値はフィクションです。</p>
+</div></section>
+{cta_band('この一台を、組織の標準に。', '台数・構成に応じたお見積りを法人窓口で承ります。', [('導入のご相談・お見積り', '/business/store/', 'btn--primary'), (p['name'] + ' 製品ページ', url, 'btn--ghost')])}
+"""
+    render_page(url + "specs/", f"{p['name']} 仕様", f"{p['name']}の詳細スペック一覧。サイズ、性能、カメラ、法人機能、通信仕様。",
+                spec_body, "dark", crumbs[:-1] + [(p["name"], url), ("仕様", None)], "法人")
+
+
+def build_biz_os_page():
+    """法人専用OSの説明ページ(/business/os/)。BIZ_OS(単一ソース)から生成。"""
+    glow = BIZ_GLOW
+    feats = "".join(
+        f'<article class="card reveal"><h3 class="t-h4">{esc(f["title"])}</h3>'
+        f'<p class="t-small t-soft">{esc(f["body"])}</p></article>'
+        for f in BIZ_OS["features"])
+    faq = "".join(
+        f'<div class="accordion__item"><button class="accordion__q" aria-expanded="false"><span>{esc(q)}</span></button>'
+        f'<div class="accordion__a"><div class="accordion__a-inner"><div class="accordion__a-body"><p>{a}</p></div></div></div></div>'
+        for q, a in BIZ_OS["faq"])
+    body = f"""
+<section class="hero hero--sub" style="--line-glow:{glow}">
+  <div class="hero__bg hero__bg--glow" style="background:radial-gradient(52% 42% at 50% 66%, {glow}44, transparent 70%), var(--bg-deep)"></div>
+  <div class="hero__inner hero-enter">
+    <p class="eyebrow eyebrow--center">{esc(BIZ_OS['short'])} — {esc(BIZ_OS['base'])}</p>
+    <h1 class="t-hero">{esc(BIZ_OS['name'])}</h1>
+    <p class="t-lead" style="max-width:660px">{esc(BIZ_OS['tagline'])}<br><span class="t-small">{esc(BIZ_OS['lead'])}</span></p>
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="/business/kaname-b1/">搭載モデル KANAME B1</a>
+      <a class="btn btn--ghost btn--lg" href="/business/store/">導入のご相談</a>
+    </div>
+  </div>
+</section>
+<section class="section--sm"><div class="container">{stats_html(BIZ_OS['stats'])}</div></section>
+<section class="section--sm"><div class="container">
+  <div class="section-head"><p class="eyebrow">FEATURES</p><h2 class="t-h2">管理・セキュリティ・長期運用</h2>
+  <p class="t-soft">情報システム部門が「配って、守って、長く使う」ための機能だけを残しました。</p></div>
+  <div class="grid grid--3 reveal-stagger">{feats}</div>
+</div></section>
+<div class="band-light" data-theme="light"><section class="section--sm"><div class="container container--narrow">
+  <div class="section-head"><p class="eyebrow">Q&amp;A</p><h2 class="t-h2">よくある質問</h2></div>
+  <div class="accordion">{faq}</div>
+</div></section></div>
+{cta_band('OSも、一般とは分けて。', '法人専用エディションの詳細・検証端末のご相談は法人窓口へ。', [('導入のご相談・お見積り', '/business/store/', 'btn--primary'), ('法人お問い合わせ', '/business/contact/', 'btn--ghost')])}
+<section class="section--sm"><div class="container container--narrow"><p class="t-micro t-faint">{esc(BIZ_OS['note'])}</p></div></section>
+"""
+    render_page("/business/os/", f"{BIZ_OS['name']} — 法人専用OS", BIZ_OS["lead"],
+                body, "dark", [("法人のお客様", "/business/"), ("法人専用OS", None)], "法人")
+
+
+def biz_store_card(p):
+    cam = "標準 / カメラレス(セキュア仕様)構成を選択可" if p.get("camera_options") else ""
+    return f"""<a class="product-card" href="{biz_url(p)}">
+  <div class="product-card__media"><img src="{pimg(p['id'])}" alt="{esc(p['name'])}" loading="lazy" width="360" height="640"></div>
+  <div class="product-card__body">
+    <p class="product-card__tag">{LINES[p['line']]['label']} / 法人専用</p>
+    <h3 class="product-card__name">{esc(p['name'])}</h3>
+    <p class="product-card__desc t-small t-soft">{esc(p['sub'])}</p>
+    <p class="product-card__price">税別 {yen(p['price'])} <small>(法人参考価格)〜</small></p>
+    <p class="t-micro t-faint">{esc(cam)}</p>
+    <p class="link-arrow">構成とお見積り</p>
+  </div>
+</a>"""
+
+
+def build_biz_store():
+    """法人向けストア(/business/store/)。一般ストアのカートとは分離し、見積・導入相談フロー。"""
+    cards = "".join(biz_store_card(p) for p in BIZ_PRODUCTS)
+    steps = [
+        ("01", "ご相談", "台数・利用シーン・MDM環境をお聞かせください。撮影禁止区域向けのカメラレス構成の要否もこの段階で伺います。"),
+        ("02", "お見積り", "構成・数量・保守条件に応じたお見積りをご提示します。ボリュームディスカウント・リースのご相談も承ります。"),
+        ("03", "キッティング納品", "ゼロタッチ登録でMDMプロファイルを事前適用し、開梱後すぐ使える状態でお届け。資産管理ラベルも同梱します。"),
+    ]
+    flow = "".join(
+        f'<div class="card reveal"><p class="stat__value" style="color:var(--accent)">{n}</p>'
+        f'<h3 class="t-h4">{esc(t)}</h3><p class="t-small t-soft">{esc(d)}</p></div>'
+        for n, t, d in steps)
+    body = f"""
+<section class="hero hero--sub" style="--line-glow:{BIZ_GLOW}">
+  <div class="hero__bg hero__bg--glow"></div>
+  <div class="hero__inner hero-enter">
+    <p class="eyebrow eyebrow--center">BUSINESS STORE</p>
+    <h1 class="t-hero">法人向けストア</h1>
+    <p class="t-lead" style="max-width:660px">法人専用モデルの導入は、カート購入ではなくお見積り・ご相談から。台数・構成・保守条件に合わせてご案内します。</p>
+  </div>
+</section>
+<section class="section--sm"><div class="container">
+  <div class="section-head"><p class="eyebrow">LINEUP</p><h2 class="t-h2">法人専用ラインアップ</h2></div>
+  <div class="grid grid--3 grid--cards reveal-stagger">{cards}</div>
+</div></section>
+<section class="section--sm"><div class="container">
+  <div class="section-head"><p class="eyebrow">HOW IT WORKS</p><h2 class="t-h2">導入の流れ</h2>
+  <p class="t-soft">ご相談から納品まで、法人窓口が一括でご案内します。</p></div>
+  <div class="grid grid--3 reveal-stagger">{flow}</div>
+</div></section>
+{cta_band('まずは、ご相談から。', '導入台数が1台からでもご相談いただけます。お見積り・検証機貸出のご依頼はこちらへ。', [('法人お問い合わせ', '/business/contact/', 'btn--primary'), ('法人ソリューション', '/business/solutions/', 'btn--ghost')])}
+<section class="section--sm"><div class="container container--narrow"><p class="t-micro t-faint">本サイトは架空企業のデモであり、記載のすべての製品・価格・サービスはフィクションです。実際の販売・見積は行っていません。</p></div></section>
+"""
+    render_page("/business/store/", "法人向けストア — 導入のご相談・お見積り",
+                "法人専用モデルの導入相談・お見積り。KANAME B1 の構成、MDMキッティング、保守までワンストップでご案内します。",
+                body, "dark", [("法人のお客様", "/business/"), ("法人向けストア", None)], "法人")
 
 
 # ==========================================================================
@@ -3436,7 +3668,6 @@ def build_product_hubs():
 {build_line_section('phone', 'neo', '前年フラッグシップの技術を受け継ぎ、価格を抑えたゲーミングスタンダード。「去年の頂点を、今年の普通に」。')}
 {build_line_section('phone', 'tsubame', 'ゲーミングで培った技術を日常へ。軽さ・カメラ・電池持ちを磨いた一般向けライン。')}
 {build_line_section('phone', 'lite', '3万円台から、SUZAKU品質。はじめての一台にも2台目にも応えるエントリーライン。')}
-{build_line_section('phone', 'biz', '仕事の道具に徹した法人専用ブランド「要 KANAME」。MDM標準対応・5年保守、カメラレス構成も選べます。')}
 {quick_table('phone')}
 {cta_band('迷ったら、比較ツールへ。', '全12機種をスペックで並べて比較できます。', [('製品を比較する', '/products/compare/', 'btn--primary'), ('ストアで見る', '/store/', 'btn--ghost')])}
 """
@@ -3593,7 +3824,8 @@ def build_assets():
     img = ROOT / "assets" / "img"
     (img / "products").mkdir(parents=True, exist_ok=True)
     (img / "favicon.svg").write_text(svg_art.FAVICON, encoding="utf-8")
-    for p in ALL_PRODUCTS:
+    # 法人機は一般 ALL_PRODUCTS から分離しているが、ビジュアル生成対象には含める
+    for p in ALL_PRODUCTS + BIZ_PRODUCTS:
         # コラボモデルなどは製品個別のアクセント色(作品カラー)を優先する
         glow = p.get("glow") or LINES[p["line"]]["glow"]
         hz = f"{num(get_spec(p, ['ディスプレイ'], 'リフレッシュレート')) or 60}Hz" if p["cat"] in ("phone", "tablet") else "60Hz"
@@ -3618,6 +3850,12 @@ def build_assets():
         if p["cat"] == "phone":
             front = svg_art.svg_phone_front(p["id"], p["colors"][0]["hex"], glow, p["name"], p["line"], hz, motif, design)
             (img / "products" / f"{p['id']}-front.svg").write_text(front, encoding="utf-8")
+            # カメラレス構成は前面カメラも非搭載。正面ビューも穴なしで生成する
+            if p.get("camera_options"):
+                ncf_design = dict(design or {})
+                ncf_design["punch"] = "none"
+                ncf = svg_art.svg_phone_front(f"{p['id']}ncf", p["colors"][0]["hex"], glow, p["name"], p["line"], hz, motif, ncf_design)
+                (img / "products" / f"{p['id']}-nc-front.svg").write_text(ncf, encoding="utf-8")
         elif p["cat"] == "tablet":
             front = svg_art.svg_tablet_front(p["id"], p["colors"][0]["hex"], glow, p["name"], p["line"], hz, design)
             (img / "products" / f"{p['id']}-front.svg").write_text(front, encoding="utf-8")
@@ -3775,6 +4013,10 @@ def main():
     build_news_pages()
     build_collab_pages()
     build_product_hubs()
+    for p in BIZ_PRODUCTS:
+        build_biz_product_page(p)
+    build_biz_os_page()
+    build_biz_store()
     build_fragments()
     build_client_data()  # PAGES確定後
     build_sitemap()

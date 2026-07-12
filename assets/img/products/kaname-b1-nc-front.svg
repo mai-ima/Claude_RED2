@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="KANAME B1 正面">
+<defs>
+<linearGradient id="framefkanameb1ncf" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#9a9ca2"/>
+  <stop offset="0.12" stop-color="#1a1f29"/>
+  <stop offset="0.5" stop-color="#0c0e13"/>
+  <stop offset="0.88" stop-color="#181d26"/>
+  <stop offset="1" stop-color="#6d7178"/>
+</linearGradient>
+<linearGradient id="scrfkanameb1ncf" x1="0" y1="0" x2="0.8" y2="1">
+  <stop offset="0" stop-color="#171722"/>
+  <stop offset="0.5" stop-color="#0d0d14"/>
+  <stop offset="1" stop-color="#07070c"/>
+</linearGradient>
+<radialGradient id="flarefkanameb1ncf" cx="0.5" cy="0.32" r="0.85">
+  <stop offset="0" stop-color="#4a7ac8" stop-opacity="0.3"/>
+  <stop offset="0.55" stop-color="#4a7ac8" stop-opacity="0.09"/>
+  <stop offset="1" stop-color="#4a7ac8" stop-opacity="0"/>
+</radialGradient>
+<filter id="softfkanameb1ncf" x="-40%" y="-40%" width="180%" height="180%">
+  <feGaussianBlur stdDeviation="7"/>
+</filter>
+<filter id="fzf" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5"/></filter>
+<clipPath id="clipfkanameb1ncf"><rect x="54" y="41" width="232" height="518" rx="30"/></clipPath>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.4" filter="url(#softfkanameb1ncf)"/>
+<rect x="43" y="30" width="254" height="540" rx="40" fill="url(#framefkanameb1ncf)"/>
+<rect x="48" y="35" width="244" height="530" rx="35" fill="#06060a"/>
+<rect x="54" y="41" width="232" height="518" rx="30" fill="url(#scrfkanameb1ncf)"/>
+<g clip-path="url(#clipfkanameb1ncf)">
+<ellipse cx="170" cy="210" rx="180" ry="200" fill="url(#flarefkanameb1ncf)"/>
+
+<text x="70" y="132" font-family="'Noto Sans JP',sans-serif" font-size="34" font-weight="300" fill="#ffffff" letter-spacing="1">12:34</text>
+<text x="70" y="154" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#b9b9c8" letter-spacing="2">7月10日(金) ・ 社給端末</text>
+<rect x="70" y="176" width="200" height="72" rx="14" fill="#ffffff" opacity="0.07"/>
+<rect x="70" y="176" width="4" height="72" rx="2" fill="#4a7ac8"/>
+<text x="88" y="200" font-family="'Noto Sans JP',sans-serif" font-size="10.5" font-weight="800" fill="#ececf2">13:00 定例ミーティング</text>
+<text x="88" y="218" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#9c9cb0">第2会議室 ・ あと26分</text>
+<text x="88" y="236" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#9c9cb0">15:30 現場巡回(A棟)</text>
+<rect x="70" y="262" width="200" height="56" rx="14" fill="#ffffff" opacity="0.05"/>
+<path d="M86 282 h28 v20 h-28 z M86 282 l14 11 14 -11" fill="none" stroke="#4a7ac8" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="126" y="288" font-family="'Noto Sans JP',sans-serif" font-size="10" font-weight="700" fill="#ececf2">未読メール 4件</text>
+<text x="126" y="306" font-family="'Noto Sans JP',sans-serif" font-size="8.5" fill="#9c9cb0">うち承認待ち 2件</text>
+<rect x="70" y="332" width="200" height="44" rx="12" fill="#4a7ac8" opacity="0.13"/>
+<rect x="70" y="332" width="200" height="44" rx="12" fill="none" stroke="#4a7ac8" stroke-opacity="0.55" stroke-width="1.4"/>
+<path d="M86 344 l9 4 v6 c0 6 -4 9 -9 11 c-5 -2 -9 -5 -9 -11 v-6 z" fill="none" stroke="#4a7ac8" stroke-width="1.7"/>
+<text x="104" y="350" font-family="'Noto Sans JP',sans-serif" font-size="9.5" font-weight="800" fill="#ffffff">MDM管理下 ・ ポリシー適用中</text>
+<text x="104" y="366" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#c9c9d6">情報システム部 ・ 最終同期 3分前</text>
+<rect x="70" y="486" width="96" height="26" rx="13" fill="#ffffff" opacity="0.07"/>
+<text x="118" y="503" font-family="'Noto Sans JP',sans-serif" font-size="9" font-weight="700" fill="#ececf2" text-anchor="middle">業務アプリ</text>
+<rect x="174" y="486" width="96" height="26" rx="13" fill="#ffffff" opacity="0.07"/>
+<text x="222" y="503" font-family="'Noto Sans JP',sans-serif" font-size="9" font-weight="700" fill="#ececf2" text-anchor="middle">内線</text>
+
+<text x="70" y="72" font-family="'Noto Sans JP',sans-serif" font-size="11" font-weight="700" fill="#e6e6ee">12:34</text>
+<rect x="222" y="70.0" width="3.5" height="5.0" rx="1" fill="#c9c9d6" opacity="0.55"/><rect x="228" y="67.5" width="3.5" height="7.5" rx="1" fill="#c9c9d6" opacity="0.7000000000000001"/><rect x="234" y="65.0" width="3.5" height="10.0" rx="1" fill="#c9c9d6" opacity="0.8500000000000001"/>
+<rect x="248" y="61.5" width="20" height="10" rx="3" fill="none" stroke="#c9c9d6" stroke-width="1.3"/>
+<rect x="250" y="63.5" width="13" height="6" rx="1.5" fill="#4a7ac8"/>
+<rect x="268.6" y="64" width="2.4" height="5" rx="1" fill="#c9c9d6"/>
+
+<rect x="125" y="544" width="90" height="4.5" rx="2.25" fill="#ffffff" opacity="0.55"/>
+<path d="M54 41 L206 41 L84 559 L54 559 Z" fill="#ffffff" opacity="0.035"/>
+</g>
+<rect x="54.8" y="41.8" width="230.4" height="516.4" rx="30" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1.4"/>
+<rect x="292.5" y="140" width="5" height="46" rx="2.5" fill="#0c0e13"/>
+<rect x="292.5" y="200" width="5" height="70" rx="2.5" fill="#0c0e13"/>
+</svg>
