@@ -1451,6 +1451,13 @@ body.drawer-open .cookie-banner {
 .cmp-thumbs { display: flex; gap: 6px; justify-content: center; }
 .cmp-thumbs img { max-height: 128px; width: auto; }
 
+/* 検索「もしかして」チップ */
+.did-you-mean { margin-bottom: 16px; font-size: .92rem; color: var(--text-soft); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dym-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; min-height: 36px; border-radius: 999px;
+  border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent);
+  font-weight: 700; cursor: pointer; transition: background .16s, transform .16s; }
+.dym-chip:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); transform: translateY(-1px); }
+
 /* 比較: SP は先頭列(行見出し)を固定して横スクロール */
 .compare-table th.cmp-rowhead { position: sticky; left: 0; z-index: 2; background: var(--bg-deep);
   text-align: left; width: 128px; min-width: 128px; }
