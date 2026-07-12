@@ -251,3 +251,47 @@
 .cl-lp.collab--next .nx-hero--next-4 .nx-motif {
   background: linear-gradient(115deg, transparent 28%, rgba(255, 95, 162, 0.12) 42%, rgba(51, 204, 221, 0.12) 55%, rgba(255, 206, 90, 0.12) 68%, transparent 82%);
 }
+
+/* ---------- マーキー帯(相手カラー) ---------- */
+.cl-lp.collab--next .nx-marquee {
+  overflow: hidden;
+  border-block: 1px solid color-mix(in srgb, var(--cl-accent, #ff7a00) 30%, transparent);
+  background: color-mix(in srgb, var(--cl-accent, #ff7a00) 6%, #0c0c0e);
+  padding: 12px 0;
+}
+.cl-lp.collab--next .nx-marquee__track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: nx-marquee 28s linear infinite;
+}
+.cl-lp.collab--next .nx-marquee__track span {
+  font-family: monospace; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.24em;
+  color: var(--cl-accent, #ff7a00); padding: 0 26px 0 0; margin-right: 26px; position: relative;
+}
+.cl-lp.collab--next .nx-marquee__track span::after {
+  content: "/"; position: absolute; right: -3px; color: color-mix(in srgb, var(--cl-accent, #ff7a00) 45%, transparent);
+}
+@keyframes nx-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .cl-lp.collab--next .nx-marquee__track { animation: none; } }
+
+/* ---------- 組み立て進捗バー ---------- */
+.cl-lp.collab--next .nx-prog { max-width: 640px; }
+.cl-lp.collab--next .nx-prog__bar {
+  height: 12px; border-radius: 999px; background: #141416; overflow: hidden;
+  border: 1px solid rgba(242, 242, 244, 0.1);
+}
+.cl-lp.collab--next .nx-prog__fill {
+  display: block; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--cl-accent, #ff7a00) 55%, transparent), var(--cl-accent, #ff7a00));
+}
+.cl-lp.collab--next .nx-prog__label { margin-top: 10px; font-family: monospace; font-size: 0.82rem; color: #9a9aa6; }
+.cl-lp.collab--next .nx-prog__label b { color: var(--cl-accent, #ff7a00); }
+
+/* ---------- 発表通知CTA ---------- */
+.cl-lp.collab--next .nx-notify__box {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  background: color-mix(in srgb, var(--cl-accent, #ff7a00) 8%, #141416);
+  border: 1px solid color-mix(in srgb, var(--cl-accent, #ff7a00) 30%, transparent);
+  border-radius: 16px; padding: clamp(24px, 4vw, 40px);
+}

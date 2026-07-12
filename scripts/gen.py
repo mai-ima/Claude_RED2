@@ -3411,6 +3411,11 @@ def _collab_lp_teaser(cfg, phone, accs):
         f'<span class="nx-sib__go">ティザーを見る →</span></a>'
         for c in sibs)
     reveal = cfg.get("reveal_at", "")
+    reveal_ymd = reveal[:10].replace("-", ".")
+    # 組み立て進捗(イメージ)。発表が近い枠ほど高く見せる
+    pct = {"next": 88, "next-2": 85, "next-3": 82, "next-4": 79}.get(cfg["slug"], 82)
+    marquee_txt = "".join(f'<span>COMING SOON</span><span>{esc(reveal_ymd)}</span>'
+                          f'<span>CLASSIFIED</span><span>???</span>' for _ in range(6))
     return f"""
 <section class="nx-hero nx-hero--{cfg['slug']}">
   <div class="nx-hero__scan" aria-hidden="true"></div>
@@ -3420,6 +3425,8 @@ def _collab_lp_teaser(cfg, phone, accs):
   <div class="nx-hero__sil reveal">{svg_art.svg_art('silhouette', cfg['tokens']['glow'])}</div>
   <p class="nx-hero__lead">第2弾のコラボレーションが、組み立てラインに載りました。相手も、名前も、まだ言えません。言えるのは — 今回も色替えでは終わらない、ということだけ。</p>
 </section>
+
+<div class="nx-marquee" aria-hidden="true"><div class="nx-marquee__track">{marquee_txt}{marquee_txt}</div></div>
 
 <section class="cl-section nx-count">
   <div class="cl-wrap">
@@ -3456,11 +3463,35 @@ def _collab_lp_teaser(cfg, phone, accs):
   </div>
 </section>
 
+<section class="cl-section nx-progress">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ASSEMBLY LINE</p><h2 class="cl-h2">組み立て、進行中。</h2>
+    <p class="cl-lead">SoC・筐体・演出、それぞれのラインが同時に動いています。ゴールは、発表の日。</p></div>
+    <div class="nx-prog reveal">
+      <div class="nx-prog__bar"><span class="nx-prog__fill" style="width:{pct}%"></span></div>
+      <p class="nx-prog__label">組み立て進捗(イメージ): <b>{pct}%</b></p>
+    </div>
+  </div>
+</section>
+
 <section class="cl-section nx-siblings">
   <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">2ND WAVE</p><h2 class="cl-h2">第2弾は、複数進行中。</h2>
     <p class="cl-lead">同時に、いくつもの共同設計が動いています。他のティザーも、のぞいてみてください。</p></div>
     <div class="nx-sib__grid">{sib_links}</div>
+  </div>
+</section>
+
+<section class="cl-section nx-notify">
+  <div class="cl-wrap">
+    <div class="nx-notify__box">
+      <div>
+        <p class="cl-eyebrow">DON'T MISS IT</p>
+        <h2 class="cl-h2">発表を、見逃さない。</h2>
+        <p class="cl-lead">正式発表はニュースルームで。第2弾の予告記事から、最新情報を追えます。</p>
+      </div>
+      <a class="cl-btn cl-btn--primary" href="/news/2026-07-collab-wave2-teaser/">第2弾の予告記事を読む</a>
+    </div>
   </div>
 </section>
 
@@ -3594,12 +3625,14 @@ def build_collab_hub():
         trv = cfg.get("tablet", {}).get("reveal_at", "")[:10].replace("-", ".")
         tab_tag = f"COMING SOON — {trv} 発表予定" if trv else "COMING SOON"
         tab_href = f'/collab/{cfg["slug"]}/tablet/' if cfg.get("tablet") else f'/collab/{cfg["slug"]}/'
+        tab_dev = cfg.get("tablet", {}).get("device", "")
         tab_cards += (
             f'<a class="collab-tabcard" style="{style}" href="{tab_href}">'
             f'{tab_icon}'
-            f'<span class="collab-tabcard__game">{esc(cfg["game"])}</span>'
-            f'<span class="collab-tabcard__name">コラボレーションタブレット</span>'
-            f'<span class="collab-tabcard__tag">{tab_tag}</span></a>')
+            f'<span class="collab-tabcard__game">SUZAKU × {esc(cfg["game"])}</span>'
+            f'<span class="collab-tabcard__name">{esc(tab_dev) if tab_dev else "コラボレーションタブレット"}</span>'
+            f'<span class="collab-tabcard__tag">{tab_tag}</span>'
+            f'<span class="collab-tabcard__go">予告を見る →</span></a>')
     body = f"""
 <section class="hero hero--sub">
   <div class="hero__bg hero__bg--glow"></div>
