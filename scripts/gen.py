@@ -921,6 +921,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(full_title)}</title>
 <meta name="description" content="{esc(desc)}">
+{'<meta name="robots" content="noindex,nofollow">' if noindex else ''}
 <meta property="og:title" content="{esc(full_title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:type" content="website">
@@ -4193,6 +4194,73 @@ def build_sitemap():
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.xml\n", encoding="utf-8")
 
 
+def build_dev_hub():
+    """内部点検・制作者向けの隠しハブ(/dev/・noindex)。ナビからは辿れず、
+    検索・サイトマップにも載らない。内部QAツールの入口と、生成/検証の手順をまとめる。"""
+    n_prod = len(ALL_PRODUCTS) + len(BIZ_PRODUCTS)
+    n_collab = len([c for c in COLLABS if c.get("active")])
+    n_teaser = len([c for c in COLLABS if c.get("motif") == "teaser"])
+    tools = [
+        ("SVG全点検グリッド", "/dev/svg-gallery/",
+         "全機種の背面+正面と、アクセサリ全カラーのSVGを1ページで目視。デザイン監査用。"),
+    ]
+    tool_cards = "".join(
+        f'<a class="card card--hover" href="{href}"><p class="eyebrow">INTERNAL TOOL</p>'
+        f'<h3 class="t-h4">{esc(t)}</h3><p class="t-small t-soft">{esc(d)}</p>'
+        f'<p class="link-arrow">開く</p></a>'
+        for t, href, d in tools)
+    pre_style = ("background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);"
+                 "padding:18px;overflow-x:auto;font-size:.85rem;line-height:1.9;color:var(--text-soft)")
+    body = f"""
+<section class="hero hero--sub">
+  <div class="hero__bg hero__bg--glow"></div>
+  <div class="hero__inner hero-enter">
+    <p class="eyebrow eyebrow--center">DEV — INTERNAL</p>
+    <h1 class="t-hero">内部点検ハブ</h1>
+    <p class="t-lead" style="max-width:680px">このページは、サイトの内部点検と「このサイトを作る人」向けの隠しハブです。ナビゲーションからは辿れず、検索・サイトマップにも載りません(noindex)。</p>
+  </div>
+</section>
+
+<section class="section--sm"><div class="container">
+  <div class="stat-row" style="--stat-cols:4">
+    <div class="stat"><p class="stat__value">{len(PAGES)}</p><p class="stat__label">公開ページ(概算)</p></div>
+    <div class="stat"><p class="stat__value">{n_prod}</p><p class="stat__label">製品(一般+法人)</p></div>
+    <div class="stat"><p class="stat__value">{n_collab}+{n_teaser}</p><p class="stat__label">コラボ(公開+ティザー)</p></div>
+    <div class="stat"><p class="stat__value">{len(NEWS)}</p><p class="stat__label">ニュース記事</p></div>
+  </div>
+</div></section>
+
+<section class="section--sm"><div class="container">
+  <div class="section-head"><p class="eyebrow">INTERNAL TOOLS</p><h2 class="t-h2">内部ツール</h2>
+  <p class="t-soft">目視点検用の内部ページ。ここからアクセスできます。</p></div>
+  <div class="grid grid--3 grid--cards">{tool_cards}</div>
+</div></section>
+
+<div class="band-light" data-theme="light"><section class="section--sm"><div class="container container--narrow">
+  <div class="section-head" style="text-align:left"><p class="eyebrow">HOW IT'S BUILT</p><h2 class="t-h2">このサイトの作り方</h2>
+  <p class="t-soft">静的サイトジェネレータ方式。HTMLを直接編集せず、単一ソースを編集して再生成します。</p></div>
+  <ul class="check-list">
+    <li>ジェネレータ: <code>scripts/gen.py</code>(全ページを生成する心臓)</li>
+    <li>データ(単一ソース): <code>data_products.py</code> / <code>data_collab.py</code> / <code>data_tech.py</code> / <code>data_misc.py</code> / <code>data_docs.py</code></li>
+    <li>固有ページ: <code>src/pages/</code> のフラグメント(先頭の <code>&lt;!--META ... --&gt;</code> でタイトル・テーマ・パンくず)</li>
+    <li>画像: 外部画像0。<code>svg_art.py</code> が製品・シルエット・図版のSVGを自動生成</li>
+    <li>内部メモ: <code>project-notes/</code>(構成監査・コラボ調査・backlog。<code>.vercelignore</code> で配信対象外)</li>
+  </ul>
+  <div class="section-head" style="text-align:left;margin-top:32px"><p class="eyebrow">REGENERATE &amp; VERIFY</p><h2 class="t-h2">再生成と検証</h2></div>
+  <pre style="{pre_style}"><code>python3 scripts/gen.py            # 再生成(差分ゼロなら健全)
+python3 scripts/check_links.py    # リンク切れ検査
+python3 -m http.server 8930 &amp;     # ルートで配信
+node scripts/audit.js             # 全ページ監査(AUDIT_WIDTH=1440 でPC幅)
+node scripts/shot.js &lt;out&gt; &lt;幅&gt; &lt;path...&gt;   # スクリーンショット
+node scripts/interact.js          # 主要インタラクションの実地検証</code></pre>
+  <p class="t-micro t-faint" style="margin-top:20px">※ 本サイトは架空企業のデモです。このページも含め、記載はすべてフィクションです。</p>
+</div></section></div>
+"""
+    render_page("/dev/", "内部点検ハブ(DEV)",
+                "サイトの内部点検と制作者向けの隠しハブ。SVG全点検などの内部ツールと、生成・検証の手順をまとめる開発者向け内部ページ。",
+                body, "dark", [("内部点検(dev)", None)], "開発者向け", noindex=True)
+
+
 def build_svg_gallery():
     """SVG全点検グリッド(開発者向け・noindex)。全機種の背面+正面ペアと
     アクセサリ全カラーバリエーションを1ページで目視点検できる。"""
@@ -4230,7 +4298,7 @@ def build_svg_gallery():
 </section>"""
     render_page("/dev/svg-gallery/", "SVG全点検グリッド(内部QA)",
                 "全機種の背面・正面と全アクセサリのSVGビジュアルを一覧点検する開発者向け内部ページ。",
-                body, "dark", [("ホーム", "/"), ("開発者向け", "/developers/"), ("SVG全点検", None)],
+                body, "dark", [("開発者向け", "/developers/"), ("SVG全点検", None)],
                 "開発者向け", noindex=True)
 
 
@@ -4252,6 +4320,7 @@ def main():
     build_biz_os_page()
     build_biz_store()
     build_fragments()
+    build_dev_hub()  # 内部点検ハブ(noindex・PAGES数の概算を出すため終盤で生成)
     build_client_data()  # PAGES確定後
     build_sitemap()
     print(f"生成完了: {len(PAGES)}ページ")
