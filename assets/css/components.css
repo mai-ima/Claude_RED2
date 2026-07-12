@@ -1414,6 +1414,51 @@ body.drawer-open .cookie-banner {
 .compare-table td { text-align: center; }
 .compare-table th[scope="row"] { width: 150px; }
 
+/* 比較: プリセット */
+.cmp-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
+@media (max-width: 760px) { .cmp-presets { grid-template-columns: repeat(2, 1fr); } }
+.cmp-preset { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; text-align: left;
+  padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md);
+  cursor: pointer; transition: border-color .18s, transform .18s, background .18s; min-height: 44px; }
+.cmp-preset:hover { border-color: var(--accent); transform: translateY(-2px); }
+.cmp-preset__k { font-weight: 800; }
+.cmp-preset__s { font-size: .8rem; color: var(--text-soft); }
+
+/* 比較: 実測ダッシュボード */
+.cmp-dash { display: grid; gap: var(--sp-4); }
+.cmp-metric { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px; }
+.cmp-metric__head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.cmp-metric__head h4 { margin: 0; }
+.cmp-metric__bars { display: grid; gap: 10px; }
+.cmp-bar { display: grid; grid-template-columns: minmax(96px, 1.4fr) 3fr auto; align-items: center; gap: 12px; }
+.cmp-bar__name { font-size: .84rem; color: var(--text-soft); display: flex; align-items: center; gap: 5px; min-width: 0; }
+.cmp-bar__track { height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--line) 70%, transparent); overflow: hidden; }
+.cmp-bar__fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, transparent), var(--accent)); }
+.cmp-bar__val { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .86rem; white-space: nowrap; }
+.cmp-bar.is-best .cmp-bar__fill { background: linear-gradient(90deg, var(--accent), #ffd062); }
+.cmp-bar.is-best .cmp-bar__name, .cmp-bar.is-best .cmp-bar__val { color: var(--accent); }
+.cmp-bar--na .cmp-bar__val { color: var(--text-faint); }
+.cmp-bar--na { grid-template-columns: minmax(96px, 1.4fr) auto; }
+@media (max-width: 560px) {
+  .cmp-bar { grid-template-columns: 1fr auto; grid-template-areas: "name val" "track track"; }
+  .cmp-bar__name { grid-area: name; } .cmp-bar__val { grid-area: val; } .cmp-bar__track { grid-area: track; }
+}
+
+/* 比較: 最良値ハイライト・差分・王冠 */
+.cmp-crown { color: #ffce5a; vertical-align: -2px; }
+.compare-table td.cmp-best { background: color-mix(in srgb, var(--accent) 14%, transparent); font-weight: 700; }
+.cmp-diff { display: block; font-size: .74rem; color: var(--text-faint); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.cmp-thumbs { display: flex; gap: 6px; justify-content: center; }
+.cmp-thumbs img { max-height: 128px; width: auto; }
+
+/* 比較: SP は先頭列(行見出し)を固定して横スクロール */
+.compare-table th.cmp-rowhead { position: sticky; left: 0; z-index: 2; background: var(--bg-deep);
+  text-align: left; width: 128px; min-width: 128px; }
+@media (max-width: 760px) {
+  .compare-table th.cmp-rowhead { width: 108px; min-width: 108px; font-size: .82rem; }
+  .cmp-thumbs img { max-height: 96px; }
+}
+
 /* --------------------------------------------------------------------------
    チャート(charts.js)
    -------------------------------------------------------------------------- */

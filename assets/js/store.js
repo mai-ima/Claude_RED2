@@ -577,28 +577,113 @@
       sel.value = defaults[i] || "";
       sel.addEventListener("change", renderCompare);
     });
-    var ROWS = ["発売日", "価格", "ディスプレイ", "リフレッシュレート", "SoC", "GPU", "メモリ", "ストレージ", "冷却", "バッテリー", "充電", "重量", "OS"];
+    // プリセット(ワンタップで機種セット)
+    $$("#comparePresets .cmp-preset").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var ids = (btn.getAttribute("data-preset") || "").split(",");
+        sels.forEach(function (s, i) { s.value = ids[i] || ""; });
+        renderCompare();
+        var res = $("#compareDash");
+        if (res && res.scrollIntoView) res.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    var ROWS = ["発売日", "価格", "ディスプレイ", "リフレッシュレート", "常時表示(AOD)", "SoC", "AnTuTu", "GPU", "メモリ", "ストレージ", "冷却方式", "バッテリー", "急速充電", "リアカメラ", "背面演出", "防塵防水", "重量", "OS更新", "OS"];
+    // 数値比較する行と方向(high=大きいほど良い / low=小さいほど良い)+差分の単位
+    var NUM = {
+      "価格": { dir: "low", u: "円" }, "リフレッシュレート": { dir: "high", u: "Hz" },
+      "AnTuTu": { dir: "high", u: "万点" }, "バッテリー": { dir: "high", u: "mAh" },
+      "急速充電": { dir: "high", u: "W" }, "重量": { dir: "low", u: "g" }
+    };
+    var METRICS = [
+      { key: "30分後fps維持率", u: "%", dir: "high" },
+      { key: "タッチ遅延(推定)", u: "ms", dir: "low" },
+      { key: "0→50%充電(推定)", u: "分", dir: "low" },
+      { key: "コスパ(1万円あたり)", u: "万点", dir: "high" }
+    ];
+    function pnum(s) { var m = String(s == null ? "" : s).replace(/,/g, "").match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : null; }
+    function fmtNum(n) { return n.toLocaleString("ja-JP"); }
+    function bestOf(vals, dir) {
+      var nums = vals.filter(function (v) { return v != null; });
+      if (!nums.length) return null;
+      return dir === "low" ? Math.min.apply(null, nums) : Math.max.apply(null, nums);
+    }
+    function assetV() { return (window.SZ && window.SZ.assetV) ? "?v=" + window.SZ.assetV : ""; }
+
+    function renderDash(chosen) {
+      var box = $("#compareDash");
+      if (!box) return;
+      var rows = METRICS.map(function (m) {
+        var vals = chosen.map(function (p) {
+          var d = (p.dash || []).filter(function (x) { return x.key === m.key; })[0];
+          return d ? d.v : null;
+        });
+        var best = bestOf(vals, m.dir);
+        var maxv = Math.max.apply(null, vals.map(function (v) { return v == null ? 0 : v; }).concat([0.0001]));
+        var minv = bestOf(vals, "low");
+        var bars = chosen.map(function (p, i) {
+          var v = vals[i];
+          if (v == null) return '<div class="cmp-bar cmp-bar--na"><span class="cmp-bar__name">' + p.name + '</span><span class="cmp-bar__val">—</span></div>';
+          // 幅: high は最大値基準、low は最小値/自分(小さいほど満杯)
+          var w = m.dir === "low" ? (minv / v) : (v / maxv);
+          var isBest = v === best;
+          return '<div class="cmp-bar' + (isBest ? " is-best" : "") + '">'
+            + '<span class="cmp-bar__name">' + p.name + (isBest ? ' <svg class="cmp-crown" viewBox="0 0 24 24" width="14" height="14" aria-label="最良値" role="img"><path d="M3 8l4.5 3.5L12 4l4.5 7.5L21 8l-1.6 10.5H4.6z" fill="currentColor"/></svg>' : '') + '</span>'
+            + '<span class="cmp-bar__track"><span class="cmp-bar__fill" style="width:' + Math.max(6, Math.round(w * 100)) + '%"></span></span>'
+            + '<span class="cmp-bar__val">' + fmtNum(v) + m.u + '</span></div>';
+        }).join("");
+        var hint = m.dir === "low" ? "小さいほど良い" : "大きいほど良い";
+        return '<div class="cmp-metric"><div class="cmp-metric__head"><h4 class="t-h4">' + m.key + '</h4><span class="t-micro t-faint">' + hint + '</span></div><div class="cmp-metric__bars">' + bars + '</div></div>';
+      }).join("");
+      box.innerHTML = '<div class="cmp-dash">' + rows + '</div>';
+    }
+
     function renderCompare() {
       var chosen = sels.map(function (s) { return product(s.value); }).filter(Boolean);
       var box = $("#compareResult");
+      var dashBox = $("#compareDash");
       if (chosen.length < 2) {
         box.innerHTML = '<div class="empty"><p>2機種以上を選択すると比較表が表示されます。</p></div>';
+        if (dashBox) dashBox.innerHTML = "";
+        var rb0 = $("#compareRadar"); if (rb0) rb0.hidden = true;
         return;
       }
-      var head = "<tr><th></th>" + chosen.map(function (p) {
+      renderDash(chosen);
+
+      var head = '<tr><th scope="col" class="cmp-rowhead"></th>' + chosen.map(function (p) {
         return '<th scope="col"><a href="' + p.url + '" style="color:var(--accent)">' + p.name + "</a></th>";
       }).join("") + "</tr>";
-      var imgs = "<tr><th></th>" + chosen.map(function (p) {
-        var v = (window.SZ && window.SZ.assetV) ? "?v=" + window.SZ.assetV : "";
-        var src = "/assets/img/products/" + p.id + "-front.svg" + v; // 正面ビューで画面差を見せる
-        return '<td><img src="' + src + '" alt="' + p.name + ' 正面" style="max-height:150px;margin-inline:auto"></td>';
+      // 正面+背面の2段サムネ
+      var v = assetV();
+      var imgs = '<tr><th scope="row" class="cmp-rowhead">正面 / 背面</th>' + chosen.map(function (p) {
+        return '<td><div class="cmp-thumbs">'
+          + '<img src="/assets/img/products/' + p.id + '-front.svg' + v + '" alt="' + p.name + ' 正面" loading="lazy">'
+          + '<img src="/assets/img/products/' + p.id + '-0.svg' + v + '" alt="' + p.name + ' 背面" loading="lazy">'
+          + '</div></td>';
       }).join("") + "</tr>";
+
       var rows = ROWS.map(function (key) {
-        return '<tr><th scope="row">' + key + "</th>" + chosen.map(function (p) {
-          return "<td>" + (p.cmp[key] || "—") + "</td>";
-        }).join("") + "</tr>";
+        var meta = NUM[key];
+        var best = null;
+        if (meta) best = bestOf(chosen.map(function (p) { return pnum(p.cmp[key]); }), meta.dir);
+        var cells = chosen.map(function (p) {
+          var raw = p.cmp[key] || "—";
+          if (!meta) return "<td>" + raw + "</td>";
+          var n = pnum(p.cmp[key]);
+          if (n == null) return "<td>" + raw + "</td>";
+          var isBest = (n === best);
+          var diff = "";
+          if (!isBest && best != null) {
+            var d = n - best;
+            var sign = d > 0 ? "+" : "−";
+            diff = '<span class="cmp-diff">' + sign + fmtNum(Math.abs(d)) + meta.u + '</span>';
+          }
+          return '<td class="' + (isBest ? "cmp-best" : "") + '">' + raw + (isBest ? ' <svg class="cmp-crown" viewBox="0 0 24 24" width="14" height="14" aria-label="最良値" role="img"><path d="M3 8l4.5 3.5L12 4l4.5 7.5L21 8l-1.6 10.5H4.6z" fill="currentColor"/></svg>' : diff) + "</td>";
+        }).join("");
+        return '<tr><th scope="row" class="cmp-rowhead">' + key + "</th>" + cells + "</tr>";
       }).join("");
       box.innerHTML = '<div class="scroll-x"><table class="spec-table compare-table"><thead>' + head + "</thead><tbody>" + imgs + rows + "</tbody></table></div>";
+
       // 5軸レーダーチャートで重ね比較
       var radarBox = $("#compareRadar");
       if (radarBox && window.szCharts) {

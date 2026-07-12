@@ -123,6 +123,75 @@ def product_antutu(p):
     return base
 
 
+def product_fps_keep(p):
+    """30分後fps維持率(%)。GAME_FPS(FPSタイトル基準)から算出。持続=冷却の実力。
+    ゲーミング系ラインのみ対象(省電力版チップの一般/エントリー機は対象外=None)。"""
+    if p["line"] not in GAMING_LINES:
+        return None
+    fps = GAME_FPS.get(p.get("chip"))
+    if not fps:
+        return None
+    avg, sustained = fps[1]  # index1 = NOVA STRIKE(上限解放FPS)を代表値に
+    return round(sustained / avg * 100)
+
+
+def product_touch_ms(p):
+    """タッチ応答遅延(ms・推定)。リフレッシュレートから導出(小さいほど良い)。
+    「1〜120Hz可変」のような表記は最大値(=最速時)を採用して一意に決める。"""
+    s = get_spec(p, ["ディスプレイ"], "リフレッシュレート") or ""
+    nums = [int(x) for x in re.findall(r"\d+", s)]
+    hz = max(nums) if nums else 60
+    return round(1000.0 / hz + 9)
+
+
+def product_charge50_min(p):
+    """0→50%充電の所要時間(分・推定)。容量と有線充電Wから導出(小さいほど良い)。
+    0→50%は急速充電が最大電力に近い領域のため、実効効率75%で近似する。"""
+    cap = num(get_spec(p, ["バッテリー", "バッテリー・充電"], "バッテリー容量")) \
+        or num(get_spec(p, ["バッテリー", "バッテリー・充電"], "容量"))
+    watt = num(get_spec(p, ["バッテリー", "バッテリー・充電"], "有線充電"))
+    if not cap or not watt:
+        return None
+    wh_half = cap * 0.5 * 3.85 / 1000.0
+    return round(wh_half / (watt * 0.75) * 60)
+
+
+def product_cost_index(p):
+    """コスパ指標: 1万円あたりAnTuTu(万点/万円。大きいほど割安)。現行モデルのみ。"""
+    a = product_antutu(p)
+    if not a or p["status"] != "current" or not p.get("price"):
+        return None
+    return round(a / (p["price"] / 10000.0), 1)
+
+
+_BACK_FX_COLLAB = {"genshin": "元素リング発光", "wuwa": "音叉LED", "nte": "EL発光背面", "endfield": "計器窓・ターミナルHUD"}
+_BACK_FX_LINE = {"suzaku": "背面LEDロゴ", "pad": "背面LEDロゴ", "neo": "背面LED", "pad-neo": "背面LED"}
+
+
+def product_back_fx(p):
+    """背面演出(LED・EL・計器窓)。コラボは作品意匠、ゲーミングはLED、その他はなし。"""
+    if p.get("collab"):
+        return _BACK_FX_COLLAB.get(p["collab"], "コラボ意匠")
+    return _BACK_FX_LINE.get(p["line"], "なし")
+
+
+def product_aod(p):
+    """常時表示(AOD)対応。有機EL系パネルは対応、液晶は非対応と判定。"""
+    panel = get_spec(p, ["ディスプレイ"], "パネル")
+    return "対応" if re.search(r"AMOLED|有機EL|燐光|OLED", panel) else "非対応"
+
+
+def compare_dash(p):
+    """比較ページの実測ダッシュボード行(数値バー付き)。すべて既存単一ソースから導出。
+    dir: high=大きいほど良い / low=小さいほど良い。"""
+    return [
+        {"key": "30分後fps維持率", "v": product_fps_keep(p), "u": "%", "dir": "high"},
+        {"key": "タッチ遅延(推定)", "v": product_touch_ms(p), "u": "ms", "dir": "low"},
+        {"key": "0→50%充電(推定)", "v": product_charge50_min(p), "u": "分", "dir": "low"},
+        {"key": "コスパ(1万円あたり)", "v": product_cost_index(p), "u": "万点", "dir": "high"},
+    ]
+
+
 def radar_values(p):
     """5軸(性能/カメラ/バッテリー/冷却/コスパ)を仕様から算出、0-100。
     コラボ限定モデルは突出軸が機種ごとに異なるため、radar_override を優先する。"""
@@ -3769,30 +3838,39 @@ def build_client_data():
     prods = []
     for p in ALL_PRODUCTS:
         cmp_data = None
+        dash = None
         if p["cat"] in ("phone", "tablet"):
+            antutu = product_antutu(p)
             cmp_data = {
                 "発売日": p["release"],
                 "価格": (yen(p["price"]) + "(税込)〜") if p["status"] == "current" else "販売終了",
                 "ディスプレイ": get_spec(p, ["ディスプレイ"], "パネル"),
                 "リフレッシュレート": get_spec(p, ["ディスプレイ"], "リフレッシュレート"),
+                "常時表示(AOD)": product_aod(p),
                 "SoC": get_spec(p, ["性能"], "SoC"),
+                "AnTuTu": (f"{antutu}万点" if antutu else "—"),
                 "GPU": get_spec(p, ["性能"], "GPU"),
                 "メモリ": get_spec(p, ["性能"], "メモリ"),
                 "ストレージ": get_spec(p, ["性能"], "ストレージ"),
-                "冷却": get_spec(p, ["冷却"], "冷却システム"),
-                "バッテリー": get_spec(p, ["バッテリー"], "バッテリー容量"),
-                "充電": get_spec(p, ["バッテリー"], "有線充電"),
+                "冷却方式": get_spec(p, ["冷却"], "冷却システム"),
+                "バッテリー": get_spec(p, ["バッテリー", "バッテリー・充電"], "バッテリー容量") or get_spec(p, ["バッテリー", "バッテリー・充電"], "容量"),
+                "急速充電": get_spec(p, ["バッテリー", "バッテリー・充電"], "有線充電"),
+                "リアカメラ": get_spec(p, ["カメラ"], "リアカメラ"),
+                "背面演出": product_back_fx(p),
+                "防塵防水": get_spec(p, ["本体"], "防塵防水"),
                 "重量": get_spec(p, ["本体"], "重量"),
+                "OS更新": get_spec(p, ["ソフトウェア"], "アップデート"),
                 "OS": get_spec(p, ["ソフトウェア"], "OS"),
             }
+            dash = [d for d in compare_dash(p) if d["v"] is not None]
         prods.append({
             "id": p["id"], "name": p["name"], "kana": p["kana"], "cat": p["cat"],
             "line": p["line"], "lineLabel": LINES[p["line"]]["label"], "year": p["year"],
             "status": p["status"], "flag": p.get("flag"), "price": p["price"],
             "tagline": p["tagline"], "release": p["release"],
             "colors": p["colors"], "storage": p["storage"],
-            "img": pimg(p["id"]),
-            "url": product_url(p), "cmp": cmp_data,
+            "img": pimg(p["id"]), "imgFront": pimg_front(p["id"]) if p["cat"] in ("phone", "tablet") else None,
+            "url": product_url(p), "cmp": cmp_data, "dash": dash,
             "radar": radar_values(p) if cmp_data else None,
         })
     news = [{"id": n["id"], "date": n["date"], "cat": n["cat"], "title": n["title"],
