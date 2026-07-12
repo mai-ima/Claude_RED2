@@ -170,3 +170,84 @@
 @media (prefers-reduced-motion: reduce) {
   .cl-lp.collab--next .nx-q { text-shadow: none; }
 }
+
+/* ---------- 4ヒント対応(自動フィット) ---------- */
+.cl-lp.collab--next .nx-hints__grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.cl-lp.collab--next .nx-hint:nth-child(4) { transform: rotate(0.4deg); }
+
+/* ---------- 言えること(予告スペック) ---------- */
+.cl-lp.collab--next .nx-spec__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.cl-lp.collab--next .nx-spec__item {
+  background: #141416;
+  border: 1px solid rgba(242, 242, 244, 0.12);
+  border-left: 3px solid var(--cl-accent, #ff7a00);
+  border-radius: 12px;
+  padding: 24px 22px;
+}
+.cl-lp.collab--next .nx-spec__k { font-family: monospace; font-size: 0.72rem; letter-spacing: 0.3em; color: var(--cl-accent, #ff7a00); }
+.cl-lp.collab--next .nx-spec__t { margin: 12px 0 8px; font-size: 1.05rem; font-weight: 900; color: #f2f2f4; }
+.cl-lp.collab--next .nx-spec__b { font-size: 0.84rem; line-height: 1.95; color: #9a9aa6; }
+
+/* ---------- 第2弾クロスリンク ---------- */
+.cl-lp.collab--next .nx-sib__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.cl-lp.collab--next .nx-sib {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: flex-start;
+  background: #141416;
+  border: 1px solid rgba(242, 242, 244, 0.12);
+  border-radius: 12px;
+  padding: 20px;
+  text-decoration: none;
+  color: #f2f2f4;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.cl-lp.collab--next .nx-sib:hover { border-color: var(--cl-accent, #ff7a00); transform: translateY(-3px); }
+.cl-lp.collab--next .nx-sib__q { font-size: 1.8rem; font-weight: 900; font-style: italic; color: var(--cl-accent, #ff7a00); line-height: 1; }
+.cl-lp.collab--next .nx-sib__d { font-family: monospace; font-size: 0.78rem; color: #c9c9d2; }
+.cl-lp.collab--next .nx-sib__go { font-size: 0.78rem; font-weight: 700; color: #9a9aa6; }
+
+@media (max-width: 860px) {
+  .cl-lp.collab--next .nx-spec__grid,
+  .cl-lp.collab--next .nx-sib__grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- 第2弾: 相手の「匂わせ」モチーフ(ヒーロー背景を一部だけ作品トーンに) ----------
+   名称・キャラは出さず、抽象的な背景意匠だけで各作品の空気を漂わせる。 */
+.cl-lp.collab--next .nx-hero > * { position: relative; z-index: 1; }
+.cl-lp.collab--next .nx-hero__scan,
+.cl-lp.collab--next .nx-motif { z-index: 0; }
+.cl-lp.collab--next .nx-motif { position: absolute; inset: 0; pointer-events: none; }
+
+/* ① 都市・警告 — ハザードストライプ */
+.cl-lp.collab--next .nx-hero--next .nx-motif {
+  background: repeating-linear-gradient(45deg, transparent 0 24px, color-mix(in srgb, var(--cl-accent, #ff7a00) 7%, transparent) 24px 32px);
+  -webkit-mask-image: radial-gradient(78% 60% at 50% 34%, #000, transparent);
+  mask-image: radial-gradient(78% 60% at 50% 34%, #000, transparent);
+}
+/* ② 宇宙 — 星屑 */
+.cl-lp.collab--next .nx-hero--next-2 .nx-motif {
+  background:
+    radial-gradient(1.6px 1.6px at 18% 30%, var(--cl-accent2, #7d8cff) 50%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 68% 22%, #ffffff 50%, transparent 55%),
+    radial-gradient(2.2px 2.2px at 42% 62%, var(--cl-accent, #d8b45c) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 84% 54%, #ffffff 50%, transparent 55%),
+    radial-gradient(1.6px 1.6px at 56% 38%, var(--cl-accent2, #7d8cff) 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 30% 78%, #ffffff 50%, transparent 55%),
+    radial-gradient(1.8px 1.8px at 76% 80%, var(--cl-accent, #d8b45c) 50%, transparent 55%);
+  -webkit-mask-image: radial-gradient(92% 82% at 50% 40%, #000, transparent);
+  mask-image: radial-gradient(92% 82% at 50% 40%, #000, transparent);
+}
+/* ③ 生命 — やわらかい光の粒 */
+.cl-lp.collab--next .nx-hero--next-3 .nx-motif {
+  background:
+    radial-gradient(160px 160px at 24% 66%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 16%, transparent), transparent 70%),
+    radial-gradient(120px 120px at 80% 28%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 12%, transparent), transparent 70%),
+    radial-gradient(2px 2px at 60% 60%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 60%, transparent) 50%, transparent 55%),
+    radial-gradient(2px 2px at 40% 40%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 50%, transparent) 50%, transparent 55%);
+}
+/* ④ 色彩 — 虹ストリーク */
+.cl-lp.collab--next .nx-hero--next-4 .nx-motif {
+  background: linear-gradient(115deg, transparent 28%, rgba(255, 95, 162, 0.12) 42%, rgba(51, 204, 221, 0.12) 55%, rgba(255, 206, 90, 0.12) 68%, transparent 82%);
+}

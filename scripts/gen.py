@@ -3402,10 +3402,19 @@ def _collab_lp_teaser(cfg, phone, accs):
         f'<a class="nx-past" href="/collab/{c["slug"]}/"><span class="nx-past__no">{i + 1:02d}</span>'
         f'<b>{esc(c["edition"])}</b><span class="nx-past__st">受付中</span></a>'
         for i, c in enumerate([c for c in COLLABS if c.get("active")]))
+    # 第2弾の他ティザーへのクロスリンク(自分は除く)
+    sibs = [c for c in COLLABS if c.get("motif") == "teaser" and c["slug"] != cfg["slug"]]
+    sib_links = "".join(
+        f'<a class="nx-sib" style="--cl-accent:{c["tokens"]["accent"]}" href="/collab/{c["slug"]}/">'
+        f'<span class="nx-sib__q">???</span>'
+        f'<span class="nx-sib__d">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
+        f'<span class="nx-sib__go">ティザーを見る →</span></a>'
+        for c in sibs)
     reveal = cfg.get("reveal_at", "")
     return f"""
-<section class="nx-hero">
+<section class="nx-hero nx-hero--{cfg['slug']}">
   <div class="nx-hero__scan" aria-hidden="true"></div>
+  <div class="nx-motif" aria-hidden="true"></div>
   <p class="nx-hero__eyebrow">{esc(cfg['hero']['eyebrow'])}</p>
   <h1 class="nx-hero__title"><span class="nx-q" data-nx-glitch>???</span><small>次の共同設計、進行中。</small></h1>
   <div class="nx-hero__sil reveal">{svg_art.svg_art('silhouette', cfg['tokens']['glow'])}</div>
@@ -3429,9 +3438,29 @@ def _collab_lp_teaser(cfg, phone, accs):
 
 <section class="cl-section nx-hints">
   <div class="cl-wrap">
-    <div class="cl-head"><p class="cl-eyebrow">TEASER</p><h2 class="cl-h2">三つのヒント。</h2>
+    <div class="cl-head"><p class="cl-eyebrow">TEASER</p><h2 class="cl-h2">手がかりは、これだけ。</h2>
     <p class="cl-lead">発表日まで、ここだけの手がかりを。当てられても、まだ答え合わせはしません。</p></div>
     <div class="nx-hints__grid">{hints}</div>
+  </div>
+</section>
+
+<section class="cl-section nx-spec">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">WHAT WE CAN SAY</p><h2 class="cl-h2">言えるのは、これだけ。</h2>
+    <p class="cl-lead">相手は言えません。でも、SUZAKUのコラボがどう作られるかは、もう決まっています。</p></div>
+    <div class="nx-spec__grid">
+      <div class="nx-spec__item reveal"><span class="nx-spec__k">DESIGN</span><h3 class="nx-spec__t">色替えでは、終わらせない。</h3><p class="nx-spec__b">筐体色も意匠も、その作品のためだけに新しく起こします。既存機の塗り替えは、しません。</p></div>
+      <div class="nx-spec__item reveal"><span class="nx-spec__k">SILICON</span><h3 class="nx-spec__t">SoCから、専用設計。</h3><p class="nx-spec__b">第1弾と同じく、体験のためのシリコンを新規に設計します。中身から、その作品専用です。</p></div>
+      <div class="nx-spec__item reveal"><span class="nx-spec__k">LIGHT</span><h3 class="nx-spec__t">背面は、作品の合図で光る。</h3><p class="nx-spec__b">通知も演出も、その世界の言葉で。何が、どう光るのかは、発表の日に。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cl-section nx-siblings">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">2ND WAVE</p><h2 class="cl-h2">第2弾は、複数進行中。</h2>
+    <p class="cl-lead">同時に、いくつもの共同設計が動いています。他のティザーも、のぞいてみてください。</p></div>
+    <div class="nx-sib__grid">{sib_links}</div>
   </div>
 </section>
 
@@ -3476,6 +3505,59 @@ def build_collab_page(cfg):
                 layout="collab", collab=cfg)
 
 
+def build_collab_tablet_teaser(cfg):
+    """コラボタブレットの予告ページ(/collab/{slug}/tablet/)。相手は公開済み・製品詳細は準備中。
+    各コラボの意匠(collab-{slug} テーマ+専用フォント)を使い、発表カウントダウンで予告する。"""
+    t = cfg["tablet"]
+    reveal = t.get("reveal_at", "")
+    points = [
+        "大画面という没入 — その世界を、手のひらより大きく描きます。",
+        "意匠は作品のまま — スマートフォン版のデザイン言語を大画面へ拡張。色替えはしません。",
+        "遊びも創作も — SUZAKU Pencil(別売予定)と分割ウィンドウで、その作品の色のまま。",
+    ]
+    pts = "".join(f"<li>{esc(p)}</li>" for p in points)
+    body = f"""
+<section class="cl-section cl-shero">
+  <div class="cl-wrap">
+    <p class="cl-shero__kick">SUZAKU × {esc(cfg['game'])} — COLLABORATION TABLET</p>
+    <h1 class="cl-shero__title">{esc(t['device'])}<br><small style="font-size:.46em;letter-spacing:.24em;font-weight:700">COMING SOON</small></h1>
+    <p class="cl-lead" style="max-width:600px">{esc(t['lead'])}</p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">REVEAL</p><h2 class="cl-h2">発表まで。</h2></div>
+    <div class="cl-count" data-until="{esc(reveal)}" role="timer" aria-label="発表までの残り時間">
+      <div class="cl-count__row">
+        <span class="cl-count__unit"><b data-c="d">--</b><i>日</i></span>
+        <span class="cl-count__unit"><b data-c="h">--</b><i>時間</i></span>
+        <span class="cl-count__unit"><b data-c="m">--</b><i>分</i></span>
+        <span class="cl-count__unit"><b data-c="s">--</b><i>秒</i></span>
+      </div>
+      <p class="cl-count__end">{esc(reveal[:10].replace('-', '/'))} 20:00 (JST) 発表予定</p>
+    </div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">PREVIEW</p><h2 class="cl-h2">分かっていること。</h2></div>
+    <ul class="cl-points">{pts}</ul>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap" style="display:flex;gap:14px;flex-wrap:wrap">
+    <a class="cl-btn cl-btn--primary" href="/collab/{cfg['slug']}/">スマートフォン版「{esc(cfg['device'])}」を見る</a>
+    <a class="cl-btn cl-btn--ghost" href="/collab/">すべてのコラボレーション</a>
+  </div>
+</section>
+{_cl_note(cfg)}"""
+    render_page(f"/collab/{cfg['slug']}/tablet/",
+                f"{cfg['edition']} タブレット — COMING SOON",
+                f"SUZAKU × {cfg['game']} コラボレーションタブレット「{t['device']}」の予告ページ。発表カウントダウンを公開中です。",
+                body, theme=_COLLAB_THEME.get(cfg['slug'], "dark"), crumbs=None,
+                group="コラボレーション", layout="collab", collab=cfg)
+
+
 def build_collab_hub():
     cards = ""          # 第1弾(受付中)
     wave2_cards = ""    # 第2弾ティザー(相手非公開)
@@ -3509,12 +3591,15 @@ def build_collab_hub():
             continue
         tok = cfg["tokens"]
         style = f"--cl-accent:{tok['accent']};--cl-accent2:{tok['accent2']};--cl-bg2:{tok['bg2']}"
+        trv = cfg.get("tablet", {}).get("reveal_at", "")[:10].replace("-", ".")
+        tab_tag = f"COMING SOON — {trv} 発表予定" if trv else "COMING SOON"
+        tab_href = f'/collab/{cfg["slug"]}/tablet/' if cfg.get("tablet") else f'/collab/{cfg["slug"]}/'
         tab_cards += (
-            f'<div class="collab-tabcard" style="{style}">'
+            f'<a class="collab-tabcard" style="{style}" href="{tab_href}">'
             f'{tab_icon}'
             f'<span class="collab-tabcard__game">{esc(cfg["game"])}</span>'
             f'<span class="collab-tabcard__name">コラボレーションタブレット</span>'
-            f'<span class="collab-tabcard__tag">COMING SOON</span></div>')
+            f'<span class="collab-tabcard__tag">{tab_tag}</span></a>')
     body = f"""
 <section class="hero hero--sub">
   <div class="hero__bg hero__bg--glow"></div>
@@ -3679,6 +3764,8 @@ def build_collab_pages():
             build_collab_page(cfg)
             for comp in COLLAB_SILICON[cfg["slug"]]:
                 build_collab_silicon_page(cfg, comp)
+            if cfg.get("tablet"):
+                build_collab_tablet_teaser(cfg)
         elif cfg.get("motif") == "teaser":
             build_collab_page(cfg)  # 第2弾ティザー(カウントダウン+シルエット・相手非公開)
 
