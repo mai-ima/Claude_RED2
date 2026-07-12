@@ -895,6 +895,10 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
         # cl-lp はLP/シリコン等の「専用レイアウトページ」のみ。コラボ製品ページは
         # 通常レイアウトのままフォント/アクセントだけ注入する(背景衝突を防ぐ)。
         collab_body_class = f' collab-page collab--{aslug}' + (" cl-lp" if collab_lp else "")
+        # 第2弾ティザーは資産共有(collab--next)しつつ、作品ごとの意匠を一部変える
+        # ため、実スラッグの per-teaser フック(nx--{slug})も付ける。
+        if collab.get("motif") == "teaser" and slug != aslug:
+            collab_body_class += f" nx--{slug}"
         style_vars = ";".join(f"--cl-{k}:{v}" for k, v in tok.items())
         collab_body_attr = f' data-motif="{collab["motif"]}" style="{style_vars}"'
         collab_script = (f'<script src="/assets/js/collab-core.js?v={ASSET_V}" defer></script>'
@@ -3589,12 +3593,25 @@ def build_collab_tablet_teaser(cfg):
                 group="コラボレーション", layout="collab", collab=cfg)
 
 
+def _lum(hx):
+    hx = hx.lstrip("#")
+    return 0.299 * int(hx[0:2], 16) + 0.587 * int(hx[2:4], 16) + 0.114 * int(hx[4:6], 16)
+
+
+def _hub_card_style(tok):
+    """ダーク背景のハブで見える色でカードを塗る。accent が暗すぎる作品
+    (エンドフィールド= #141412 等)は accent2 を表示アクセントに採用する。"""
+    a = tok["accent"] if _lum(tok["accent"]) > 90 else tok["accent2"]
+    a2 = tok["accent2"] if _lum(tok["accent2"]) > 90 else tok["accent"]
+    return f"--cl-accent:{a};--cl-accent2:{a2};--cl-bg2:{tok['bg2']}"
+
+
 def build_collab_hub():
     cards = ""          # 第1弾(受付中)
     wave2_cards = ""    # 第2弾ティザー(相手非公開)
     for cfg in COLLABS:
         tok = cfg["tokens"]
-        style = f"--cl-accent:{tok['accent']};--cl-accent2:{tok['accent2']};--cl-bg2:{tok['bg2']}"
+        style = _hub_card_style(tok)
         if cfg.get("active"):
             cards += (
                 f'<a class="collab-card" style="{style}" href="/collab/{cfg["slug"]}/">'
@@ -3621,7 +3638,7 @@ def build_collab_hub():
         if not cfg.get("active"):
             continue
         tok = cfg["tokens"]
-        style = f"--cl-accent:{tok['accent']};--cl-accent2:{tok['accent2']};--cl-bg2:{tok['bg2']}"
+        style = _hub_card_style(tok)
         trv = cfg.get("tablet", {}).get("reveal_at", "")[:10].replace("-", ".")
         tab_tag = f"COMING SOON — {trv} 発表予定" if trv else "COMING SOON"
         tab_href = f'/collab/{cfg["slug"]}/tablet/' if cfg.get("tablet") else f'/collab/{cfg["slug"]}/'
@@ -3757,7 +3774,7 @@ def build_collab_silicon_hub():
         if not cfg.get("active"):
             continue
         tok = cfg["tokens"]
-        style = f"--cl-accent:{tok['accent']};--cl-accent2:{tok['accent2']};--cl-bg2:{tok['bg2']}"
+        style = _hub_card_style(tok)
         cards = "".join(
             f'<a class="collab-card" style="{style}" href="{collab_silicon_url(cfg["slug"], c["key"])}">'
             f'<span class="collab-card__game">専用{esc(c["comp"])}</span>'

@@ -497,7 +497,7 @@ a.card:hover,
   /* ダークテーマのハブ上に置くため、明色トークン(--cl-bg2)ではなく暗色ベース+
      アクセントの淡いティントで色を出す。明色コラボ(原神/エンドフィールド)でも
      白系テキストが読める。 */
-  background: linear-gradient(150deg, color-mix(in srgb, var(--cl-accent, var(--accent)) 14%, var(--surface-2)), var(--surface));
+  background: linear-gradient(150deg, color-mix(in srgb, var(--cl-accent, var(--accent)) 18%, var(--surface-2)), var(--surface));
   color: var(--text-strong); overflow: hidden; transition: transform var(--dur-fast), box-shadow var(--dur-fast);
 }
 .collab-card::before {
@@ -2529,7 +2529,7 @@ body.has-announce-bar .drawer { top: calc(var(--header-h) + var(--announce-h, 32
   border: 1px solid var(--cl-accent, var(--line-strong));
   border-radius: var(--r-lg);
   /* カードと同じく暗色ベース+アクセント淡色で、明色コラボでもテキストが読める */
-  background: linear-gradient(160deg, color-mix(in srgb, var(--cl-accent, var(--accent)) 12%, var(--surface-2)), var(--surface));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--cl-accent, var(--accent)) 16%, var(--surface-2)), var(--surface));
   color: var(--text-strong);
   text-decoration: none;
   overflow: hidden;

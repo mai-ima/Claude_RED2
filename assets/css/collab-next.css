@@ -295,3 +295,28 @@
   border: 1px solid color-mix(in srgb, var(--cl-accent, #ff7a00) 30%, transparent);
   border-radius: 16px; padding: clamp(24px, 4vw, 40px);
 }
+
+/* ---------- 第2弾: 作品ごとの意匠を一部だけ変える(相手非公開のまま、雰囲気で匂わせる)
+   絵文字は使わず、ASCII / 承認済みの幾何記号のみで表現する。 ---------- */
+/* ② 宇宙 — 星のような区切り・字間を広く(静かな宇宙) */
+.nx--next-2 .nx-marquee__track span::after { content: "*"; }
+.nx--next-2 .nx-marquee__track span { letter-spacing: 0.3em; }
+.nx--next-2 .nx-prog__label { letter-spacing: 0.14em; }
+
+/* ③ 生命 — 器を大きく丸める(有機的・やわらかい) */
+.nx--next-3 .nx-hint,
+.nx--next-3 .nx-spec__item,
+.nx--next-3 .nx-sib,
+.nx--next-3 .nx-notify__box { border-radius: 22px; }
+.nx--next-3 .nx-hint { transform: none; }
+.nx--next-3 .nx-marquee__track span::after { content: "\25CB"; } /* ○ */
+
+/* ④ 色彩 — 虹の進捗・にぎやかなマーキー(カラフル) */
+.nx--next-4 .nx-prog__fill { background: linear-gradient(90deg, #ff5fa2, #ffce5a, #33ccdd, #7d8cff); }
+.nx--next-4 .nx-marquee {
+  background: linear-gradient(90deg, color-mix(in srgb, #ff5fa2 9%, #0c0c0e), color-mix(in srgb, #33ccdd 9%, #0c0c0e));
+}
+.nx--next-4 .nx-marquee__track span:nth-child(4n+1) { color: #ff5fa2; }
+.nx--next-4 .nx-marquee__track span:nth-child(4n+2) { color: #ffce5a; }
+.nx--next-4 .nx-marquee__track span:nth-child(4n+3) { color: #33ccdd; }
+.nx--next-4 .nx-marquee__track span:nth-child(4n) { color: #7d8cff; }
