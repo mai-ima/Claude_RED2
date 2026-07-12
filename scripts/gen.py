@@ -886,16 +886,19 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
     if layout == "collab" and collab:
         tok = collab["tokens"]
         slug = collab["slug"]
+        # 第2弾ティザーは複数スラッグ(next-2/3/4)が collab-next の CSS/JS と .collab--next を
+        # 共有する。assets_slug 未指定の既存コラボは従来どおり slug をそのまま使う。
+        aslug = collab.get("assets_slug", slug)
         collab_head = (f'<link rel="stylesheet" href="/assets/css/collab-core.css?v={ASSET_V}">'
-                       f'<link rel="stylesheet" href="/assets/css/collab-{slug}.css?v={ASSET_V}">'
-                       + COLLAB_FONTS.get(slug, ""))
+                       f'<link rel="stylesheet" href="/assets/css/collab-{aslug}.css?v={ASSET_V}">'
+                       + COLLAB_FONTS.get(aslug, ""))
         # cl-lp はLP/シリコン等の「専用レイアウトページ」のみ。コラボ製品ページは
         # 通常レイアウトのままフォント/アクセントだけ注入する(背景衝突を防ぐ)。
-        collab_body_class = f' collab-page collab--{slug}' + (" cl-lp" if collab_lp else "")
+        collab_body_class = f' collab-page collab--{aslug}' + (" cl-lp" if collab_lp else "")
         style_vars = ";".join(f"--cl-{k}:{v}" for k, v in tok.items())
         collab_body_attr = f' data-motif="{collab["motif"]}" style="{style_vars}"'
         collab_script = (f'<script src="/assets/js/collab-core.js?v={ASSET_V}" defer></script>'
-                         f'<script src="/assets/js/collab-{slug}.js?v={ASSET_V}" defer></script>')
+                         f'<script src="/assets/js/collab-{aslug}.js?v={ASSET_V}" defer></script>')
     crumb_html = ""
     if crumbs:
         items = [('ホーム', '/')] + list(crumbs)
@@ -2966,10 +2969,13 @@ def _collab_lp_endfield(cfg, phone, accs):
         ("編成(アクセサリ)", "#efAcc", False),
         ("記録画像", "#efGallery", False),
         ("通行証(保証)", "/support/warranty/", False),
-        ("第2弾", None, True),
+        ("第2弾", "/collab/#wave2", False),
     ]
+    _lock_svg = ('<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">'
+                 '<rect x="5" y="11" width="14" height="9" rx="2" fill="currentColor"/>'
+                 '<path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>')
     right_btns = "".join(
-        (f'<span class="ef-map__slot is-lock"><i>🔒</i>{label}</span>' if locked else
+        (f'<span class="ef-map__slot is-lock"><i>{_lock_svg}</i>{label}</span>' if locked else
          f'<a class="ef-map__slot" href="{href}"><i>▣</i>{label}</a>')
         for label, href, locked in right_slots)
 
@@ -3456,10 +3462,12 @@ def build_collab_page(cfg):
     slug = cfg["slug"]
     phone = next((p for p in ALL_PRODUCTS if p["id"] == cfg["phone_id"]), None)
     accs = [p for p in ALL_PRODUCTS if p["id"] in cfg.get("accessory_ids", [])]
-    body = _COLLAB_LP_BUILDERS[slug](cfg, phone, accs)
-    if slug == "next":
-        title = "コラボレーション第2弾 ティザー — COMING SOON"
-        desc = "SUZAKUコラボレーション第2弾のティザーページ。発表カウントダウンと三つのヒントを公開中。相手は、まだ言えません。"
+    is_teaser = cfg.get("motif") == "teaser"
+    builder = _collab_lp_teaser if is_teaser else _COLLAB_LP_BUILDERS[slug]
+    body = builder(cfg, phone, accs)
+    if is_teaser:
+        title = cfg.get("teaser_title", "コラボレーション第2弾 ティザー — COMING SOON")
+        desc = cfg.get("teaser_desc", "SUZAKUコラボレーション第2弾のティザーページ。発表カウントダウンと三つのヒントを公開中。相手は、まだ言えません。")
     else:
         title = f"{cfg['edition']} — 公式コラボレーション"
         desc = f"SUZAKU × {cfg['game']} 完全専用設計のコラボレーションモデル「{cfg['edition']}」特設ページ。{cfg['hero']['lead']}"
@@ -3469,7 +3477,8 @@ def build_collab_page(cfg):
 
 
 def build_collab_hub():
-    cards = ""
+    cards = ""          # 第1弾(受付中)
+    wave2_cards = ""    # 第2弾ティザー(相手非公開)
     for cfg in COLLABS:
         tok = cfg["tokens"]
         style = f"--cl-accent:{tok['accent']};--cl-accent2:{tok['accent2']};--cl-bg2:{tok['bg2']}"
@@ -3480,12 +3489,14 @@ def build_collab_hub():
                 f'<span class="collab-card__edition">{esc(cfg["edition"])}</span>'
                 f'<span class="collab-card__tag">数量限定・期間限定 — 受付中</span>'
                 f'<span class="collab-card__go">特設ページへ →</span></a>')
-        else:
-            cards += (
+        elif cfg.get("motif") == "teaser":
+            reveal_ym = cfg.get("reveal_at", "")[:7].replace("-", ".")
+            reveal_tag = f"近日公開 — {reveal_ym} 発表予定" if reveal_ym else "近日公開 — ティザー公開中"
+            wave2_cards += (
                 f'<a class="collab-card collab-card--soon" style="{style}" href="/collab/{cfg["slug"]}/">'
                 f'<span class="collab-card__game">{esc(cfg["game"])}</span>'
                 f'<span class="collab-card__edition">{esc(cfg["edition"])}</span>'
-                f'<span class="collab-card__tag">近日公開 — ティザー公開中</span>'
+                f'<span class="collab-card__tag">{reveal_tag}</span>'
                 f'<span class="collab-card__go">ティザーを見る →</span></a>')
 
     # コラボタブレット予告(第1弾の続き)。ページは未公開のため表示のみ。
@@ -3515,7 +3526,15 @@ def build_collab_hub():
 </section>
 <section class="section--sm">
   <div class="container">
+    <div class="section-head"><p class="eyebrow">1ST WAVE — 受付中</p><h2 class="t-h2">第1弾 — 4作品、受付中</h2></div>
     <div class="collab-grid">{cards}</div>
+  </div>
+</section>
+<section class="section--sm" id="wave2">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">2ND WAVE — COMING SOON</p><h2 class="t-h2">第2弾 — 進行中の共同設計</h2>
+    <p class="t-soft" style="max-width:640px">次の第2弾は複数作品を同時進行中。相手も、名前も、まだ言えません。各ティザーで発表カウントダウンとヒントだけ、先に公開しています。</p></div>
+    <div class="collab-grid">{wave2_cards}</div>
   </div>
 </section>
 <section class="section--sm">
@@ -3660,8 +3679,8 @@ def build_collab_pages():
             build_collab_page(cfg)
             for comp in COLLAB_SILICON[cfg["slug"]]:
                 build_collab_silicon_page(cfg, comp)
-        elif cfg["slug"] == "next":
-            build_collab_page(cfg)  # 第2弾ティザー(カウントダウン+シルエット)
+        elif cfg.get("motif") == "teaser":
+            build_collab_page(cfg)  # 第2弾ティザー(カウントダウン+シルエット・相手非公開)
 
 
 # ==========================================================================
