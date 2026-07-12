@@ -3039,10 +3039,10 @@ def _collab_lp_endfield(cfg, phone, accs):
         ("2025-08", "プロジェクト起動", "SUZAKUとHypergryphの共同設計チームが発足。「道具として信頼できる端末」を要件の頂点に置く。"),
         ("2025-12", "タロⅡ環境要件を定義", "低温・粉塵・連続稼働の3条件を実機仕様に翻訳。-20℃動作とIP68+MILを必須要件化。"),
         ("2026-04", "基幹 KIKAN-F1 テープアウト", "持続特化の専用SoCの初回試作が完成。定速ガバナーの実測でfps維持率99%を確認。"),
-        ("2026-08", "全26項目の耐久試験に合格", "落下26方向・防水・防塵・温度・振動の全項目をパス。装甲リブの最終形状が確定。"),
-        ("2026-10-03", "予約受付開始", "SUZAKUストアで先行予約を受付。"),
-        ("2026-10-17", "発売", "オンライン・秋葉原直営で同時発売。数量限定6,500台。"),
-        ("2026-11-30", "受付終了", "期間限定販売の受付終了。完売次第、期間内でも終了。"),
+        ("2026-06", "全26項目の耐久試験に合格", "落下26方向・防水・防塵・温度・振動の全項目をパス。装甲リブの最終形状が確定。"),
+        ("2026-07-10", "予約受付開始", "SUZAKUストアで先行予約を受付。"),
+        ("2026-07-11", "発売", "オンライン・秋葉原直営で同時発売。数量限定6,500台。"),
+        ("2026-09-27", "受付終了", "期間限定販売の受付終了。完売次第、期間内でも終了。"),
     ]
     devlog_rows = "".join(
         f'<li class="ef-log reveal"><span class="ef-log__d">{d}</span><b class="ef-log__t">{t}</b>'
@@ -3181,7 +3181,7 @@ def _collab_lp_endfield(cfg, phone, accs):
     <p class="ef-title__lead">{esc(cfg['hero']['lead'])}</p>
   </div>
   <a class="ef-title__continue" href="#efBase">スクロールして続ける <b>▶</b></a>
-  <span class="ef-title__ver" aria-hidden="true">SZ_WEB_REL_2026.10_ZENSEN_E{lim['qty']}</span>
+  <span class="ef-title__ver" aria-hidden="true">SZ_WEB_REL_2026.07_ZENSEN_E{lim['qty']}</span>
   <span class="ef-title__maker" aria-hidden="true">SUZAKU × ENDFIELD INDUSTRIES</span>
 </section>
 
