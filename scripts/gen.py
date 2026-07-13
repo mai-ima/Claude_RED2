@@ -2286,6 +2286,26 @@ def svg_os_showcase(v):
 # ニュース
 # ==========================================================================
 
+NEWS_CAT_COLOR = {"製品": "#e8442e", "技術": "#2fb6d0", "企業": "#d9a441", "開発者": "#2fd0a0", "コラボ": "#a15bff"}
+
+
+def news_cat_color(cat):
+    return NEWS_CAT_COLOR.get(cat, "#e8442e")
+
+
+def _news_ec(n):
+    """記事のアイキャッチSVG。コラボ記事は該当作品のグローを使う。"""
+    glow = None
+    nid = n["id"]
+    for kw, slug in (("shichiyo", "genshin"), ("zankyo", "wuwa"), ("yako", "nte"), ("zensen", "endfield")):
+        if kw in nid:
+            c = collab_by_slug(slug)
+            if c:
+                glow = c["tokens"]["glow"]
+            break
+    return svg_art.news_eyecatch(n["cat"], nid, glow)
+
+
 def build_news_pages():
     for i, n in enumerate(NEWS):
         paras = "".join(f"<p>{p}</p>" for p in n["body"])
@@ -2299,6 +2319,7 @@ def build_news_pages():
     <p class="t-soft t-small">{n['date'].replace('-', '.')} — 株式会社朱雀</p>
   </div>
 </section>
+<div class="container"><figure class="news-ec reveal">{_news_ec(n)}</figure></div>
 <article class="section--sm">
   <div class="container container--text">
     <div class="prose reveal">{paras}</div>
@@ -4543,7 +4564,8 @@ def news_list_html():
     """ニュース一覧をサーバー描画。JS有効時は年・カテゴリフィルタで再描画される。"""
     items = sorted(NEWS, key=lambda n: n["date"], reverse=True)
     return "".join(
-        f'<a class="card card--hover" href="/news/{n["id"]}/">'
+        f'<a class="card card--hover card--news" href="/news/{n["id"]}/">'
+        f'<div class="card--news__ec" style="--c1:{news_cat_color(n["cat"])}"><b>{esc(n["cat"])}</b></div>'
         f'<p class="t-micro t-faint">{n["date"].replace("-", ".")} <span class="badge" style="margin-left:8px">{esc(n["cat"])}</span></p>'
         f'<h2 class="t-h4">{esc(n["title"])}</h2>'
         f'<p class="t-small t-soft">{esc(n["excerpt"])}</p>'

@@ -83,8 +83,11 @@
         newsList.innerHTML = '<div class="empty"><p>該当するニュースはありません。</p></div>';
         return;
       }
+      var NEWS_EC = { "製品": "#e8442e", "技術": "#2fb6d0", "企業": "#d9a441", "開発者": "#2fd0a0", "コラボ": "#a15bff" };
       newsList.innerHTML = items.map(function (n) {
-        return '<a class="card card--hover" href="' + n.url + '">' +
+        var c1 = NEWS_EC[n.cat] || "#e8442e";
+        return '<a class="card card--hover card--news" href="' + n.url + '">' +
+          '<div class="card--news__ec" style="--c1:' + c1 + '"><b>' + esc(n.cat) + "</b></div>" +
           '<p class="t-micro t-faint">' + n.date.replace(/-/g, ".") + ' <span class="badge" style="margin-left:8px">' + n.cat + "</span></p>" +
           '<h2 class="t-h4">' + esc(n.title) + "</h2>" +
           '<p class="t-small t-soft">' + esc(n.excerpt) + "</p>" +

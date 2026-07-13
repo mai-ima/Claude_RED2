@@ -2619,3 +2619,14 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
 .os-ui__screen svg { width: 100%; height: auto; max-width: 200px; }
 .os-ui__cap { margin-top: 14px; }
 .os-ui__cap .t-h4 { margin: 4px 0 6px; }
+
+/* ===== ニュースアイキャッチ(D-H) ===== */
+.news-ec { margin: 0 auto clamp(20px, 3vw, 36px); max-width: 840px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line, rgba(255,255,255,.1)); line-height: 0; }
+.news-ec svg { width: 100%; height: auto; display: block; }
+.card--news { display: flex; flex-direction: column; }
+.card--news__ec {
+  position: relative; height: 96px; margin: -6px -6px 14px; border-radius: 12px 12px 0 0; overflow: hidden; flex: none;
+  background: linear-gradient(120deg, var(--c1, #e8442e) 0%, color-mix(in srgb, var(--c1, #e8442e) 20%, transparent) 46%, var(--bg-deep, #0d0d13) 100%);
+}
+.card--news__ec::after { content: ""; position: absolute; inset: 0; background: radial-gradient(64% 130% at 84% 4%, color-mix(in srgb, var(--c1, #e8442e) 55%, transparent), transparent 70%); }
+.card--news__ec b { position: absolute; left: 14px; bottom: 11px; z-index: 1; font-size: .64rem; font-weight: 800; letter-spacing: .22em; color: #fff; }

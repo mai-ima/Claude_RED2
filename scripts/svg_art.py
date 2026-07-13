@@ -1921,3 +1921,57 @@ ICONS = {
     "cart": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h13l-1.5 9h-10z"/><path d="M6 7L5 4H2.5"/><circle cx="9" cy="20" r="1.6"/><circle cx="16" cy="20" r="1.6"/></svg>',
     "user": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.5-3.5 4.2-5 7.5-5s6 1.5 7.5 5"/></svg>',
 }
+
+
+# ==========================================================================
+# ニュースのアイキャッチ(カテゴリ別・決定的生成)。外部画像に頼らない。
+# ==========================================================================
+_NEWS_EC_PAL = {
+    "製品": ("#e8442e", "#d9a441"),
+    "技術": ("#2fb6d0", "#5b8cff"),
+    "企業": ("#d9a441", "#e8442e"),
+    "開発者": ("#2fd0a0", "#2fb6d0"),
+    "コラボ": ("#a15bff", "#33ccdd"),
+}
+
+
+def news_eyecatch(cat, seed, glow=None):
+    """記事カテゴリ(と任意のグロー)から決定的に生成する抽象アイキャッチ(640×260)。
+    seed(記事id等)でモチーフ配置を変え、同じ記事は常に同じ絵になる。"""
+    c1, c2 = _NEWS_EC_PAL.get(cat, ("#e8442e", "#d9a441"))
+    if glow:
+        c1 = glow
+    h = 0
+    for ch in str(seed):
+        h = (h * 131 + ord(ch)) & 0xFFFFFFFF
+    u = f"ec{h:x}"
+    rnd = []
+    x = h or 1
+    for _ in range(12):
+        x = (1103515245 * x + 12345) & 0x7FFFFFFF
+        rnd.append(x / 0x7FFFFFFF)
+    # 対角ライン
+    lines = "".join(
+        f'<path d="M{-60 + i * 90} 260 L{60 + i * 90} 0" stroke="#fff" stroke-opacity="{0.03 + rnd[i % 12] * 0.05:.3f}" stroke-width="1.5"/>'
+        for i in range(9))
+    # 円(泡)
+    circs = "".join(
+        f'<circle cx="{int(40 + rnd[i] * 560)}" cy="{int(30 + rnd[i + 1] * 200)}" r="{int(10 + rnd[i + 2] * 46)}" '
+        f'fill="{c2 if i % 2 else c1}" fill-opacity="{0.06 + rnd[i] * 0.10:.3f}"/>'
+        for i in range(0, 8, 2))
+    # 前景の大リング
+    rx = int(430 + rnd[3] * 120)
+    return (
+        f'<svg viewBox="0 0 640 260" role="img" aria-label="{cat}の記事アイキャッチ" width="640" height="260" preserveAspectRatio="xMidYMid slice">'
+        f'<defs><linearGradient id="{u}g" x1="0" y1="0" x2="1" y2="1">'
+        f'<stop offset="0" stop-color="{c1}" stop-opacity="0.52"/><stop offset="0.62" stop-color="{c2}" stop-opacity="0.16"/><stop offset="1" stop-color="#0d0d13" stop-opacity="1"/></linearGradient>'
+        f'<radialGradient id="{u}r" cx="0.72" cy="0.32" r="0.62">'
+        f'<stop offset="0" stop-color="{c1}" stop-opacity="0.62"/><stop offset="1" stop-color="{c1}" stop-opacity="0"/></radialGradient></defs>'
+        f'<rect width="640" height="260" fill="#0d0d13"/><rect width="640" height="260" fill="url(#{u}g)"/>'
+        f'{lines}{circs}'
+        f'<circle cx="{rx}" cy="70" r="120" fill="none" stroke="{c1}" stroke-opacity="0.45" stroke-width="2"/>'
+        f'<circle cx="{rx}" cy="70" r="120" fill="url(#{u}r)"/>'
+        f'<rect width="640" height="260" fill="url(#{u}r)" opacity="0.5"/>'
+        f'<text x="34" y="150" font-family="sans-serif" font-size="17" font-weight="800" letter-spacing="6" fill="#fff" fill-opacity="0.9">{cat.upper() if cat.isascii() else cat}</text>'
+        f'<text x="34" y="176" font-family="sans-serif" font-size="12" font-weight="700" letter-spacing="4" fill="{c1}">SUZAKU NEWSROOM</text>'
+        f'</svg>')
