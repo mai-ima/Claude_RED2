@@ -16,11 +16,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/base.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/components.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/animations.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/collab-core.css?v=9272ee7a93"><link rel="stylesheet" href="/assets/css/collab-wuwa.css?v=9272ee7a93"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/base.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/components.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/animations.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/collab-core.css?v=ba1e477762"><link rel="stylesheet" href="/assets/css/collab-wuwa.css?v=ba1e477762"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
 </head>
 <body class="page-collab-wuwa-silicon-soc collab-page collab--wuwa cl-lp" data-motif="wuwa" style="--cl-bg:#0a0a0c;--cl-bg2:#101014;--cl-ink:#f2f2f4;--cl-soft:#9a9aa6;--cl-accent:#e8e8ec;--cl-accent2:#00e0ff;--cl-line:rgba(242,242,244,.22);--cl-glow:#00e0ff">
 
@@ -330,14 +330,28 @@
     <div class="cl-head"><p class="cl-eyebrow">VS STANDARD</p><h2 class="cl-h2">標準フラッグシップとの違い</h2>
     <p class="cl-lead">SUZAKU 4 世代(雷 RAI-G4 ほか)との比較。別設計のため、性格そのものが異なります。</p></div>
     <div class="cl-delta"><table><thead><tr><th>項目</th><th>標準(SUZAKU 4 世代)</th><th>共振 KYOSHIN-W1</th></tr></thead><tbody><tr><th scope="row">AnTuTu</th><td>385万点(雷 RAI-G4)</td><td class="cl-delta__sel">418万点(全SUZAKU最高)</td></tr><tr><th scope="row">最大クロック</th><td>3.8GHz</td><td class="cl-delta__sel">4.1GHz</td></tr><tr><th scope="row">入力→表示遅延</th><td>基準</td><td class="cl-delta__sel">-21%</td></tr></tbody></table></div>
+    <figure class="cl-bars"><figcaption class="cl-bars__cap">AnTuTuスコア(標準フラッグシップとの比較)</figcaption><div class="cl-bar"><span class="cl-bar__l">標準 雷 RAI-G4</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:92%"></span></span><span class="cl-bar__v">385万点</span></div><div class="cl-bar cl-bar--hi"><span class="cl-bar__l">共振 KYOSHIN-W1</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:100%"></span></span><span class="cl-bar__v">418万点</span></div></figure>
   </div>
 </section>
 
 <section class="cl-section">
   <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ARCHITECTURE</p><h2 class="cl-h2">設計の中身。</h2></div>
+    <div class="cl-archs"><div class="cl-arch"><b class="cl-arch__t">疾波ガバナー</b><p class="cl-arch__b">入力の立ち上がりを検知し、待たずに最高クロックへ跳ね上げる専用クロック制御。</p></div><div class="cl-arch"><b class="cl-arch__t">3nm 高クロックビン</b><p class="cl-arch__b">選別された高クロックダイで、全SUZAKU最高の4.1GHzを実現。</p></div><div class="cl-arch"><b class="cl-arch__t">低遅延パス</b><p class="cl-arch__b">入力から表示までの信号経路を短縮し、応答チェーンの待ち時間を削る。</p></div></div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、専用設計なのか。</h2></div>
     <p class="cl-lead" style="max-width:760px">残響のSoCは一点だけを求めて設計しました — 速さです。クロック制御「疾波ガバナー」は入力の立ち上がりを検知して瞬時に4.1GHzへ。共振鎖冷却との協調で、その速度を維持します。</p>
     <ul class="cl-points"><li>最大4.1GHz・AnTuTu 418万点(全SUZAKU最高)</li><li>入力起点のクロック制御「疾波ガバナー」</li><li>入力→表示遅延を21%短縮</li></ul>
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq"><details class="cl-faq__i"><summary>何がSUZAKU最速?</summary><p>AnTuTu 418万点・最大4.1GHzで、フラッグシップSUZAKU 4(385万点)を含む全SUZAKU製品の頂点です。</p></details><details class="cl-faq__i"><summary>速さは体感できる?</summary><p>疾波ガバナーと185Hz表示・3,200Hzタッチで、パリィやジャスト回避のコンマ1秒に効きます。</p></details></div>
   </div>
 </section>
 
@@ -412,19 +426,19 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="/assets/js/keys.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/fmt.js?v=9272ee7a93" defer></script>
-<script src="/data/products.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/main.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/charts.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/store.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/biz.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/pages.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-core.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-guard.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-account.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-admin.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-status.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/collab-core.js?v=9272ee7a93" defer></script><script src="/assets/js/collab-wuwa.js?v=9272ee7a93" defer></script>
+<script src="/assets/js/keys.js?v=ba1e477762" defer></script>
+<script src="/assets/js/fmt.js?v=ba1e477762" defer></script>
+<script src="/data/products.js?v=ba1e477762" defer></script>
+<script src="/assets/js/main.js?v=ba1e477762" defer></script>
+<script src="/assets/js/charts.js?v=ba1e477762" defer></script>
+<script src="/assets/js/store.js?v=ba1e477762" defer></script>
+<script src="/assets/js/biz.js?v=ba1e477762" defer></script>
+<script src="/assets/js/pages.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-core.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-guard.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-account.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-admin.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-status.js?v=ba1e477762" defer></script>
+<script src="/assets/js/collab-core.js?v=ba1e477762" defer></script><script src="/assets/js/collab-wuwa.js?v=ba1e477762" defer></script>
 </body>
 </html>

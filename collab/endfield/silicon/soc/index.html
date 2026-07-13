@@ -16,11 +16,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/base.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/components.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/animations.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/collab-core.css?v=9272ee7a93"><link rel="stylesheet" href="/assets/css/collab-endfield.css?v=9272ee7a93"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/base.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/components.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/animations.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/collab-core.css?v=ba1e477762"><link rel="stylesheet" href="/assets/css/collab-endfield.css?v=ba1e477762"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
 </head>
 <body class="page-collab-endfield-silicon-soc collab-page collab--endfield cl-lp" data-motif="endfield" style="--cl-bg:#f2f1ec;--cl-bg2:#e9e8e1;--cl-ink:#141412;--cl-soft:#5a5952;--cl-accent:#141412;--cl-accent2:#f2d800;--cl-line:rgba(20,20,18,.25);--cl-glow:#f2d800">
 
@@ -330,14 +330,28 @@
     <div class="cl-head"><p class="cl-eyebrow">VS STANDARD</p><h2 class="cl-h2">標準フラッグシップとの違い</h2>
     <p class="cl-lead">SUZAKU 4 世代(雷 RAI-G4 ほか)との比較。別設計のため、性格そのものが異なります。</p></div>
     <div class="cl-delta"><table><thead><tr><th>項目</th><th>標準(SUZAKU 4 世代)</th><th>基幹 KIKAN-F1</th></tr></thead><tbody><tr><th scope="row">30分後fps維持率</th><td>97%(雷 RAI-G4)</td><td class="cl-delta__sel">99%(全SUZAKU最高)</td></tr><tr><th scope="row">動作保証温度</th><td>0〜35℃</td><td class="cl-delta__sel">-20〜45℃</td></tr><tr><th scope="row">AnTuTu</th><td>385万点</td><td class="cl-delta__sel">403万点</td></tr></tbody></table></div>
+    <figure class="cl-bars"><figcaption class="cl-bars__cap">AnTuTuスコア(標準フラッグシップとの比較)</figcaption><div class="cl-bar"><span class="cl-bar__l">標準 雷 RAI-G4</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:96%"></span></span><span class="cl-bar__v">385万点</span></div><div class="cl-bar cl-bar--hi"><span class="cl-bar__l">基幹 KIKAN-F1</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:100%"></span></span><span class="cl-bar__v">403万点</span></div></figure>
   </div>
 </section>
 
 <section class="cl-section">
   <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ARCHITECTURE</p><h2 class="cl-h2">設計の中身。</h2></div>
+    <div class="cl-archs"><div class="cl-arch"><b class="cl-arch__t">定速ガバナー</b><p class="cl-arch__b">発熱を先読みしてクロックを一定に保ち、30分後も維持率99%を守る制御。</p></div><div class="cl-arch"><b class="cl-arch__t">広温度域ビン</b><p class="cl-arch__b">-20℃の低温でも仕様通りに動くよう選別・チューニングしたダイ。</p></div><div class="cl-arch"><b class="cl-arch__t">持続特化コア</b><p class="cl-arch__b">瞬間最大値ではなく、落ちない性能に振り切ったコア構成。</p></div></div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、専用設計なのか。</h2></div>
     <p class="cl-lead" style="max-width:760px">前線のSoCは、ベンチマークの1分ではなく現場の8時間のために設計しました。クロック制御「定速ガバナー」は発熱を先読みして一定速度を守り、-20℃の屋外でも仕様通りに動きます。</p>
     <ul class="cl-points"><li>30分後fps維持率99%(全SUZAKU最高)</li><li>動作保証-20〜45℃の広温度域設計</li><li>最大3.8GHz・AnTuTu 403万点</li></ul>
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq"><details class="cl-faq__i"><summary>ベンチは高くない?</summary><p>瞬間値より持続を優先した設計です。30分後のfps維持率99%は全SUZAKUで最高値です。</p></details><details class="cl-faq__i"><summary>氷点下でも動く?</summary><p>定速ガバナーと広温度域ビンにより、-20℃でも仕様通りに動作します。</p></details></div>
   </div>
 </section>
 
@@ -412,19 +426,19 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="/assets/js/keys.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/fmt.js?v=9272ee7a93" defer></script>
-<script src="/data/products.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/main.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/charts.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/store.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/biz.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/pages.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-core.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-guard.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-account.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-admin.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-status.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/collab-core.js?v=9272ee7a93" defer></script><script src="/assets/js/collab-endfield.js?v=9272ee7a93" defer></script>
+<script src="/assets/js/keys.js?v=ba1e477762" defer></script>
+<script src="/assets/js/fmt.js?v=ba1e477762" defer></script>
+<script src="/data/products.js?v=ba1e477762" defer></script>
+<script src="/assets/js/main.js?v=ba1e477762" defer></script>
+<script src="/assets/js/charts.js?v=ba1e477762" defer></script>
+<script src="/assets/js/store.js?v=ba1e477762" defer></script>
+<script src="/assets/js/biz.js?v=ba1e477762" defer></script>
+<script src="/assets/js/pages.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-core.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-guard.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-account.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-admin.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-status.js?v=ba1e477762" defer></script>
+<script src="/assets/js/collab-core.js?v=ba1e477762" defer></script><script src="/assets/js/collab-endfield.js?v=ba1e477762" defer></script>
 </body>
 </html>

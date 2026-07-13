@@ -16,11 +16,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/base.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/components.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/animations.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/collab-core.css?v=9272ee7a93"><link rel="stylesheet" href="/assets/css/collab-genshin.css?v=9272ee7a93"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/base.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/components.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/animations.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/collab-core.css?v=ba1e477762"><link rel="stylesheet" href="/assets/css/collab-genshin.css?v=ba1e477762"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" media="print" onload="this.media='all'">
 </head>
 <body class="page-collab-genshin-silicon-soc collab-page collab--genshin cl-lp" data-motif="genshin" style="--cl-bg:#f7f2e6;--cl-bg2:#efe7d2;--cl-ink:#2c261a;--cl-soft:#6b6353;--cl-accent:#a8842c;--cl-accent2:#2fb9a3;--cl-line:rgba(168,132,44,.35);--cl-glow:#2fb9a3">
 
@@ -330,14 +330,28 @@
     <div class="cl-head"><p class="cl-eyebrow">VS STANDARD</p><h2 class="cl-h2">標準フラッグシップとの違い</h2>
     <p class="cl-lead">SUZAKU 4 世代(雷 RAI-G4 ほか)との比較。別設計のため、性格そのものが異なります。</p></div>
     <div class="cl-delta"><table><thead><tr><th>項目</th><th>標準(SUZAKU 4 世代)</th><th>元素炉 GENSORO-E1</th></tr></thead><tbody><tr><th scope="row">AnTuTu</th><td>385万点(雷 RAI-G4)</td><td class="cl-delta__sel">408万点</td></tr><tr><th scope="row">広色域駆動時の消費電力</th><td>基準</td><td class="cl-delta__sel">-18%</td></tr><tr><th scope="row">色管理</th><td>ソフトウェア処理</td><td class="cl-delta__sel">専用コプロ「幻彩エンジン」</td></tr></tbody></table></div>
+    <figure class="cl-bars"><figcaption class="cl-bars__cap">AnTuTuスコア(標準フラッグシップとの比較)</figcaption><div class="cl-bar"><span class="cl-bar__l">標準 雷 RAI-G4</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:94%"></span></span><span class="cl-bar__v">385万点</span></div><div class="cl-bar cl-bar--hi"><span class="cl-bar__l">元素炉 GENSORO-E1</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:100%"></span></span><span class="cl-bar__v">408万点</span></div></figure>
   </div>
 </section>
 
 <section class="cl-section">
   <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ARCHITECTURE</p><h2 class="cl-h2">設計の中身。</h2></div>
+    <div class="cl-archs"><div class="cl-arch"><b class="cl-arch__t">幻彩エンジン</b><p class="cl-arch__b">色域の広い映像の色管理を専用回路でハードウェア化。CPU/GPUの負荷を上げずに色を守る。</p></div><div class="cl-arch"><b class="cl-arch__t">3nm 1+3+4 コア</b><p class="cl-arch__b">高効率コアを厚めに配し、長時間の探索でも発熱と電池を両立させる構成。</p></div><div class="cl-arch"><b class="cl-arch__t">元素リング制御ブロック</b><p class="cl-arch__b">背面の元素リングLEDの明滅を、描画とは別レーンで処理して負荷を分離。</p></div></div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、専用設計なのか。</h2></div>
     <p class="cl-lead" style="max-width:760px">七耀の主役は「色」。BT.2020 110%のパネルを一日中駆動しても電池が持つよう、色管理をハードウェア化した専用SoCを新規設計しました。テイワットの空の色を、計算で妥協しないための炉です。</p>
     <ul class="cl-points"><li>色管理コプロ「幻彩エンジン」をダイに統合</li><li>広色域駆動の消費電力を18%削減</li><li>最大3.85GHz・AnTuTu 408万点</li></ul>
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq"><details class="cl-faq__i"><summary>なぜ色のためにSoCを作るの?</summary><p>広色域パネルの色管理をソフトで行うと電力を食い、長時間で色がずれます。専用の幻彩エンジンでハードウェア化し、一日中同じ色を保ちます。</p></details><details class="cl-faq__i"><summary>ゲーム性能は?</summary><p>最大3.85GHz・AnTuTu 408万点。色処理を専用回路に逃がしているため、描画性能を削らずに色を守れます。</p></details></div>
   </div>
 </section>
 
@@ -412,19 +426,19 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="/assets/js/keys.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/fmt.js?v=9272ee7a93" defer></script>
-<script src="/data/products.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/main.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/charts.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/store.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/biz.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/pages.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-core.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-guard.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-account.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-admin.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-status.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/collab-core.js?v=9272ee7a93" defer></script><script src="/assets/js/collab-genshin.js?v=9272ee7a93" defer></script>
+<script src="/assets/js/keys.js?v=ba1e477762" defer></script>
+<script src="/assets/js/fmt.js?v=ba1e477762" defer></script>
+<script src="/data/products.js?v=ba1e477762" defer></script>
+<script src="/assets/js/main.js?v=ba1e477762" defer></script>
+<script src="/assets/js/charts.js?v=ba1e477762" defer></script>
+<script src="/assets/js/store.js?v=ba1e477762" defer></script>
+<script src="/assets/js/biz.js?v=ba1e477762" defer></script>
+<script src="/assets/js/pages.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-core.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-guard.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-account.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-admin.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-status.js?v=ba1e477762" defer></script>
+<script src="/assets/js/collab-core.js?v=ba1e477762" defer></script><script src="/assets/js/collab-genshin.js?v=ba1e477762" defer></script>
 </body>
 </html>

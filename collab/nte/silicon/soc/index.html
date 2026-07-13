@@ -16,11 +16,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/base.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/components.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/animations.css?v=9272ee7a93">
-<link rel="stylesheet" href="/assets/css/collab-core.css?v=9272ee7a93"><link rel="stylesheet" href="/assets/css/collab-nte.css?v=9272ee7a93"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;1,800;1,900&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/base.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/components.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/animations.css?v=ba1e477762">
+<link rel="stylesheet" href="/assets/css/collab-core.css?v=ba1e477762"><link rel="stylesheet" href="/assets/css/collab-nte.css?v=ba1e477762"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;1,800;1,900&display=swap" media="print" onload="this.media='all'">
 </head>
 <body class="page-collab-nte-silicon-soc collab-page collab--nte cl-lp" data-motif="nte" style="--cl-bg:#221f26;--cl-bg2:#2a2530;--cl-ink:#f4ecff;--cl-soft:#b9aec8;--cl-accent:#ff3ea5;--cl-accent2:#c8f24a;--cl-line:rgba(255,62,165,.32);--cl-glow:#ff2d78">
 
@@ -330,14 +330,28 @@
     <div class="cl-head"><p class="cl-eyebrow">VS STANDARD</p><h2 class="cl-h2">標準フラッグシップとの違い</h2>
     <p class="cl-lead">SUZAKU 4 世代(雷 RAI-G4 ほか)との比較。別設計のため、性格そのものが異なります。</p></div>
     <div class="cl-delta"><table><thead><tr><th>項目</th><th>標準(SUZAKU 4 世代)</th><th>夜想 YASO-N1</th></tr></thead><tbody><tr><th scope="row">AnTuTu</th><td>385万点(雷 RAI-G4)</td><td class="cl-delta__sel">410万点</td></tr><tr><th scope="row">ISP</th><td>1基</td><td class="cl-delta__sel">2基(1基は夜景デノイズ専用)</td></tr><tr><th scope="row">低照度ノイズ</th><td>基準</td><td class="cl-delta__sel">-35%</td></tr></tbody></table></div>
+    <figure class="cl-bars"><figcaption class="cl-bars__cap">AnTuTuスコア(標準フラッグシップとの比較)</figcaption><div class="cl-bar"><span class="cl-bar__l">標準 雷 RAI-G4</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:94%"></span></span><span class="cl-bar__v">385万点</span></div><div class="cl-bar cl-bar--hi"><span class="cl-bar__l">夜想 YASO-N1</span><span class="cl-bar__track"><span class="cl-bar__fill" style="width:100%"></span></span><span class="cl-bar__v">410万点</span></div></figure>
   </div>
 </section>
 
 <section class="cl-section">
   <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ARCHITECTURE</p><h2 class="cl-h2">設計の中身。</h2></div>
+    <div class="cl-archs"><div class="cl-arch"><b class="cl-arch__t">デュアルISP</b><p class="cl-arch__b">2基のISPのうち1基を夜景・低照度のデノイズ専用に割り当てる異例構成。</p></div><div class="cl-arch"><b class="cl-arch__t">夜景パイプライン</b><p class="cl-arch__b">長時間露光のRAWを、ゲーム描画と別レーンで現像しfps低下を防ぐ。</p></div><div class="cl-arch"><b class="cl-arch__t">3nm 省電力コア</b><p class="cl-arch__b">撮影しながらの長時間駆動に耐える電力効率重視のコア設計。</p></div></div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、専用設計なのか。</h2></div>
     <p class="cl-lead" style="max-width:760px">夜行のSoCは、カメラのために新規設計しました。2基のISPのうち1基をネオン・低照度のデノイズ専用に割り当てる構成は量産SoCでは異例です。ヘロシティの夜は、それだけの価値があります。</p>
     <ul class="cl-points"><li>デュアルISP(夜景デノイズ専用系統)</li><li>低照度ノイズ-35%</li><li>最大3.9GHz・AnTuTu 410万点</li></ul>
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq"><details class="cl-faq__i"><summary>なぜISPが2基?</summary><p>夜景の現像とゲーム描画を別レーンで走らせるためです。撮りながら遊んでもfpsが落ちません。</p></details><details class="cl-faq__i"><summary>暗所ノイズは?</summary><p>1基を夜景デノイズ専用に割り当て、低照度ノイズを標準比35%抑えます。</p></details></div>
   </div>
 </section>
 
@@ -412,19 +426,19 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="/assets/js/keys.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/fmt.js?v=9272ee7a93" defer></script>
-<script src="/data/products.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/main.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/charts.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/store.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/biz.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/pages.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-core.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-guard.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-account.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-admin.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/auth-status.js?v=9272ee7a93" defer></script>
-<script src="/assets/js/collab-core.js?v=9272ee7a93" defer></script><script src="/assets/js/collab-nte.js?v=9272ee7a93" defer></script>
+<script src="/assets/js/keys.js?v=ba1e477762" defer></script>
+<script src="/assets/js/fmt.js?v=ba1e477762" defer></script>
+<script src="/data/products.js?v=ba1e477762" defer></script>
+<script src="/assets/js/main.js?v=ba1e477762" defer></script>
+<script src="/assets/js/charts.js?v=ba1e477762" defer></script>
+<script src="/assets/js/store.js?v=ba1e477762" defer></script>
+<script src="/assets/js/biz.js?v=ba1e477762" defer></script>
+<script src="/assets/js/pages.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-core.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-guard.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-account.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-admin.js?v=ba1e477762" defer></script>
+<script src="/assets/js/auth-status.js?v=ba1e477762" defer></script>
+<script src="/assets/js/collab-core.js?v=ba1e477762" defer></script><script src="/assets/js/collab-nte.js?v=ba1e477762" defer></script>
 </body>
 </html>

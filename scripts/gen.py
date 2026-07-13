@@ -20,7 +20,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from data_products import ALL_PRODUCTS, PHONES, TABLETS, ACCESSORIES, LINES, BIZ_PRODUCTS, BIZ_OS  # noqa: E402
-from data_collab import COLLABS, COLLAB_SILICON, COLLAB_COOLING, COLLAB_SOC_CLOCK, collab_by_slug  # noqa: E402
+from data_collab import (COLLABS, COLLAB_SILICON, COLLAB_COOLING, COLLAB_SOC_CLOCK,  # noqa: E402
+                         COLLAB_SILICON_ARCH, COLLAB_SILICON_FAQ, collab_by_slug)
 from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
 from data_docs import DOCS  # noqa: E402
@@ -3888,9 +3889,12 @@ def build_collab_cooling_page(cfg):
 
 
 def build_collab_silicon_page(cfg, comp):
-    """コラボ専用シリコンの詳細ページ。デザインはLPと同じ作品言語(collab-{slug}.css)。"""
+    """コラボ専用シリコンの詳細ページ。デザインはLPと同じ作品言語(collab-{slug}.css)。
+    追補データ(COLLAB_SILICON_ARCH/_FAQ)と自動ベンチで内容を充実させる。"""
     slug = cfg["slug"]
+    key = comp["key"]
     name = comp["name"]
+    akey = f"{slug}-{key}"
 
     rows = "".join(
         f'<tr><th scope="row">{esc(k)}</th><td>{esc(v)}</td></tr>' for k, v in comp["rows"])
@@ -3901,6 +3905,44 @@ def build_collab_silicon_page(cfg, comp):
     others = "".join(
         f'<a class="cl-chip" href="{collab_silicon_url(slug, c["key"])}">{esc(c["comp"])} {esc(c["name"])}</a>'
         for c in COLLAB_SILICON[slug] if c["key"] != comp["key"])
+
+    # story を複数段落対応(str/list 両対応)
+    story_src = comp["story"] if isinstance(comp["story"], (list, tuple)) else [comp["story"]]
+    story_html = "".join(f'<p class="cl-lead" style="max-width:760px">{esc(p)}</p>' for p in story_src)
+
+    # SoC は AnTuTu の自動ベンチ(標準 雷 RAI-G4 との比較)を描く
+    bench_html = ""
+    if key == "soc":
+        chip = comp["en"].lower()
+        if chip in ANTUTU:
+            bench_html = _cl_bars({"title": "AnTuTuスコア(標準フラッグシップとの比較)", "unit": "万点",
+                                   "rows": [("標準 雷 RAI-G4", ANTUTU["rai-g4"]), (name, ANTUTU[chip])], "hi": 1})
+
+    # 追補: アーキテクチャ(あれば)
+    arch_data = COLLAB_SILICON_ARCH.get(akey, [])
+    arch_html = ""
+    if arch_data:
+        arch_cards = "".join(
+            f'<div class="cl-arch"><b class="cl-arch__t">{esc(t)}</b><p class="cl-arch__b">{esc(b)}</p></div>'
+            for t, b in arch_data)
+        arch_html = f"""
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ARCHITECTURE</p><h2 class="cl-h2">設計の中身。</h2></div>
+    <div class="cl-archs">{arch_cards}</div>
+  </div>
+</section>"""
+
+    # FAQ: 追補があれば使用、無ければ部品タイプ別の汎用2問
+    faq_data = COLLAB_SILICON_FAQ.get(akey) or [
+        (f"「{name}」は既存チップの選別版?",
+         f"いいえ。{cfg['edition']}のためだけに新規設計した専用{comp['comp']}です。標準品のクロック違いや選別ではありません。"),
+        ("標準モデルにも載る?",
+         f"いいえ。{name}は本コラボ機の専用設計で、標準ラインには搭載されません。"),
+    ]
+    faq_html = "".join(
+        f'<details class="cl-faq__i"><summary>{esc(q)}</summary><p>{esc(a)}</p></details>'
+        for q, a in faq_data)
 
     body = f"""
 {_cl_lpnav(cfg, None)}
@@ -3929,14 +3971,22 @@ def build_collab_silicon_page(cfg, comp):
     <div class="cl-head"><p class="cl-eyebrow">VS STANDARD</p><h2 class="cl-h2">標準フラッグシップとの違い</h2>
     <p class="cl-lead">SUZAKU 4 世代(雷 RAI-G4 ほか)との比較。別設計のため、性格そのものが異なります。</p></div>
     <div class="cl-delta"><table><thead><tr><th>項目</th><th>標準(SUZAKU 4 世代)</th><th>{esc(name)}</th></tr></thead><tbody>{vs_rows}</tbody></table></div>
+    {bench_html}
+  </div>
+</section>
+{arch_html}
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、専用設計なのか。</h2></div>
+    {story_html}
+    <ul class="cl-points">{points}</ul>
   </div>
 </section>
 
 <section class="cl-section">
   <div class="cl-wrap">
-    <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、専用設計なのか。</h2></div>
-    <p class="cl-lead" style="max-width:760px">{esc(comp['story'])}</p>
-    <ul class="cl-points">{points}</ul>
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq">{faq_html}</div>
   </div>
 </section>
 
