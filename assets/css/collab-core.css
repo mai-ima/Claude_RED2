@@ -512,3 +512,25 @@
 }
 .cl-view__btn.is-on { background: var(--cl-accent); color: var(--cl-bg); }
 @media (max-width: 900px) { .cl-buy__media img { width: 120px; } }
+
+/* コラボ冷却/シリコン詳細ページの追加コンポーネント(D-B/D-C) */
+.cl-bars { margin-top: 22px; display: grid; gap: 12px; max-width: 720px; }
+.cl-bars__cap { font-size: 0.82rem; color: var(--cl-soft); margin-bottom: 4px; }
+.cl-bar { display: grid; grid-template-columns: minmax(120px, 34%) 1fr auto; align-items: center; gap: 12px; }
+.cl-bar__l { font-size: 0.82rem; color: var(--cl-soft); }
+.cl-bar__track { height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--cl-ink) 12%, transparent); overflow: hidden; }
+.cl-bar__fill { display: block; height: 100%; border-radius: 999px; background: color-mix(in srgb, var(--cl-ink) 36%, transparent); }
+.cl-bar--hi .cl-bar__fill { background: var(--cl-accent); }
+.cl-bar__v { font-size: 0.82rem; font-weight: 700; color: var(--cl-ink); font-variant-numeric: tabular-nums; }
+.cl-bar--hi .cl-bar__v { color: var(--cl-accent); }
+
+.cl-archs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cl-arch { border: 1px solid var(--cl-line); border-radius: 14px; padding: 18px 18px 20px; background: color-mix(in srgb, var(--cl-ink) 3%, transparent); }
+.cl-arch__t { display: block; color: var(--cl-accent); font-size: 0.98rem; }
+.cl-arch__b { margin-top: 8px; color: var(--cl-soft); font-size: 0.88rem; line-height: 1.85; }
+@media (max-width: 860px) { .cl-archs { grid-template-columns: 1fr; } }
+
+.cl-split { display: grid; grid-template-columns: minmax(0, 0.9fr) 1.1fr; gap: clamp(20px, 4vw, 48px); align-items: center; }
+.cl-split__art { border: 1px solid var(--cl-line); border-radius: 18px; padding: 22px; background: color-mix(in srgb, var(--cl-ink) 3%, transparent); }
+.cl-split__art svg { width: 100%; height: auto; display: block; }
+@media (max-width: 860px) { .cl-split { grid-template-columns: 1fr; } }

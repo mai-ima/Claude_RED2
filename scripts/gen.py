@@ -20,7 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from data_products import ALL_PRODUCTS, PHONES, TABLETS, ACCESSORIES, LINES, BIZ_PRODUCTS, BIZ_OS  # noqa: E402
-from data_collab import COLLABS, COLLAB_SILICON, COLLAB_SOC_CLOCK, collab_by_slug  # noqa: E402
+from data_collab import COLLABS, COLLAB_SILICON, COLLAB_COOLING, COLLAB_SOC_CLOCK, collab_by_slug  # noqa: E402
 from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
 from data_docs import DOCS  # noqa: E402
@@ -1941,8 +1941,26 @@ def build_tech_hub(hub_key):
         trend_charts += chart({"type": "bar", "title": "神楽ISP 画像処理能力の推移", "unit": "億画素/秒",
                                "labels": ["2024(RS-1世代)", "2025(RS-2世代)", "2026(RS-2+世代)"], "values": [14, 24, 32], "highlight": 2})
 
-    # カメラハブ専用: イメージングパイプラインの解説(センサー→ISP→演算処理の全体像)
+    # 冷却ハブ専用: コラボ専用冷却への相互リンク(本体は /collab/ 配下=一般ラインと分離)
     hub_extra = ""
+    if hub_key == "cooling":
+        cool_cards = "".join(
+            f'<a class="card card--hover" href="{collab_cooling_url(cfg["slug"])}">'
+            f'<p class="eyebrow">{esc(cfg["game"])}</p>'
+            f'<h3 class="t-h4">{esc(COLLAB_COOLING[cfg["slug"]]["name"])}</h3>'
+            f'<p class="t-small t-soft">{esc(COLLAB_COOLING[cfg["slug"]]["kicker"])}</p>'
+            f'<p class="link-arrow">専用冷却を見る</p></a>'
+            for cfg in COLLABS if cfg.get("active") and cfg["slug"] in COLLAB_COOLING)
+        hub_extra += f"""
+<section class="section--sm">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">COLLAB — DEDICATED COOLING</p><h2 class="t-h2">コラボ専用の冷却技術。</h2>
+    <p class="t-soft">第1弾コラボ4機は、標準の氷刃/旋風ではなく、作品ごとに新規設計した専用冷却を積みます。詳細は各作品の特設をご覧ください。</p></div>
+    <div class="grid grid--cards reveal-stagger">{cool_cards}</div>
+  </div>
+</section>"""
+
+    # カメラハブ専用: イメージングパイプラインの解説(センサー→ISP→演算処理の全体像)
     if hub_key == "camera":
         hub_extra = f"""
 <section class="section--sm">
@@ -2290,6 +2308,28 @@ def _cl_silicon(cfg):
 </section>"""
 
 
+def _cl_cooling(cfg):
+    """コラボ専用冷却への導線(LP用)。冷却も作品専用であることを示す。"""
+    slug = cfg["slug"]
+    c = COLLAB_COOLING.get(slug)
+    if not c:
+        return ""
+    pts = "".join(f"<li>{esc(p)}</li>" for p in c.get("points", []))
+    return f"""
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">DEDICATED COOLING</p><h2 class="cl-h2">冷却も、作品専用。</h2>
+    <p class="cl-lead">{esc(cfg['device'])}は筐体・SoCだけでなく、冷却まで専用設計。標準の氷刃/旋風ではなく、この作品のために起こした「{esc(c['name'])}」を積みます。</p></div>
+    <a class="cl-si-card" href="{collab_cooling_url(slug)}" style="display:block">
+      <span class="cl-si-card__comp">冷却 — 専用設計</span>
+      <span class="cl-si-card__brand">{esc(c['name'])}</span>
+      <span class="cl-si-card__kick">{esc(c['kicker'])}</span></a>
+    <ul class="cl-points" style="margin-top:16px">{pts}</ul>
+    <div style="margin-top:16px"><a class="cl-btn cl-btn--ghost" href="{collab_cooling_url(slug)}">{esc(c['name'])} の詳細を見る</a></div>
+  </div>
+</section>"""
+
+
 def _cl_note(cfg):
     return (f'<p class="cl-note">{esc(cfg["note"])} 本サイトは架空企業「株式会社朱雀」のデモンストレーションであり、'
             f'実在の商品・価格・提携・販売を示すものではありません。</p>'
@@ -2527,6 +2567,7 @@ def _collab_lp_genshin(cfg, phone, accs):
 </section>
 {gs_ext}
 {_cl_silicon(cfg)}
+{_cl_cooling(cfg)}
 {_cl_accs(cfg, accs)}
 {_cl_bundle(cfg)}
 {_cl_schedule(cfg)}
@@ -2565,7 +2606,7 @@ def _collab_lp_wuwa(cfg, phone, accs):
         ("0.9mm", "精密鍛造アルミ背板", "マイクロアーク酸化仕上げ。指紋も、音も、残さない。"),
         ("0.3mm", "音叉LED導光層", "背面の唯一の光。音の振幅だけを写す。"),
         ("3.9mm", "両面実装 7,000mAh電池", "基板の裏表に電池を分け、8.2mmの薄さを成立させる。"),
-        ("1.9mm", "超薄型旋風ファン", "羽根を非対称ピッチにし、風切り音の山を消した。"),
+        ("1.9mm", "共振鎖の超薄型ファン", "羽根を非対称ピッチにし、風切り音の山を消した。"),
         ("0.4mm", "ベイパーチャンバー", "熱を面で受け、共振 KYOSHIN-W1 の4.1GHzを支える。"),
     ]
     layer_rows = "".join(
@@ -2715,6 +2756,7 @@ def _collab_lp_wuwa(cfg, phone, accs):
 </section>
 {ww_ext}
 {_cl_silicon(cfg)}
+{_cl_cooling(cfg)}
 {_cl_accs(cfg, accs)}
 {_cl_bundle(cfg)}
 {_cl_schedule(cfg)}
@@ -2915,6 +2957,7 @@ def _collab_lp_nte(cfg, phone, accs):
 </section>
 {nt_ext}
 {_cl_silicon(cfg)}
+{_cl_cooling(cfg)}
 {_cl_accs(cfg, accs)}
 {_cl_bundle(cfg)}
 {_cl_schedule(cfg)}
@@ -3011,6 +3054,13 @@ def _collab_lp_endfield(cfg, phone, accs):
         f'<span class="ef-slot__t">{esc(c["comp"])}</span><b>{esc(c["name"].split(" ")[0])}</b>'
         f'<span class="ef-slot__lv">専用設計</span></a>'
         for c in COLLAB_SILICON["endfield"])
+    # 冷却も専用設計 — 同じスロット列に「機関 KIKAN」を1枠追加
+    _ef_cool = COLLAB_COOLING.get("endfield")
+    if _ef_cool:
+        slots += (
+            f'<a class="ef-slot" href="{collab_cooling_url("endfield")}">'
+            f'<span class="ef-slot__t">冷却</span><b>{esc(_ef_cool["name"].split(" ")[0])}</b>'
+            f'<span class="ef-slot__lv">専用設計</span></a>')
 
     # --- S5 設備ダイアログ ---
     dura_cards = "".join(
@@ -3062,7 +3112,7 @@ def _collab_lp_endfield(cfg, phone, accs):
     flow_nodes = [
         ("電力", "8,500mAh", "供給 100%", "/products/phone/zensen/specs/"),
         ("制御", "基幹 KIKAN-F1", "定速 3.8GHz", "/collab/endfield/silicon/soc/"),
-        ("冷却", "密閉 定速ファン", "IP68内蔵", "/tech/cooling/"),
+        ("冷却", "機関 KIKAN 密閉", "IP68内蔵", "/collab/endfield/cooling/"),
         ("出力", "144fps 表示", "維持率 99%", "#efSustain"),
     ]
     flow_html = ""
@@ -3694,6 +3744,149 @@ def collab_silicon_url(slug, key):
     return f"/collab/{slug}/silicon/{key}/"
 
 
+def collab_cooling_url(slug):
+    return f"/collab/{slug}/cooling/"
+
+
+def _cl_bars(bench):
+    """コラボページ用のJS非依存・軽量バーチャート(cl-* スタイル)。
+    bench = {title, unit, rows:[(label, value)], hi}。charts.js に依存しない。"""
+    if not bench:
+        return ""
+    rows = bench.get("rows", [])
+    if not rows:
+        return ""
+    unit = bench.get("unit", "")
+    mx = max((v for _, v in rows), default=1) or 1
+    hi = bench.get("hi", -1)
+    bars = ""
+    for i, (label, val) in enumerate(rows):
+        w = max(6, round(val / mx * 100))
+        cls = " cl-bar--hi" if i == hi else ""
+        bars += (
+            f'<div class="cl-bar{cls}"><span class="cl-bar__l">{esc(label)}</span>'
+            f'<span class="cl-bar__track"><span class="cl-bar__fill" style="width:{w}%"></span></span>'
+            f'<span class="cl-bar__v">{esc(str(val))}{esc(unit)}</span></div>')
+    return (
+        f'<figure class="cl-bars"><figcaption class="cl-bars__cap">{esc(bench.get("title", ""))}</figcaption>'
+        f'{bars}</figure>')
+
+
+def build_collab_cooling_page(cfg):
+    """コラボ専用冷却の詳細ページ。作品言語(collab-{slug}.css)でデザイン統一。
+    第1弾4機は冷却も作品専用(氷刃/旋風ではない)であることを示す。"""
+    slug = cfg["slug"]
+    c = COLLAB_COOLING.get(slug)
+    if not c:
+        return
+    name = c["name"]
+    stats = "".join(
+        f'<div class="cl-stat"><b class="cl-stat__v">{esc(s["v"])}<i>{esc(s["u"])}</i></b>'
+        f'<span class="cl-stat__l">{esc(s["l"])}</span></div>'
+        for s in c.get("stats", []))
+    stats_html_cl = f'<div class="cl-stats">{stats}</div>' if stats else ""
+    rows = "".join(
+        f'<tr><th scope="row">{esc(k)}</th><td>{esc(v)}</td></tr>' for k, v in c.get("rows", []))
+    vs_rows = "".join(
+        f'<tr><th scope="row">{esc(k)}</th><td>{esc(b)}</td><td class="cl-delta__sel">{esc(s)}</td></tr>'
+        for k, b, s in c.get("vs", []))
+    arch = "".join(
+        f'<div class="cl-arch"><b class="cl-arch__t">{esc(t)}</b><p class="cl-arch__b">{esc(b)}</p></div>'
+        for t, b in c.get("arch", []))
+    secs = "".join(
+        f"""
+<section class="cl-section">
+  <div class="cl-wrap cl-split">
+    <div class="cl-split__art">{svg_art.svg_art(s.get('art', 'cooling'), cfg['tokens']['glow'])}</div>
+    <div class="cl-split__body">
+      <p class="cl-eyebrow">{esc(s.get('eyebrow', ''))}</p>
+      <h2 class="cl-h2">{esc(s['title'])}</h2>
+      <p class="cl-lead">{esc(s['body'])}</p>
+    </div>
+  </div>
+</section>""" for s in c.get("sections", []))
+    story = "".join(f'<p class="cl-lead" style="max-width:760px">{esc(p)}</p>' for p in c.get("story", []))
+    points = "".join(f"<li>{esc(p)}</li>" for p in c.get("points", []))
+    faq = "".join(
+        f'<details class="cl-faq__i"><summary>{esc(q)}</summary><p>{esc(a)}</p></details>'
+        for q, a in c.get("faq", []))
+    bars = _cl_bars(c.get("bench"))
+
+    body = f"""
+{_cl_lpnav(cfg, None)}
+<section class="cl-shero">
+  <div class="cl-wrap cl-shero__grid">
+    <div>
+      <p class="cl-eyebrow">DEDICATED COOLING — {esc(cfg['game'])}</p>
+      <h1 class="cl-shero__title">{esc(name)}</h1>
+      <p class="cl-shero__kick">{esc(c['kicker'])}</p>
+      <p class="cl-lead">{esc(c.get('lead', ''))}</p>
+      <div class="cl-hero__tags"><span class="cl-tag">完全専用設計</span><span class="cl-tag">冷却</span><span class="cl-tag">{esc(c['en'])}</span></div>
+    </div>
+    <div class="cl-shero__art">{svg_art.svg_art(c.get('art', 'cooling'), cfg['tokens']['glow'])}</div>
+  </div>
+</section>
+
+<section class="cl-section"><div class="cl-wrap">{stats_html_cl}</div></section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">SPEC</p><h2 class="cl-h2">主要スペック</h2></div>
+    <div class="cl-delta"><table><tbody>{rows}</tbody></table></div>
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">VS STANDARD</p><h2 class="cl-h2">標準の氷刃/旋風との違い</h2>
+    <p class="cl-lead">SUZAKU 4 世代の標準冷却(氷刃 V4 + 旋風 第3世代)との比較。同じ冷却でも、狙いから別物です。</p></div>
+    <div class="cl-delta"><table><thead><tr><th>項目</th><th>標準(氷刃/旋風)</th><th>{esc(name)}</th></tr></thead><tbody>{vs_rows}</tbody></table></div>
+    {bars}
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ARCHITECTURE</p><h2 class="cl-h2">熱設計の中身。</h2></div>
+    <div class="cl-archs">{arch}</div>
+  </div>
+</section>
+{secs}
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">WHY DEDICATED</p><h2 class="cl-h2">なぜ、冷却まで専用設計なのか。</h2></div>
+    {story}
+    <ul class="cl-points">{points}</ul>
+  </div>
+</section>
+
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq">{faq}</div>
+  </div>
+</section>
+
+<section class="cl-section cl-buy">
+  <div class="cl-wrap cl-buy__inner">
+    <div>
+      <p class="cl-eyebrow">{esc(cfg['game'])} コラボ専用冷却</p>
+      <h2 class="cl-h2">{esc(name)}</h2>
+    </div>
+    <div class="cl-buy__cta">
+      <a class="cl-btn cl-btn--primary" href="/collab/{slug}/">{esc(cfg['edition'])} を見る</a>
+      <a class="cl-btn cl-btn--ghost" href="/tech/cooling/">標準の冷却技術</a>
+    </div>
+  </div>
+</section>
+<div class="cl-backlink"><a href="/collab/{slug}/">← {esc(cfg['edition'])} に戻る</a></div>
+"""
+    desc = f"{cfg['edition']} 専用の冷却「{name}」。{c['kicker']} 標準の氷刃/旋風とは別設計の理由を解説。"
+    render_page(collab_cooling_url(slug), f"{name} — SUZAKU × {cfg['game']} 専用冷却",
+                desc, body, theme=_COLLAB_THEME.get(slug, "dark"), crumbs=None, group="コラボレーション",
+                layout="collab", collab=cfg)
+
+
 def build_collab_silicon_page(cfg, comp):
     """コラボ専用シリコンの詳細ページ。デザインはLPと同じ作品言語(collab-{slug}.css)。"""
     slug = cfg["slug"]
@@ -3818,6 +4011,8 @@ def build_collab_pages():
             build_collab_page(cfg)
             for comp in COLLAB_SILICON[cfg["slug"]]:
                 build_collab_silicon_page(cfg, comp)
+            if cfg["slug"] in COLLAB_COOLING:
+                build_collab_cooling_page(cfg)
             if cfg.get("tablet"):
                 build_collab_tablet_teaser(cfg)
         elif cfg.get("motif") == "teaser":
