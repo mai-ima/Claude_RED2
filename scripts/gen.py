@@ -2173,6 +2173,7 @@ def build_os_pages():
     <div class="grid grid--3">{feats}</div>
   </div>
 </section>
+{_os_ui_carousel(v) if i == 0 else ''}
 {svg_os_showcase(v)}
 <section class="section--sm">
   <div class="container container--narrow">
@@ -2188,6 +2189,79 @@ def build_os_pages():
 """
         render_page(f"/os/{v['path']}/", f"{v['name']}「{v['code']}」",
                     v["sub"], body, "dark", [("SUZAKU OS", "/os/"), (f"{v['name']}「{v['code']}」", None)], "OS")
+
+
+def _os_screen(inner):
+    """OS UIモック用のスマホ画面フレーム(220×440)。inner は画面内の描画。"""
+    return (f'<svg viewBox="0 0 220 440" role="img" width="220" height="440">'
+            f'<rect x="6" y="6" width="208" height="428" rx="30" fill="#0e0e14" stroke="rgba(255,255,255,.14)"/>'
+            f'<rect x="14" y="14" width="192" height="412" rx="24" fill="#141420"/>'
+            f'<rect x="86" y="20" width="48" height="7" rx="3.5" fill="#000"/>'
+            f'{inner}</svg>')
+
+
+def _os_ui_carousel(v):
+    """OS最新版専用: スクリーンショット風UIモックのカルーセル(横スクロール)。
+    外部画像に頼らずインラインSVGで描く。旧版には付けない(最新版のリッチ化)。"""
+    ac = "#e8442e"
+    # 1) ゲームスペース「陣」
+    tiles = "".join(f'<rect x="{28 + (i % 2) * 84}" y="{150 + (i // 2) * 66}" width="72" height="54" rx="10" '
+                    f'fill="{"rgba(232,68,46,.22)" if i == 0 else "rgba(255,255,255,.06)"}" stroke="rgba(255,255,255,.1)"/>'
+                    for i in range(4))
+    jin = (f'<text x="30" y="58" fill="#fff" font-size="18" font-weight="800" font-family="sans-serif">陣</text>'
+           f'<rect x="150" y="44" width="44" height="20" rx="10" fill="{ac}"/>'
+           f'<text x="172" y="58" fill="#fff" font-size="10" font-weight="700" text-anchor="middle" font-family="sans-serif">144fps</text>'
+           f'<rect x="28" y="86" width="164" height="48" rx="12" fill="rgba(232,68,46,.16)" stroke="{ac}" stroke-opacity=".5"/>'
+           f'<text x="40" y="115" fill="#fff" font-size="12" font-weight="700" font-family="sans-serif">おすすめ設定で起動</text>'
+           f'{tiles}')
+    # 2) AIフレーム生成
+    bars = "".join(f'<rect x="{34 + i * 26}" y="{300 - h}" width="16" height="{h}" rx="3" fill="{ac if i == 5 else "rgba(255,255,255,.18)"}"/>'
+                   for i, h in enumerate([40, 60, 78, 100, 128, 150]))
+    ai = (f'<text x="30" y="58" fill="#fff" font-size="14" font-weight="800" font-family="sans-serif">AI フレーム生成</text>'
+          f'<text x="30" y="82" fill="rgba(255,255,255,.6)" font-size="10" font-family="sans-serif">神楽NPUで最大2倍のfps</text>'
+          f'<rect x="30" y="104" width="160" height="1" fill="rgba(255,255,255,.12)"/>'
+          f'{bars}'
+          f'<text x="150" y="130" fill="{ac}" font-size="22" font-weight="900" text-anchor="middle" font-family="sans-serif">×2</text>')
+    # 3) 表示設定
+    def _toggle(y, on, label):
+        knob = 178 if on else 158
+        col = ac if on else "rgba(255,255,255,.16)"
+        return (f'<text x="30" y="{y + 5}" fill="#fff" font-size="12" font-family="sans-serif">{label}</text>'
+                f'<rect x="152" y="{y - 9}" width="40" height="20" rx="10" fill="{col}"/>'
+                f'<circle cx="{knob}" cy="{y + 1}" r="7.5" fill="#fff"/>')
+    settings = (f'<text x="30" y="58" fill="#fff" font-size="14" font-weight="800" font-family="sans-serif">表示設定</text>'
+                f'{_toggle(110, True, "アニメーション低減")}{_toggle(156, False, "文字を大きく")}'
+                f'{_toggle(202, True, "ダークテーマ")}{_toggle(248, False, "フッター常時展開")}')
+    # 4) ロック画面(不知火テーマ)
+    lock = (f'<text x="110" y="150" fill="#fff" font-size="48" font-weight="200" text-anchor="middle" font-family="sans-serif">9:41</text>'
+            f'<text x="110" y="176" fill="rgba(255,255,255,.6)" font-size="11" text-anchor="middle" font-family="sans-serif">7月11日 土曜日</text>'
+            f'<rect x="30" y="210" width="160" height="40" rx="12" fill="rgba(255,255,255,.07)"/>'
+            f'<circle cx="50" cy="230" r="9" fill="{ac}"/>'
+            f'<rect x="68" y="222" width="90" height="6" rx="3" fill="rgba(255,255,255,.5)"/>'
+            f'<rect x="68" y="234" width="60" height="5" rx="2.5" fill="rgba(255,255,255,.25)"/>'
+            f'<rect x="30" y="258" width="160" height="40" rx="12" fill="rgba(255,255,255,.07)"/>'
+            f'<circle cx="50" cy="278" r="9" fill="rgba(255,255,255,.3)"/>'
+            f'<rect x="68" y="270" width="70" height="6" rx="3" fill="rgba(255,255,255,.5)"/>'
+            f'<rect x="68" y="282" width="94" height="5" rx="2.5" fill="rgba(255,255,255,.25)"/>')
+    mocks = [
+        ("GAME SPACE", "ゲームスペース「陣」", "起動・実績・fpsをひとつの画面に。おすすめ設定でワンタップ起動。", jin),
+        ("AI FRAME", "AIフレーム生成", "神楽NPUがフレームを補間し、対応タイトルで最大2倍のfpsに。", ai),
+        ("SETTINGS", "表示設定", "文字とUIの大きさ・アニメーション低減・テーマを、指先で。", settings),
+        ("LOCK", "不知火テーマ", "バージョン名を冠したライブ壁紙・サウンド・通知デザインを同梱。", lock),
+    ]
+    cards = "".join(
+        f'<figure class="os-ui reveal"><div class="os-ui__screen">{svg}</div>'
+        f'<figcaption class="os-ui__cap"><p class="eyebrow">{eb}</p><h3 class="t-h4">{esc(t)}</h3>'
+        f'<p class="t-small t-soft">{esc(d)}</p></figcaption></figure>'
+        for eb, t, d, svg in mocks)
+    return f"""
+<section class="section--sm">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">SCREENS</p><h2 class="t-h2">画面で見る、{esc(v['name'])}。</h2>
+    <p class="t-soft">「陣」・AIフレーム生成・表示設定・{esc(v['code'])}テーマ。横にスクロールして主要画面をどうぞ。</p></div>
+    <div class="os-ui-rail scroll-x">{cards}</div>
+  </div>
+</section>"""
 
 
 def svg_os_showcase(v):

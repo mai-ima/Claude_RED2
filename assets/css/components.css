@@ -2609,3 +2609,13 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
 .combo-total b { color: var(--text, #fff); font-size: 1.35em; font-weight: 900; margin-left: 4px; }
 .combo-total small { font-size: .7em; margin-left: 2px; }
 .combo-total .link-arrow { margin-left: 6px; }
+
+/* ===== OS最新版 UIモック・カルーセル(D-G) ===== */
+.os-ui-rail { display: flex; gap: 20px; padding-bottom: 10px; scroll-snap-type: x mandatory; }
+.os-ui { flex: 0 0 auto; width: 260px; scroll-snap-align: start; }
+.os-ui__screen { display: grid; place-items: center; padding: 16px; border-radius: 22px;
+  background: radial-gradient(70% 50% at 50% 20%, rgba(232,68,46,.14), transparent 70%), color-mix(in srgb, var(--bg-deep, #0c0c10) 70%, transparent);
+  border: 1px solid var(--line, rgba(255,255,255,.1)); }
+.os-ui__screen svg { width: 100%; height: auto; max-width: 200px; }
+.os-ui__cap { margin-top: 14px; }
+.os-ui__cap .t-h4 { margin: 4px 0 6px; }
