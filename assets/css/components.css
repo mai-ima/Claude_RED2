@@ -2594,3 +2594,18 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
   .fs-step { opacity: 1; transition: none; }
   .fs-showcase__badge { transition: none; }
 }
+
+/* ===== ライン別ヒーロー演出(D-E) ===== */
+/* 標準(TSUBAME/燕)= 明るめ・製品画像を大きく前面に */
+.hero--life .hero-device { max-width: min(64%, 300px); margin-top: 22px; filter: drop-shadow(0 20px 46px rgba(0,0,0,.34)); }
+.hero--life .t-hero { letter-spacing: .01em; }
+/* エントリー(Lite)= 価格を大きく先行表示 */
+.hero__price { margin-top: 16px; font-size: clamp(1.6rem, 1.2rem + 2.2vw, 2.6rem); font-weight: 900; color: var(--text, #fff); letter-spacing: .01em; }
+.hero__price small { font-size: .42em; font-weight: 600; color: var(--text-soft, #9aa); margin-left: 6px; }
+.hero--entry .hero-device { max-width: min(52%, 240px); margin-top: 18px; }
+
+/* ===== アクセサリ組み合わせ提案の合計(D-F) ===== */
+.combo-total { margin-top: 22px; text-align: center; color: var(--text-soft, #9aa); font-size: .95rem; }
+.combo-total b { color: var(--text, #fff); font-size: 1.35em; font-weight: 900; margin-left: 4px; }
+.combo-total small { font-size: .7em; margin-left: 2px; }
+.combo-total .link-arrow { margin-left: 6px; }

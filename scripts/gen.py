@@ -1124,6 +1124,51 @@ def cta_minimal(title, links):
 
 
 FLAGSHIP_IDS = {"suzaku-4", "pad-2"}
+PRODUCT_BY_ID = {x["id"]: x for x in ALL_PRODUCTS}
+
+
+def _combo_section(p):
+    """本体×アクセサリの組み合わせ提案(D-F)。製品ページには相性のよい純正アクセサリを、
+    アクセサリページには相性のよい本体を、product_card 流用のセット帯で提示する。"""
+    def byid(ids):
+        return [PRODUCT_BY_ID[i] for i in ids if i in PRODUCT_BY_ID and PRODUCT_BY_ID[i]["status"] == "current"]
+
+    if p["cat"] == "accessory":
+        if p.get("collab"):
+            return ""  # コラボ限定アクセサリは各LPで扱うため対象外
+        items = byid(["suzaku-4", "tsubame-3", "pad-2"])
+        if not items:
+            return ""
+        cards = "".join(product_card(x) for x in items[:3])
+        return f"""
+<section class="section--sm">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">GOOD WITH</p><h2 class="t-h2">この製品と、相性のいい本体。</h2>
+    <p class="t-soft">{esc(p['name'])}は、現行の主要モデルと組み合わせて使えます。</p></div>
+    <div class="grid grid--3 grid--cards reveal-stagger">{cards}</div>
+  </div>
+</section>"""
+
+    if p["cat"] == "tablet":
+        aids = ["dock", "buds", "raisoku-charger"]
+    elif p["line"] in GAMING_LINES:
+        aids = ["hyoran-cooler", "grip-pro", "buds"]
+    else:
+        aids = ["shield-case", "buds", "raisoku-charger"]
+    accs = byid(aids)
+    if not accs:
+        return ""
+    cards = "".join(product_card(a) for a in accs)
+    total = p["price"] + sum(a["price"] for a in accs)
+    return f"""
+<section class="section--sm">
+  <div class="container">
+    <div class="section-head"><p class="eyebrow">COMPLETE THE SET</p><h2 class="t-h2">本体と、そろえて。</h2>
+    <p class="t-soft">{esc(p['name'])}の相性のよい純正アクセサリ。まとめてそろえると、体験が一段上がります。</p></div>
+    <div class="grid grid--3 grid--cards reveal-stagger">{cards}</div>
+    <p class="combo-total">本体＋アクセサリ{len(accs)}点のセット合計目安 <b>{yen(total)}</b><small>(税込)</small>　<a class="link-arrow" href="/store/">ストアでそろえる</a></p>
+  </div>
+</section>"""
 
 
 def _flagship_showcase(p, glow):
@@ -1446,16 +1491,24 @@ def build_product_page(p):
   </div>
 </div>"""
 
+    # ライン別ヒーロー演出 — ゲーミング=ダーク+グロー / 標準(燕)=明るめ+製品先行 / エントリー=価格先行
+    if p["line"] in ("lite", "t-pad-lite"):
+        hero_var, hero_bg = "hero--entry", f"radial-gradient(54% 40% at 50% 24%, {glow}22, transparent 70%), var(--bg)"
+    elif p["line"] in ("tsubame", "t-pad"):
+        hero_var, hero_bg = "hero--life", f"radial-gradient(62% 46% at 50% 30%, {glow}26, transparent 72%), var(--bg)"
+    else:
+        hero_var, hero_bg = "hero--gaming", (f"radial-gradient(52% 42% at 50% 66%, {glow}44, transparent 70%), "
+                                             "radial-gradient(40% 32% at 80% 12%, rgba(217,164,65,0.08), transparent 70%), var(--bg-deep)")
+    hero_price = (f'<p class="hero__price">{yen(p["price"])}<small>(税込)〜</small></p>'
+                  if hero_var == "hero--entry" and p["status"] == "current" else "")
     body = f"""
-<section class="hero hero--sub" style="--line-glow:{glow}">
-  <div class="hero__bg hero__bg--glow" style="background:
-    radial-gradient(52% 42% at 50% 66%, {glow}44, transparent 70%),
-    radial-gradient(40% 32% at 80% 12%, rgba(217,164,65,0.08), transparent 70%),
-    var(--bg-deep)"></div>
+<section class="hero hero--sub {hero_var}" style="--line-glow:{glow}">
+  <div class="hero__bg hero__bg--glow" style="background: {hero_bg}"></div>
   <div class="hero__inner hero-enter">
     <p class="eyebrow eyebrow--center">{line['label']} — {p['year']}</p>
     <h1 class="t-hero">{esc(p['name'])}</h1>
     <p class="t-lead" style="max-width:640px">{esc(p['tagline'])}<br><span class="t-small">{esc(p['sub'])}</span></p>
+    {hero_price}
     <div class="hero__actions">
       {'<a class="btn btn--primary btn--lg" href="#buy">' + yen(p['price']) + '(税込)〜 購入へ</a>' if p['status'] == 'current' else '<span class="badge badge--end">販売終了モデル</span>'}
       {chip_link}
@@ -1473,6 +1526,7 @@ def build_product_page(p):
 {lineage_section(p) if is_device else ''}
 {extras}
 {f'''<section class="section--sm"><div class="container"><div class="card t-center" style="padding:clamp(32px,5vw,56px)"><h2 class="t-h3">すべての仕様を確認する</h2><p class="t-soft">サイズ・性能・カメラ・通信仕様の完全なリストをご用意しています。</p><div class="cluster cluster--center"><a class="btn btn--primary" href="{url}specs/">{esc(p['name'])} の仕様を見る</a><a class="btn btn--ghost" href="/products/compare/">他のモデルと比較する</a></div></div></div></section>''' if is_device else ''}
+{_combo_section(p)}
 {related}
 {related_news_section([p['name']], title=f"{esc(p['name'])} のニュース")}
 {cta_band(*(
