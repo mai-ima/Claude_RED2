@@ -470,5 +470,23 @@
     });
   })();
 
+  /* ---------- 旗艦ショーケース(スクロール連動で有効な柱を追従) ---------- */
+  (function fsShowcase() {
+    var fs = document.querySelector("[data-fs]");
+    if (!fs) return;
+    var badge = fs.querySelector("[data-fs-badge]");
+    var steps = $$("[data-fs-step]", fs);
+    if (!steps.length || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        steps.forEach(function (s) { s.classList.remove("is-active"); });
+        en.target.classList.add("is-active");
+        if (badge) badge.textContent = en.target.getAttribute("data-fs-label") || "";
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    steps.forEach(function (s) { io.observe(s); });
+  })();
+
   szUpdateCartBadge();
 })();

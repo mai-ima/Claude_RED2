@@ -1123,6 +1123,48 @@ def cta_minimal(title, links):
             f'<h2 class="t-h3">{title}</h2><div class="cluster cluster--center" style="gap:26px">{l}</div></div></section>')
 
 
+FLAGSHIP_IDS = {"suzaku-4", "pad-2"}
+
+
+def _flagship_showcase(p, glow):
+    """旗艦専用: スクロール連動ショーケース。左に製品画像をスティッキー固定し、
+    右の柱(ディスプレイ/SoC/冷却…)がスクロールで順に現れる。main.js が有効な柱を
+    追従表示する。reduced-motion 環境では通常の縦積みとして読める(演出のみ無効)。"""
+    if p["id"] not in FLAGSHIP_IDS:
+        return ""
+    secs = p.get("sections", [])[:5]
+    if len(secs) < 2:
+        return ""
+    steps = ""
+    for i, s in enumerate(secs):
+        art = svg_art.svg_art(s.get("art", "chip"), glow)
+        steps += f"""
+    <div class="fs-step reveal" data-fs-step data-fs-label="{esc(s.get('eyebrow', ''))}">
+      <div class="fs-step__ic" aria-hidden="true">{art}</div>
+      <p class="fs-step__no">{i + 1:02d}</p>
+      <h3 class="fs-step__t">{esc(s['title'])}</h3>
+      <p class="fs-step__b">{esc(s['body'])}</p>
+    </div>"""
+    stage_img = pimg_front(p["id"]) if p["cat"] in ("phone", "tablet") else pimg(p["id"])
+    return f"""
+<section class="fs-showcase" data-fs style="--fs-glow:{glow}">
+  <div class="container fs-showcase__grid">
+    <div class="fs-showcase__stagewrap">
+      <div class="fs-showcase__stage">
+        <span class="fs-showcase__eyebrow">SHOWCASE</span>
+        <img src="{stage_img}" alt="{esc(p['name'])}" width="360" height="640" loading="lazy">
+        <span class="fs-showcase__badge" data-fs-badge>{esc(secs[0].get('eyebrow', ''))}</span>
+      </div>
+    </div>
+    <div class="fs-showcase__steps">
+      <div class="fs-showcase__head"><p class="eyebrow">FLAGSHIP</p><h2 class="t-h2">この一台を、分解する。</h2>
+      <p class="t-soft">スクロールで、{esc(p['name'])}を構成する柱を一つずつ。</p></div>
+      {steps}
+    </div>
+  </div>
+</section>"""
+
+
 def build_product_page(p):
     line = LINES[p["line"]]
     glow = p.get("glow") or line["glow"]
@@ -1422,6 +1464,7 @@ def build_product_page(p):
   </div>
 </section>
 <section class="section--sm"><div class="container">{stats_html(p['stats'])}</div></section>
+{_flagship_showcase(p, glow)}
 {buy_box}
 {bleed}
 {color_gallery}
