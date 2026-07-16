@@ -37,28 +37,45 @@ REDMAGICと同じ思想(自社シリコン・冷却技術・ゲーミング特�
 ├── project-notes/              # 内部メモ(構成監査・コラボ調査・backlog。配信対象外)
 └── scripts/
     ├── gen.py                  # 静的サイトジェネレータ(このリポジトリの心臓)
+    ├── lib.py                  # 共通ユーティリティ(esc/yen/num/slugify・純粋関数)
+    ├── validate.py             # データ検証層(スキーマ・絵文字・機密ガード。ビルド前ゲート)
+    ├── selftest.py             # スモークテスト(生成→検証→リンク→整合をワンコマンド)
     ├── data_products.py        # 製品データ(単一ソース。一般 + 法人 BIZ_PRODUCTS + 法人OS)
-    ├── data_collab.py          # コラボデータ(第1弾/第2弾ティザー/専用シリコン/タブレット予告)
+    ├── data_collab.py          # コラボデータ(第1弾/第2弾ティザー/専用シリコン/専用冷却/タブレット予告)
     ├── data_tech.py            # 技術・OSデータ
-    ├── data_misc.py            # ニュース・FAQ・沿革
+    ├── data_misc.py            # ニュース・FAQ・沿革(+ NEWS_BODY_ARCHIVE)
     ├── data_docs.py            # 開発者ドキュメント
-    ├── svg_art.py              # SVGアート生成(製品・シルエット・ダイアグラム)
+    ├── svg_art.py              # SVGアート生成(製品・シルエット・ダイアグラム・ニュースアイキャッチ)
     ├── check_links.py          # リンク切れ検査
     ├── audit.js                # 全ページ監査(Playwright)
     └── shot.js / interact.js   # スクショ / 主要インタラクションの実地検証(QA用)
 ```
 
-## ページの編集・再生成
+## ビルドと品質ゲート
+
+データ生成は「**検証 → 生成 → 整合チェック**」の順で走る。`gen.py` は冒頭で
+`validate.py` を呼び、壊れたデータ(必須キー欠落・id重複・不正な日付/価格・データ
+ファイルへの絵文字混入など)を**生成前に明快なメッセージで停止**させる。生成後は
+重複URLを検出し(あれば失敗)、グループ別ページ数を `.build/report.json`(配信対象外)
+へ書き出す。
 
 ```bash
-# データやフラグメントを編集したら再生成
-python3 scripts/gen.py
+python3 scripts/validate.py     # データの不変条件だけを検査
+python3 scripts/gen.py          # 検証 → 全ページ生成 → 整合チェック
+python3 scripts/selftest.py     # 生成→検証→リンク→整合 をワンコマンドで(CIと同じゲート)
 
-# リンク切れ0を検証
-python3 scripts/check_links.py
+make verify                     # = selftest(既定タスク)
+make build / make links / make audit / make serve / make clean
+```
 
-# 全ページ監査(HTTPステータス/コンソールエラー/横スクロール/壊れ画像/リンク404)
-python3 -m http.server 8930 &   # リポジトリルートで配信
+- CI(`.github/workflows/verify.yml`)は push/PR で `validate.py` + `selftest.py` を実行する。
+- 第2弾コラボ相手名の機密チェックは、禁止語をリポジトリ内に置かない方針のため、
+  リポジトリ外のワードリストを `SZ_BLOCKLIST_FILE` で渡したときだけ `validate.py` が検査する。
+
+### 全ページ監査(Playwright)
+
+```bash
+python3 -m http.server 8930 &   # リポジトリルートで配信(ブラウザの並列取得には threaded 推奨)
 node scripts/audit.js           # AUDIT_WIDTH=1440 でPC幅、AUDIT_BASE で配信先変更
 ```
 

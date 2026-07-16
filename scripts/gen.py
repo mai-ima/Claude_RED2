@@ -26,6 +26,7 @@ from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
 from data_docs import DOCS  # noqa: E402
 import svg_art  # noqa: E402
+from lib import esc, yen, num, slugify  # noqa: E402,F401
 from validate import validate_all  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -70,18 +71,7 @@ def pimg_front(pid):
 
 PAGES = []  # 検索インデックス + sitemap 用 {url,title,desc,group}
 
-
-def yen(n):
-    return f"¥{n:,}"
-
-
-def esc(s):
-    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
-
-
-def num(s):
-    m = re.search(r"([\d,]+)", s or "")
-    return int(m.group(1).replace(",", "")) if m else 0
+# 純粋ヘルパーは scripts/lib.py に集約(esc/yen/num/slugify)。
 
 
 # ==========================================================================
@@ -4576,8 +4566,7 @@ def news_list_html():
 
 def glossary_list_html():
     """用語集をサーバー描画(読み順)。JS有効時はカテゴリ/検索で再描画される。"""
-    def slug(t):
-        return re.sub(r"[^0-9A-Za-z一-龠ぁ-んァ-ヶー]+", "-", t).lower()
+    slug = slugify
     cards = []
     for t in sorted(GLOSSARY, key=lambda x: x["reading"]):
         link = f'<div style="margin-top:10px"><a class="link-arrow" href="{esc(t["link"])}">関連ページを見る</a></div>' if t.get("link") else ""
