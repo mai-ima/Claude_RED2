@@ -534,3 +534,33 @@
 .cl-split__art { border: 1px solid var(--cl-line); border-radius: 18px; padding: 22px; background: color-mix(in srgb, var(--cl-ink) 3%, transparent); }
 .cl-split__art svg { width: 100%; height: auto; display: block; }
 @media (max-width: 860px) { .cl-split { grid-template-columns: 1fr; } }
+
+/* コラボLPの専用冷却フィーチャーカード(シリコン節と釣り合う扱い) */
+.cl-cool {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) 1.15fr;
+  gap: clamp(20px, 3.4vw, 44px);
+  align-items: center;
+  border: 1px solid var(--cl-line);
+  border-radius: 20px;
+  padding: clamp(20px, 3vw, 36px);
+  background: color-mix(in srgb, var(--cl-bg2) 72%, transparent);
+}
+.cl-cool__art { display: block; border-radius: 14px; overflow: hidden; line-height: 0;
+  border: 1px solid var(--cl-line); transition: transform .22s ease, box-shadow .3s ease; }
+.cl-cool__art:hover { transform: translateY(-3px);
+  box-shadow: 0 14px 40px color-mix(in srgb, var(--cl-glow, var(--cl-accent)) 28%, transparent); }
+.cl-cool__art svg { width: 100%; height: auto; display: block; }
+.cl-cool__comp { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--cl-accent); }
+.cl-cool__name { margin-top: 8px; font-size: clamp(1.3rem, 1rem + 1.6vw, 1.9rem);
+  color: var(--cl-ink); line-height: 1.3; }
+.cl-cool__kick { margin-top: 6px; color: var(--cl-soft); line-height: 1.8; }
+.cl-cool__stats { display: flex; gap: clamp(16px, 2.4vw, 30px); flex-wrap: wrap; margin-top: 16px; }
+.cl-cool__stat b { display: block; font-size: clamp(1.25rem, 1rem + 1.2vw, 1.7rem);
+  font-weight: 900; color: var(--cl-ink); font-variant-numeric: tabular-nums; }
+.cl-cool__stat b i { font-style: normal; font-size: 0.55em; margin-left: 2px; color: var(--cl-accent); }
+.cl-cool__stat span { display: block; margin-top: 2px; font-size: 0.74rem; color: var(--cl-soft); }
+.cl-cool__body .cl-points { margin-top: 16px; }
+.cl-cool__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+@media (max-width: 860px) { .cl-cool { grid-template-columns: 1fr; } }

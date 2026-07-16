@@ -2527,23 +2527,36 @@ def _cl_silicon(cfg):
 
 
 def _cl_cooling(cfg):
-    """コラボ専用冷却への導線(LP用)。冷却も作品専用であることを示す。"""
+    """コラボ専用冷却への導線(LP用)。冷却も作品専用であることを示す。
+    シリコン節と釣り合う2カラムのフィーチャーカード(左=冷却アート/右=名称・数値・要点)。"""
     slug = cfg["slug"]
     c = COLLAB_COOLING.get(slug)
     if not c:
         return ""
     pts = "".join(f"<li>{esc(p)}</li>" for p in c.get("points", []))
+    stats = "".join(
+        f'<div class="cl-cool__stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
+        for s in c.get("stats", [])[:3])
+    art = svg_art.svg_art(c.get("art", "cooling"), cfg["tokens"]["glow"])
     return f"""
 <section class="cl-section">
   <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">DEDICATED COOLING</p><h2 class="cl-h2">冷却も、作品専用。</h2>
     <p class="cl-lead">{esc(cfg['device'])}は筐体・SoCだけでなく、冷却まで専用設計。標準の氷刃/旋風ではなく、この作品のために起こした「{esc(c['name'])}」を積みます。</p></div>
-    <a class="cl-si-card" href="{collab_cooling_url(slug)}" style="display:block">
-      <span class="cl-si-card__comp">冷却 — 専用設計</span>
-      <span class="cl-si-card__brand">{esc(c['name'])}</span>
-      <span class="cl-si-card__kick">{esc(c['kicker'])}</span></a>
-    <ul class="cl-points" style="margin-top:16px">{pts}</ul>
-    <div style="margin-top:16px"><a class="cl-btn cl-btn--ghost" href="{collab_cooling_url(slug)}">{esc(c['name'])} の詳細を見る</a></div>
+    <div class="cl-cool">
+      <a class="cl-cool__art" href="{collab_cooling_url(slug)}" aria-label="{esc(c['name'])} の詳細">{art}</a>
+      <div class="cl-cool__body">
+        <p class="cl-cool__comp">冷却 — 専用設計</p>
+        <h3 class="cl-cool__name">{esc(c['name'])}</h3>
+        <p class="cl-cool__kick">{esc(c['kicker'])}</p>
+        <div class="cl-cool__stats">{stats}</div>
+        <ul class="cl-points">{pts}</ul>
+        <div class="cl-cool__cta">
+          <a class="cl-btn cl-btn--primary" href="{collab_cooling_url(slug)}">{esc(c['name'])} の詳細を見る</a>
+          <a class="cl-btn cl-btn--ghost" href="/tech/cooling/">標準の冷却技術</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>"""
 
