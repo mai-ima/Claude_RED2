@@ -26,6 +26,7 @@ from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
 from data_docs import DOCS  # noqa: E402
 import svg_art  # noqa: E402
+from validate import validate_all  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src" / "pages"
@@ -4743,7 +4744,38 @@ def build_svg_gallery():
                 "開発者向け", noindex=True)
 
 
+def _build_report():
+    """ビルド後の整合チェックと集計レポート。重複URLを検出し(あれば失敗)、
+    グループ別ページ数を集計して .build/report.json に書き出す。"""
+    import collections
+    seen = {}
+    dups = []
+    for p in PAGES:
+        if p["url"] in seen:
+            dups.append(p["url"])
+        seen[p["url"]] = p
+    by_group = collections.Counter(p["group"] for p in PAGES)
+    report = {
+        "pages": len(PAGES),
+        "by_group": dict(sorted(by_group.items(), key=lambda x: -x[1])),
+        "asset_version": ASSET_V,
+        "duplicate_urls": sorted(set(dups)),
+    }
+    outdir = ROOT / ".build"
+    outdir.mkdir(exist_ok=True)
+    (outdir / "report.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    if dups:
+        print("整合エラー: URL が重複しています:", file=sys.stderr)
+        for u in sorted(set(dups)):
+            print("  - " + u, file=sys.stderr)
+        raise SystemExit(1)
+    top = " / ".join(f"{g}:{n}" for g, n in list(report["by_group"].items())[:6])
+    print(f"整合OK(重複URL 0件)。内訳(上位): {top}")
+
+
 def main():
+    validate_all()  # データ検証ゲート(NG なら生成前に停止)
     build_assets()
     build_svg_gallery()
     for p in ALL_PRODUCTS:
@@ -4764,6 +4796,7 @@ def main():
     build_dev_hub()  # 内部点検ハブ(noindex・PAGES数の概算を出すため終盤で生成)
     build_client_data()  # PAGES確定後
     build_sitemap()
+    _build_report()
     print(f"生成完了: {len(PAGES)}ページ")
 
 

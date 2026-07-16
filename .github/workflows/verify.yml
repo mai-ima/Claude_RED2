@@ -1,0 +1,24 @@
+name: verify
+
+# 静的サイトの品質ゲート。データ検証 → 生成 → リンク切れ検査 → 整合/スモークテスト。
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: データ検証(ビルド前ゲート)
+        run: python3 scripts/validate.py
+      - name: スモークテスト(生成→検証→リンク→整合)
+        run: python3 scripts/selftest.py
+      - name: ビルドレポート
+        if: always()
+        run: cat .build/report.json || true

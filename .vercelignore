@@ -3,3 +3,4 @@ src/
 project-notes/
 README.md
 .gitignore
+.build/
