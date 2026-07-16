@@ -906,6 +906,34 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
                 lis.append(f'<li><a href="{href}">{esc(label)}</a></li>')
         crumb_html = f'<nav class="breadcrumb" aria-label="パンくずリスト"><div class="container container--wide"><ol>{"".join(lis)}</ol></div></nav>'
 
+    # 正規URL・構造化データ(SEO/SNS)。noindexページには付けない。
+    canonical = f"{BASE_URL}{url}"
+    structured = []
+    if not noindex:
+        if url == "/":
+            structured.append({
+                "@context": "https://schema.org", "@type": "Organization",
+                "name": "株式会社朱雀", "alternateName": "SUZAKU Inc.", "url": BASE_URL,
+                "slogan": "限界を、燃やし尽くせ。", "foundingDate": "2022-05-01",
+                "address": {"@type": "PostalAddress", "addressLocality": "東京都千代田区外神田",
+                            "addressCountry": "JP"}})
+            structured.append({
+                "@context": "https://schema.org", "@type": "WebSite",
+                "name": SITE_NAME, "url": BASE_URL, "inLanguage": "ja",
+                "potentialAction": {"@type": "SearchAction",
+                                    "target": BASE_URL + "/search/?q={search_term_string}",
+                                    "query-input": "required name=search_term_string"}})
+        if crumbs:
+            bc_items = [("ホーム", "/")] + list(crumbs)
+            elts = [{"@type": "ListItem", "position": i + 1, "name": lbl,
+                     "item": BASE_URL + (href or url)}
+                    for i, (lbl, href) in enumerate(bc_items)]
+            structured.append({"@context": "https://schema.org", "@type": "BreadcrumbList",
+                               "itemListElement": elts})
+    jsonld_html = "".join(
+        f'<script type="application/ld+json">{json.dumps(s, ensure_ascii=False)}</script>'
+        for s in structured)
+
     html = f"""<!DOCTYPE html>
 <html lang="ja" data-theme="{theme}">
 <head>
@@ -913,11 +941,16 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(full_title)}</title>
 <meta name="description" content="{esc(desc)}">
-{'<meta name="robots" content="noindex,nofollow">' if noindex else ''}
+{'<meta name="robots" content="noindex,nofollow">' if noindex else '<link rel="canonical" href="' + canonical + '">'}
 <meta property="og:title" content="{esc(full_title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:url" content="{canonical}">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(full_title)}">
+<meta name="twitter:description" content="{esc(desc)}">
 <meta name="theme-color" content="{'#0b0b10' if theme == 'dark' else '#fafafc'}">
 <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
 {HEAD_FONTS}
@@ -928,6 +961,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 {collab_head}
 </head>
 <body class="page{url.rstrip('/').replace('/', '-') or '-home'}{collab_body_class}"{collab_body_attr}>
+{jsonld_html}
 {header_html()}
 {crumb_html}
 <main id="main">

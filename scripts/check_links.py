@@ -14,7 +14,9 @@ from urllib.parse import urlparse, unquote
 
 ROOT = Path(__file__).resolve().parent.parent
 SKIP_DIRS = {".git", "src", "scripts", "node_modules"}
-EXTERNAL_ALLOW = {"fonts.googleapis.com", "fonts.gstatic.com"}
+# fonts.* は外部フォント。suzaku.example.jp は自サイトの本番ドメイン
+# (canonical / og:url / sitemap が自己参照の絶対URLで使う)。
+EXTERNAL_ALLOW = {"fonts.googleapis.com", "fonts.gstatic.com", "suzaku.example.jp"}
 
 
 class Collector(HTMLParser):
