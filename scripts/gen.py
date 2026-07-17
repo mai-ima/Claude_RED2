@@ -3676,6 +3676,19 @@ def _collab_lp_endfield(cfg, phone, accs):
 {_cl_note(cfg)}"""
 
 
+# 予告開始日時(進捗リングの起点)。第2弾=予告ニュース7/11、タブレット=予告ニュース7/10。
+TEASER_SINCE = {"wave2": "2026-07-11T20:00:00", "tablet": "2026-07-10T20:00:00"}
+
+
+def _cl_ring():
+    """発表までの進捗リング(SVG円弧)。collab-core.js が data-since/data-until から
+    経過割合を計算して描画する。JS無効時は装飾なし(aria-hidden)。"""
+    return ("""<div class="cl-ring" aria-hidden="true">
+      <svg viewBox="0 0 120 120"><circle class="cl-ring__bg" cx="60" cy="60" r="52"/>
+      <circle class="cl-ring__fg" cx="60" cy="60" r="52" pathLength="100"/></svg>
+      <span class="cl-ring__pct">--</span></div>""")
+
+
 def _collab_lp_teaser(cfg, phone, accs):
     """コラボ第2弾ティザー — 暗闇+スキャンライン+シルエット+発表カウントダウン。
     コラボ相手は未発表のため、固有名詞は一切出さない(ヒントで匂わせるのみ)。"""
@@ -3698,6 +3711,7 @@ def _collab_lp_teaser(cfg, phone, accs):
         for c in sibs)
     reveal = cfg.get("reveal_at", "")
     reveal_ymd = reveal[:10].replace("-", ".")
+    since = TEASER_SINCE["wave2"]  # 予告開始(第2弾予告ニュースの公開日時)
     # 組み立て進捗(イメージ)。発表が近い枠ほど高く見せる
     pct = {"next": 88, "next-2": 85, "next-3": 82, "next-4": 79}.get(cfg["slug"], 82)
     marquee_txt = "".join(f'<span>COMING SOON</span><span>{esc(reveal_ymd)}</span>'
@@ -3751,7 +3765,7 @@ def _collab_lp_teaser(cfg, phone, accs):
 <section class="cl-section nx-count">
   <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">REVEAL</p><h2 class="cl-h2">発表まで。</h2></div>
-    <div class="cl-count nx-count__panel" data-until="{esc(reveal)}" role="timer" aria-label="発表までの残り時間">
+    <div class="cl-count nx-count__panel" data-until="{esc(reveal)}" data-since="{esc(since)}" role="timer" aria-label="発表までの残り時間">
       <div class="cl-count__row">
         <span class="cl-count__unit"><b data-c="d">--</b><i>日</i></span>
         <span class="cl-count__unit"><b data-c="h">--</b><i>時間</i></span>
@@ -3760,6 +3774,7 @@ def _collab_lp_teaser(cfg, phone, accs):
       </div>
       <p class="cl-count__end">{esc(reveal[:10].replace('-', '/'))} 20:00 (JST) 発表予定</p>
       <p class="cl-count__soon" hidden>発表準備中 — まもなく公開します。</p>
+      {_cl_ring()}
     </div>
   </div>
 </section>
@@ -3963,7 +3978,7 @@ def build_collab_tablet_teaser(cfg):
 <section class="cl-section">
   <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">REVEAL</p><h2 class="cl-h2">発表まで。</h2></div>
-    <div class="cl-count" data-until="{esc(reveal)}" role="timer" aria-label="発表までの残り時間">
+    <div class="cl-count" data-until="{esc(reveal)}" data-since="{TEASER_SINCE['tablet']}" role="timer" aria-label="発表までの残り時間">
       <div class="cl-count__row">
         <span class="cl-count__unit"><b data-c="d">--</b><i>日</i></span>
         <span class="cl-count__unit"><b data-c="h">--</b><i>時間</i></span>
@@ -3972,6 +3987,7 @@ def build_collab_tablet_teaser(cfg):
       </div>
       <p class="cl-count__end">{esc(reveal[:10].replace('-', '/'))} 20:00 (JST) 発表予定</p>
       <p class="cl-count__soon" hidden>発表準備中 — まもなく公開します。</p>
+      {_cl_ring()}
     </div>
   </div>
 </section>

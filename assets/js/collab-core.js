@@ -42,15 +42,27 @@
       window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
       return true;
     };
+    // 進捗リング(data-since がある発表カウントダウンのみ)。予告開始→発表の経過割合を描く。
+    var since = new Date(countEl.getAttribute("data-since") || "").getTime();
+    var ringFg = countEl.querySelector(".cl-ring__fg");
+    var ringPct = countEl.querySelector(".cl-ring__pct");
+    var drawRing = function (now) {
+      if (!ringFg || isNaN(since) || until <= since) return;
+      var p = Math.max(0, Math.min(1, (now - since) / (until - since)));
+      ringFg.style.strokeDashoffset = String(100 - Math.round(p * 100));
+      if (ringPct) ringPct.textContent = Math.round(p * 100) + "%";
+    };
     var timer = null;
     var tick = function () {
-      var diff = until - Date.now();
+      var now = Date.now();
+      var diff = until - now;
       if (diff <= 0) {
         if (slots.d) slots.d.textContent = "0";
         if (slots.h) slots.h.textContent = "00";
         if (slots.m) slots.m.textContent = "00";
         if (slots.s) slots.s.textContent = "00";
         countEl.classList.add("is-ended");
+        drawRing(now);
         // フルLPを持つページは発表状態へ切替。無ければ「発表準備中」の受け皿へ。
         if (!revealFull() && soonEl) {
           soonEl.hidden = false;
@@ -59,11 +71,14 @@
         if (timer) clearInterval(timer);
         return;
       }
+      // 最終24時間は「まもなく」強調(数字のグローパルス。reduced-motion では静的)
+      countEl.classList.toggle("is-imminent", diff <= 86400000);
       var sec = Math.floor(diff / 1000);
       if (slots.d) slots.d.textContent = String(Math.floor(sec / 86400));
       if (slots.h) slots.h.textContent = pad(Math.floor((sec % 86400) / 3600));
       if (slots.m) slots.m.textContent = pad(Math.floor((sec % 3600) / 60));
       if (slots.s) slots.s.textContent = pad(sec % 60);
+      drawRing(now);
     };
     tick();
     timer = setInterval(tick, 1000);

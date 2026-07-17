@@ -574,3 +574,39 @@
 @media (prefers-reduced-motion: reduce) {
   [data-reveal-stage="full"].is-arriving { animation: none; }
 }
+
+/* 発表カウントダウンの進捗リング(G-C)。data-since 起点の経過割合を円弧で示す */
+.cl-count { position: relative; }
+.cl-ring {
+  position: absolute; right: clamp(16px, 3vw, 30px); top: 50%; transform: translateY(-50%);
+  width: clamp(74px, 9vw, 104px); height: clamp(74px, 9vw, 104px);
+}
+.cl-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.cl-ring circle { fill: none; stroke-width: 7; }
+.cl-ring__bg { stroke: color-mix(in srgb, var(--cl-ink) 12%, transparent); }
+.cl-ring__fg {
+  stroke: var(--cl-accent); stroke-linecap: round;
+  stroke-dasharray: 100; stroke-dashoffset: 100;
+  transition: stroke-dashoffset .6s cubic-bezier(.22,1,.36,1);
+}
+.cl-ring__pct {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 0.82rem; font-weight: 800; color: var(--cl-accent);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 700px) { .cl-ring { display: none; } }
+
+/* 最終24時間の「まもなく」強調 */
+.cl-count.is-imminent .cl-count__unit b {
+  color: var(--cl-accent);
+  animation: clPulse 1.6s ease-in-out infinite;
+}
+.cl-count.is-imminent .cl-count__end { color: var(--cl-accent); font-weight: 700; }
+@keyframes clPulse {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  50% { text-shadow: 0 0 22px color-mix(in srgb, var(--cl-accent) 65%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cl-count.is-imminent .cl-count__unit b { animation: none; }
+  .cl-ring__fg { transition: none; }
+}
