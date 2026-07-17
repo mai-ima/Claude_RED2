@@ -37,3 +37,24 @@
   ティザー表示側・`<title>`/description・ハブ・ニュース・検索インデックスなど発表前の導線には
   引き続き出さない。発表第一報の機体名: 空洞 KUDO / 星軌 SEIKI / 結生 YUISEI / 彩歌 SAIKA。
   第2報(実LP化: 仕様・価格・専用シリコン)は reveal_at 経過後の次サイクルで実施する。
+
+## H-2 の設計メモ(2026-07-17)
+
+- **slug改名**: `next` 系は次回コラボのために空け、第2弾は `wave2{,-2,-3,-4}` へ改名済み。
+  旧URLには meta refresh + noindex の転送ページを生成(`gen.py build_collab_redirects`)。
+- **製品専用URL**: 発表済み枠は `reveal["url_slug"]`(kudo / seiki)を持ち、
+  `/collab/{url_slug}/` に発表フルLPの単独ページを生成(noindex・PAGES非登録)。
+  ハブ/兄弟リンクは `data-reveal`+`data-reveal-href` で発表後に href 自動差替(main.js)。
+  ティザーURLは発表後の再訪時に location.replace で専用URLへ転送(collab-core.js。
+  視聴中にゼロ到達した場合はその場の切替演出を優先)。
+  ※ href/転送先の属性値に kudo/seiki が発表前HTMLに含まれるのは「コード内記載OK」の
+  承認範囲。表示テキスト・title/description には出さないことを漏れ検査で担保する。
+- **ティザーアーカイブ**: `/collab/wave2{,-2}/teaser/`(noindex)。相手名は載せない。
+  製品専用ページ末尾の小ボタン(.cl-minibtn)から導線。
+- **仮SVG**: `svg_art.svg_prototype(pid, glow, label, kana, style)`。style=zzz / srail。
+  量産版レンダリング(svg_phone の専用描画)が出来たら差し替える。
+- **製品別FAQ**: `data_products.py PRODUCT_FAQ`(id→[(Q,A)])。product page で
+  ライン別FAQより優先。第2報時にコラボアクセサリ追加分もここへ足す。
+- **未使用アーカイブ**: 発表LPの旧・実機SVG呼び出し(svg_phone "kudo"/"seiki")は
+  H-2-1 で仮SVGに置換した。実機デザイン確定時は svg_phone の _PHONE_CUSTOM に
+  専用描画を実装して戻す。
