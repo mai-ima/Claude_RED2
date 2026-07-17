@@ -878,7 +878,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
     if layout == "collab" and collab:
         tok = collab["tokens"]
         slug = collab["slug"]
-        # 第2弾ティザーは複数スラッグ(next-2/3/4)が collab-next の CSS/JS と .collab--next を
+        # 第2弾ティザーは複数スラッグ(wave2-2/3/4)が collab-wave2 の CSS/JS と .collab--wave2 を
         # 共有する。assets_slug 未指定の既存コラボは従来どおり slug をそのまま使う。
         aslug = collab.get("assets_slug", slug)
         collab_head = (f'<link rel="stylesheet" href="/assets/css/collab-core.css?v={ASSET_V}">'
@@ -887,7 +887,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
         # cl-lp はLP/シリコン等の「専用レイアウトページ」のみ。コラボ製品ページは
         # 通常レイアウトのままフォント/アクセントだけ注入する(背景衝突を防ぐ)。
         collab_body_class = f' collab-page collab--{aslug}' + (" cl-lp" if collab_lp else "")
-        # 第2弾ティザーは資産共有(collab--next)しつつ、作品ごとの意匠を一部変える
+        # 第2弾ティザーは資産共有(collab--wave2)しつつ、作品ごとの意匠を一部変える
         # ため、実スラッグの per-teaser フック(nx--{slug})も付ける。
         if collab.get("motif") == "teaser" and slug != aslug:
             collab_body_class += f" nx--{slug}"
@@ -2405,7 +2405,7 @@ COLLAB_FONTS = {
     "nte": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;1,800;1,900&display=swap" media="print" onload="this.media='all'">""",
     "endfield": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" media="print" onload="this.media='all'">""",
     # 第2弾ティザー共有(発表LP: 星軌 SEIKI のセリフ体用。非ブロッキング)
-    "next": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" media="print" onload="this.media='all'">""",
+    "wave2": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" media="print" onload="this.media='all'">""",
 }
 
 
@@ -3995,7 +3995,7 @@ def _collab_lp_teaser(cfg, phone, accs):
     reveal_ymd = reveal[:10].replace("-", ".")
     since = TEASER_SINCE["wave2"]  # 予告開始(第2弾予告ニュースの公開日時)
     # 組み立て進捗(イメージ)。発表が近い枠ほど高く見せる
-    pct = {"next": 88, "next-2": 85, "next-3": 82, "next-4": 79}.get(cfg["slug"], 82)
+    pct = {"wave2": 88, "wave2-2": 85, "wave2-3": 82, "wave2-4": 79}.get(cfg["slug"], 82)
     marquee_txt = "".join(f'<span>COMING SOON</span><span>{esc(reveal_ymd)}</span>'
                           f'<span>CLASSIFIED</span><span>???</span>' for _ in range(6))
     # 発表後ステージ: reveal データ(相手名入りの正式発表)があれば本発表版を描く。
@@ -4003,9 +4003,9 @@ def _collab_lp_teaser(cfg, phone, accs):
     # ハブ・ニュースなど発表前の導線には出さない(ユーザー承認済みの方針)。
     rv = cfg.get("reveal")
     # 本気LP版(第1弾級の作り込み)。データに price があるものは専用ビルダーで描く。
-    if rv and rv.get("price") and cfg["slug"] == "next":
+    if rv and rv.get("price") and cfg["slug"] == "wave2":
         revealed_stage = _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd)
-    elif rv and rv.get("price") and cfg["slug"] == "next-2":
+    elif rv and rv.get("price") and cfg["slug"] == "wave2-2":
         revealed_stage = _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd)
     elif rv:
         rv_points = "".join(
@@ -4172,7 +4172,7 @@ _COLLAB_LP_BUILDERS = {
     "wuwa": _collab_lp_wuwa,
     "nte": _collab_lp_nte,
     "endfield": _collab_lp_endfield,
-    "next": _collab_lp_teaser,
+    "wave2": _collab_lp_teaser,
 }
 
 # 明色ベースのLP(ヘッダー/フッターのテーマを合わせる)
@@ -4757,6 +4757,39 @@ def build_collab_pages():
                 build_collab_tablet_teaser(cfg)
         elif cfg.get("motif") == "teaser":
             build_collab_page(cfg)  # 第2弾ティザー(カウントダウン+シルエット・相手非公開)
+    build_collab_redirects()
+
+
+# 旧スラッグ → 新スラッグ(H-2-0 で next 系を wave2 系へ改名。"next" は次回コラボ用に空ける)
+_COLLAB_SLUG_REDIRECTS = {
+    "next": "wave2", "next-2": "wave2-2", "next-3": "wave2-3", "next-4": "wave2-4",
+}
+
+
+def build_collab_redirects():
+    """旧ティザーURLに meta refresh + noindex の薄い転送ページを置く。
+    PAGES には登録しない(サイトマップ・検索・内部リンク対象外)。"""
+    for old, new in _COLLAB_SLUG_REDIRECTS.items():
+        target = f"/collab/{new}/"
+        html = f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="refresh" content="0; url={target}">
+<link rel="canonical" href="{BASE_URL}{target}">
+<title>移動しました | {SITE_NAME}</title>
+<style>body{{margin:0;display:grid;place-items:center;min-height:100vh;background:#0c0c0e;color:#f2f2f4;font-family:sans-serif}}a{{color:#e60012}}</style>
+</head>
+<body>
+<p>このページは移動しました。自動的に切り替わらない場合は <a href="{target}">新しいページ</a> へお進みください。</p>
+</body>
+</html>
+"""
+        outdir = ROOT / "collab" / old
+        outdir.mkdir(parents=True, exist_ok=True)
+        (outdir / "index.html").write_text(html, encoding="utf-8")
 
 
 # ==========================================================================

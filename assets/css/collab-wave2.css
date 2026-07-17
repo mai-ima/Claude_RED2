@@ -1,11 +1,11 @@
 /* ==========================================================================
-   SUZAKU collab-next.css — コラボ第2弾ティザー専用(黒×警告色×白のポップ調)
+   SUZAKU collab-wave2.css — コラボ第2弾ティザー専用(黒×警告色×白のポップ調)
    相手作品名は未発表のため、意匠は「機密・予告」のトーンに徹する。
-   ルートは .cl-lp.collab--next 配下のみ。アクセントは各ティザーの --cl-accent
+   ルートは .cl-lp.collab--wave2 配下のみ。アクセントは各ティザーの --cl-accent
    (data_collab の tokens.accent)を採用し、作品ごとに配色が変わる(ZZZ は var(--cl-accent, #ff7a00))。
    ========================================================================== */
 
-.cl-lp.collab--next.collab-page {
+.cl-lp.collab--wave2.collab-page {
   background:
     radial-gradient(720px 420px at 78% -4%, color-mix(in srgb, var(--cl-accent, #ff7a00) 14%, transparent), transparent 60%),
     repeating-linear-gradient(0deg, transparent 0 5px, rgba(255, 255, 255, 0.012) 5px 6px),
@@ -14,14 +14,14 @@
 }
 
 /* ---------- ヒーロー ---------- */
-.cl-lp.collab--next .nx-hero {
+.cl-lp.collab--wave2 .nx-hero {
   position: relative;
   text-align: center;
   padding: clamp(72px, 11vw, 130px) 20px clamp(40px, 6vw, 64px);
   overflow: hidden;
 }
 
-.cl-lp.collab--next .nx-hero__scan {
+.cl-lp.collab--wave2 .nx-hero__scan {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -29,16 +29,16 @@
   mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent);
 }
 
-.cl-lp.collab--next .nx-hero__eyebrow {
+.cl-lp.collab--wave2 .nx-hero__eyebrow {
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.34em;
   color: var(--cl-accent, #ff7a00);
 }
 
-.cl-lp.collab--next .nx-hero__title { margin: 18px 0 8px; }
+.cl-lp.collab--wave2 .nx-hero__title { margin: 18px 0 8px; }
 
-.cl-lp.collab--next .nx-q {
+.cl-lp.collab--wave2 .nx-q {
   display: block;
   font-size: clamp(4.4rem, 14vw, 8.5rem);
   font-weight: 900;
@@ -49,7 +49,7 @@
   text-shadow: 4px 0 0 color-mix(in srgb, var(--cl-accent, #ff7a00) 55%, transparent), -4px 0 0 rgba(255, 255, 255, 0.18);
 }
 
-.cl-lp.collab--next .nx-hero__title small {
+.cl-lp.collab--wave2 .nx-hero__title small {
   display: block;
   margin-top: 14px;
   font-size: clamp(1rem, 2.4vw, 1.3rem);
@@ -58,10 +58,10 @@
   color: #c9c9d2;
 }
 
-.cl-lp.collab--next .nx-hero__sil { max-width: 380px; margin: 26px auto 20px; }
-.cl-lp.collab--next .nx-hero__sil svg { width: 100%; height: auto; }
+.cl-lp.collab--wave2 .nx-hero__sil { max-width: 380px; margin: 26px auto 20px; }
+.cl-lp.collab--wave2 .nx-hero__sil svg { width: 100%; height: auto; }
 
-.cl-lp.collab--next .nx-hero__lead {
+.cl-lp.collab--wave2 .nx-hero__lead {
   max-width: 560px;
   margin: 0 auto;
   font-size: 0.95rem;
@@ -70,7 +70,7 @@
 }
 
 /* ---------- カウントダウン ---------- */
-.cl-lp.collab--next .nx-count__panel {
+.cl-lp.collab--wave2 .nx-count__panel {
   background: #141416;
   border: 1px solid color-mix(in srgb, var(--cl-accent, #ff7a00) 35%, transparent);
   border-radius: 18px;
@@ -78,19 +78,19 @@
   text-align: center;
 }
 
-.cl-lp.collab--next .cl-count__unit b {
+.cl-lp.collab--wave2 .cl-count__unit b {
   color: var(--cl-accent, #ff7a00);
   text-shadow: 0 0 22px color-mix(in srgb, var(--cl-accent, #ff7a00) 40%, transparent);
 }
 
 /* ---------- ヒントカード ---------- */
-.cl-lp.collab--next .nx-hints__grid {
+.cl-lp.collab--wave2 .nx-hints__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
-.cl-lp.collab--next .nx-hint {
+.cl-lp.collab--wave2 .nx-hint {
   position: relative;
   background: #141416;
   border: 1px solid rgba(242, 242, 244, 0.12);
@@ -100,26 +100,26 @@
   transform: rotate(-0.5deg);
 }
 
-.cl-lp.collab--next .nx-hint:nth-child(2) { transform: rotate(0.6deg); }
-.cl-lp.collab--next .nx-hint:nth-child(3) { transform: rotate(-0.3deg); }
+.cl-lp.collab--wave2 .nx-hint:nth-child(2) { transform: rotate(0.6deg); }
+.cl-lp.collab--wave2 .nx-hint:nth-child(3) { transform: rotate(-0.3deg); }
 
-.cl-lp.collab--next .nx-hint__no {
+.cl-lp.collab--wave2 .nx-hint__no {
   font-family: monospace;
   font-size: 0.72rem;
   letter-spacing: 0.3em;
   color: var(--cl-accent, #ff7a00);
 }
 
-.cl-lp.collab--next .nx-hint__t {
+.cl-lp.collab--wave2 .nx-hint__t {
   margin: 12px 0 10px;
   font-size: 1.2rem;
   font-weight: 900;
   color: #f2f2f4;
 }
 
-.cl-lp.collab--next .nx-hint__b { font-size: 0.85rem; line-height: 2; color: #9a9aa6; }
+.cl-lp.collab--wave2 .nx-hint__b { font-size: 0.85rem; line-height: 2; color: #9a9aa6; }
 
-.cl-lp.collab--next .nx-hint__tape {
+.cl-lp.collab--wave2 .nx-hint__tape {
   position: absolute;
   top: 14px;
   right: -34px;
@@ -133,9 +133,9 @@
 }
 
 /* ---------- 第1弾リンク ---------- */
-.cl-lp.collab--next .nx-pasts__grid { display: grid; gap: 10px; max-width: 720px; }
+.cl-lp.collab--wave2 .nx-pasts__grid { display: grid; gap: 10px; max-width: 720px; }
 
-.cl-lp.collab--next .nx-past {
+.cl-lp.collab--wave2 .nx-past {
   display: grid;
   grid-template-columns: 52px 1fr auto;
   gap: 14px;
@@ -149,10 +149,10 @@
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
-.cl-lp.collab--next .nx-past:hover { border-color: var(--cl-accent, #ff7a00); transform: translateX(4px); }
-.cl-lp.collab--next .nx-past__no { font-family: monospace; font-size: 1.1rem; color: var(--cl-accent, #ff7a00); }
-.cl-lp.collab--next .nx-past b { font-size: 0.95rem; }
-.cl-lp.collab--next .nx-past__st {
+.cl-lp.collab--wave2 .nx-past:hover { border-color: var(--cl-accent, #ff7a00); transform: translateX(4px); }
+.cl-lp.collab--wave2 .nx-past__no { font-family: monospace; font-size: 1.1rem; color: var(--cl-accent, #ff7a00); }
+.cl-lp.collab--wave2 .nx-past b { font-size: 0.95rem; }
+.cl-lp.collab--wave2 .nx-past__st {
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -163,34 +163,34 @@
 }
 
 @media (max-width: 860px) {
-  .cl-lp.collab--next .nx-hints__grid { grid-template-columns: 1fr; }
-  .cl-lp.collab--next .nx-hint { transform: none; }
+  .cl-lp.collab--wave2 .nx-hints__grid { grid-template-columns: 1fr; }
+  .cl-lp.collab--wave2 .nx-hint { transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cl-lp.collab--next .nx-q { text-shadow: none; }
+  .cl-lp.collab--wave2 .nx-q { text-shadow: none; }
 }
 
 /* ---------- 4ヒント対応(自動フィット) ---------- */
-.cl-lp.collab--next .nx-hints__grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-.cl-lp.collab--next .nx-hint:nth-child(4) { transform: rotate(0.4deg); }
+.cl-lp.collab--wave2 .nx-hints__grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.cl-lp.collab--wave2 .nx-hint:nth-child(4) { transform: rotate(0.4deg); }
 
 /* ---------- 言えること(予告スペック) ---------- */
-.cl-lp.collab--next .nx-spec__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.cl-lp.collab--next .nx-spec__item {
+.cl-lp.collab--wave2 .nx-spec__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.cl-lp.collab--wave2 .nx-spec__item {
   background: #141416;
   border: 1px solid rgba(242, 242, 244, 0.12);
   border-left: 3px solid var(--cl-accent, #ff7a00);
   border-radius: 12px;
   padding: 24px 22px;
 }
-.cl-lp.collab--next .nx-spec__k { font-family: monospace; font-size: 0.72rem; letter-spacing: 0.3em; color: var(--cl-accent, #ff7a00); }
-.cl-lp.collab--next .nx-spec__t { margin: 12px 0 8px; font-size: 1.05rem; font-weight: 900; color: #f2f2f4; }
-.cl-lp.collab--next .nx-spec__b { font-size: 0.84rem; line-height: 1.95; color: #9a9aa6; }
+.cl-lp.collab--wave2 .nx-spec__k { font-family: monospace; font-size: 0.72rem; letter-spacing: 0.3em; color: var(--cl-accent, #ff7a00); }
+.cl-lp.collab--wave2 .nx-spec__t { margin: 12px 0 8px; font-size: 1.05rem; font-weight: 900; color: #f2f2f4; }
+.cl-lp.collab--wave2 .nx-spec__b { font-size: 0.84rem; line-height: 1.95; color: #9a9aa6; }
 
 /* ---------- 第2弾クロスリンク ---------- */
-.cl-lp.collab--next .nx-sib__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.cl-lp.collab--next .nx-sib {
+.cl-lp.collab--wave2 .nx-sib__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.cl-lp.collab--wave2 .nx-sib {
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -203,31 +203,31 @@
   color: #f2f2f4;
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
-.cl-lp.collab--next .nx-sib:hover { border-color: var(--cl-accent, #ff7a00); transform: translateY(-3px); }
-.cl-lp.collab--next .nx-sib__q { font-size: 1.8rem; font-weight: 900; font-style: italic; color: var(--cl-accent, #ff7a00); line-height: 1; }
-.cl-lp.collab--next .nx-sib__d { font-family: monospace; font-size: 0.78rem; color: #c9c9d2; }
-.cl-lp.collab--next .nx-sib__go { font-size: 0.78rem; font-weight: 700; color: #9a9aa6; }
+.cl-lp.collab--wave2 .nx-sib:hover { border-color: var(--cl-accent, #ff7a00); transform: translateY(-3px); }
+.cl-lp.collab--wave2 .nx-sib__q { font-size: 1.8rem; font-weight: 900; font-style: italic; color: var(--cl-accent, #ff7a00); line-height: 1; }
+.cl-lp.collab--wave2 .nx-sib__d { font-family: monospace; font-size: 0.78rem; color: #c9c9d2; }
+.cl-lp.collab--wave2 .nx-sib__go { font-size: 0.78rem; font-weight: 700; color: #9a9aa6; }
 
 @media (max-width: 860px) {
-  .cl-lp.collab--next .nx-spec__grid,
-  .cl-lp.collab--next .nx-sib__grid { grid-template-columns: 1fr; }
+  .cl-lp.collab--wave2 .nx-spec__grid,
+  .cl-lp.collab--wave2 .nx-sib__grid { grid-template-columns: 1fr; }
 }
 
 /* ---------- 第2弾: 相手の「匂わせ」モチーフ(ヒーロー背景を一部だけ作品トーンに) ----------
    名称・キャラは出さず、抽象的な背景意匠だけで各作品の空気を漂わせる。 */
-.cl-lp.collab--next .nx-hero > * { position: relative; z-index: 1; }
-.cl-lp.collab--next .nx-hero__scan,
-.cl-lp.collab--next .nx-motif { z-index: 0; }
-.cl-lp.collab--next .nx-motif { position: absolute; inset: 0; pointer-events: none; }
+.cl-lp.collab--wave2 .nx-hero > * { position: relative; z-index: 1; }
+.cl-lp.collab--wave2 .nx-hero__scan,
+.cl-lp.collab--wave2 .nx-motif { z-index: 0; }
+.cl-lp.collab--wave2 .nx-motif { position: absolute; inset: 0; pointer-events: none; }
 
 /* ① 都市・警告 — ハザードストライプ */
-.cl-lp.collab--next .nx-hero--next .nx-motif {
+.cl-lp.collab--wave2 .nx-hero--wave2 .nx-motif {
   background: repeating-linear-gradient(45deg, transparent 0 24px, color-mix(in srgb, var(--cl-accent, #ff7a00) 7%, transparent) 24px 32px);
   -webkit-mask-image: radial-gradient(78% 60% at 50% 34%, #000, transparent);
   mask-image: radial-gradient(78% 60% at 50% 34%, #000, transparent);
 }
 /* ② 宇宙 — 星屑 */
-.cl-lp.collab--next .nx-hero--next-2 .nx-motif {
+.cl-lp.collab--wave2 .nx-hero--wave2-2 .nx-motif {
   background:
     radial-gradient(1.6px 1.6px at 18% 30%, var(--cl-accent2, #7d8cff) 50%, transparent 55%),
     radial-gradient(1.4px 1.4px at 68% 22%, #ffffff 50%, transparent 55%),
@@ -240,7 +240,7 @@
   mask-image: radial-gradient(92% 82% at 50% 40%, #000, transparent);
 }
 /* ③ 生命 — やわらかい光の粒 */
-.cl-lp.collab--next .nx-hero--next-3 .nx-motif {
+.cl-lp.collab--wave2 .nx-hero--wave2-3 .nx-motif {
   background:
     radial-gradient(160px 160px at 24% 66%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 16%, transparent), transparent 70%),
     radial-gradient(120px 120px at 80% 28%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 12%, transparent), transparent 70%),
@@ -248,48 +248,48 @@
     radial-gradient(2px 2px at 40% 40%, color-mix(in srgb, var(--cl-accent, #2fd0a0) 50%, transparent) 50%, transparent 55%);
 }
 /* ④ 色彩 — 虹ストリーク */
-.cl-lp.collab--next .nx-hero--next-4 .nx-motif {
+.cl-lp.collab--wave2 .nx-hero--wave2-4 .nx-motif {
   background: linear-gradient(115deg, transparent 28%, rgba(255, 95, 162, 0.12) 42%, rgba(51, 204, 221, 0.12) 55%, rgba(255, 206, 90, 0.12) 68%, transparent 82%);
 }
 
 /* ---------- マーキー帯(相手カラー) ---------- */
-.cl-lp.collab--next .nx-marquee {
+.cl-lp.collab--wave2 .nx-marquee {
   overflow: hidden;
   border-block: 1px solid color-mix(in srgb, var(--cl-accent, #ff7a00) 30%, transparent);
   background: color-mix(in srgb, var(--cl-accent, #ff7a00) 6%, #0c0c0e);
   padding: 12px 0;
 }
-.cl-lp.collab--next .nx-marquee__track {
+.cl-lp.collab--wave2 .nx-marquee__track {
   display: inline-flex;
   white-space: nowrap;
   will-change: transform;
   animation: nx-marquee 28s linear infinite;
 }
-.cl-lp.collab--next .nx-marquee__track span {
+.cl-lp.collab--wave2 .nx-marquee__track span {
   font-family: monospace; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.24em;
   color: var(--cl-accent, #ff7a00); padding: 0 26px 0 0; margin-right: 26px; position: relative;
 }
-.cl-lp.collab--next .nx-marquee__track span::after {
+.cl-lp.collab--wave2 .nx-marquee__track span::after {
   content: "/"; position: absolute; right: -3px; color: color-mix(in srgb, var(--cl-accent, #ff7a00) 45%, transparent);
 }
 @keyframes nx-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .cl-lp.collab--next .nx-marquee__track { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .cl-lp.collab--wave2 .nx-marquee__track { animation: none; } }
 
 /* ---------- 組み立て進捗バー ---------- */
-.cl-lp.collab--next .nx-prog { max-width: 640px; }
-.cl-lp.collab--next .nx-prog__bar {
+.cl-lp.collab--wave2 .nx-prog { max-width: 640px; }
+.cl-lp.collab--wave2 .nx-prog__bar {
   height: 12px; border-radius: 999px; background: #141416; overflow: hidden;
   border: 1px solid rgba(242, 242, 244, 0.1);
 }
-.cl-lp.collab--next .nx-prog__fill {
+.cl-lp.collab--wave2 .nx-prog__fill {
   display: block; height: 100%; border-radius: 999px;
   background: linear-gradient(90deg, color-mix(in srgb, var(--cl-accent, #ff7a00) 55%, transparent), var(--cl-accent, #ff7a00));
 }
-.cl-lp.collab--next .nx-prog__label { margin-top: 10px; font-family: monospace; font-size: 0.82rem; color: #9a9aa6; }
-.cl-lp.collab--next .nx-prog__label b { color: var(--cl-accent, #ff7a00); }
+.cl-lp.collab--wave2 .nx-prog__label { margin-top: 10px; font-family: monospace; font-size: 0.82rem; color: #9a9aa6; }
+.cl-lp.collab--wave2 .nx-prog__label b { color: var(--cl-accent, #ff7a00); }
 
 /* ---------- 発表通知CTA ---------- */
-.cl-lp.collab--next .nx-notify__box {
+.cl-lp.collab--wave2 .nx-notify__box {
   display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   background: color-mix(in srgb, var(--cl-accent, #ff7a00) 8%, #141416);
   border: 1px solid color-mix(in srgb, var(--cl-accent, #ff7a00) 30%, transparent);
@@ -299,27 +299,27 @@
 /* ---------- 第2弾: 作品ごとの意匠を一部だけ変える(相手非公開のまま、雰囲気で匂わせる)
    絵文字は使わず、ASCII / 承認済みの幾何記号のみで表現する。 ---------- */
 /* ② 宇宙 — 星のような区切り・字間を広く(静かな宇宙) */
-.nx--next-2 .nx-marquee__track span::after { content: "*"; }
-.nx--next-2 .nx-marquee__track span { letter-spacing: 0.3em; }
-.nx--next-2 .nx-prog__label { letter-spacing: 0.14em; }
+.nx--wave2-2 .nx-marquee__track span::after { content: "*"; }
+.nx--wave2-2 .nx-marquee__track span { letter-spacing: 0.3em; }
+.nx--wave2-2 .nx-prog__label { letter-spacing: 0.14em; }
 
 /* ③ 生命 — 器を大きく丸める(有機的・やわらかい) */
-.nx--next-3 .nx-hint,
-.nx--next-3 .nx-spec__item,
-.nx--next-3 .nx-sib,
-.nx--next-3 .nx-notify__box { border-radius: 22px; }
-.nx--next-3 .nx-hint { transform: none; }
-.nx--next-3 .nx-marquee__track span::after { content: "\25CB"; } /* ○ */
+.nx--wave2-3 .nx-hint,
+.nx--wave2-3 .nx-spec__item,
+.nx--wave2-3 .nx-sib,
+.nx--wave2-3 .nx-notify__box { border-radius: 22px; }
+.nx--wave2-3 .nx-hint { transform: none; }
+.nx--wave2-3 .nx-marquee__track span::after { content: "\25CB"; } /* ○ */
 
 /* ④ 色彩 — 虹の進捗・にぎやかなマーキー(カラフル) */
-.nx--next-4 .nx-prog__fill { background: linear-gradient(90deg, #ff5fa2, #ffce5a, #33ccdd, #7d8cff); }
-.nx--next-4 .nx-marquee {
+.nx--wave2-4 .nx-prog__fill { background: linear-gradient(90deg, #ff5fa2, #ffce5a, #33ccdd, #7d8cff); }
+.nx--wave2-4 .nx-marquee {
   background: linear-gradient(90deg, color-mix(in srgb, #ff5fa2 9%, #0c0c0e), color-mix(in srgb, #33ccdd 9%, #0c0c0e));
 }
-.nx--next-4 .nx-marquee__track span:nth-child(4n+1) { color: #ff5fa2; }
-.nx--next-4 .nx-marquee__track span:nth-child(4n+2) { color: #ffce5a; }
-.nx--next-4 .nx-marquee__track span:nth-child(4n+3) { color: #33ccdd; }
-.nx--next-4 .nx-marquee__track span:nth-child(4n) { color: #7d8cff; }
+.nx--wave2-4 .nx-marquee__track span:nth-child(4n+1) { color: #ff5fa2; }
+.nx--wave2-4 .nx-marquee__track span:nth-child(4n+2) { color: #ffce5a; }
+.nx--wave2-4 .nx-marquee__track span:nth-child(4n+3) { color: #33ccdd; }
+.nx--wave2-4 .nx-marquee__track span:nth-child(4n) { color: #7d8cff; }
 
 /* 発表後ステージ(REVEALED): シルエットの発光を強め、機密テープ演出を外す */
 .nx-hero--revealed .nx-hero__title .nx-q { text-shadow: 0 0 34px var(--cl-glow), 0 0 90px var(--cl-glow); letter-spacing: .1em; }

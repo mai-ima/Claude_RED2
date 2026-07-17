@@ -158,8 +158,8 @@ URLが変わるため、CDN・ブラウザの古いキャッシュを確実に�
   (`/collab/{slug}/silicon/{key}/`)+ **作品専用の冷却技術**(`COLLAB_COOLING` /
   `/collab/{slug}/cooling/`。標準の氷刃/旋風ではなく作品ごとに新規設計)。
   配色・フォントは各作品のトークン(`collab-{slug}.css` / `COLLAB_FONTS`)で切り替える
-- **第2弾ティザー(相手非公開)**: `/collab/next{,-2,-3,-4}/`。共通の `_collab_lp_teaser` と
-  `collab-next.css`(`.collab--next`)を **`assets_slug` で共有** しつつ、発表カウントダウン・
+- **第2弾ティザー(発表前は相手非公開)**: `/collab/wave2{,-2,-3,-4}/`。共通の `_collab_lp_teaser` と
+  `collab-wave2.css`(`.collab--wave2`)を **`assets_slug` で共有** しつつ、発表カウントダウン・
   ヒント・「言えること」・進捗バー・マーキー・通知CTAを掲載。ヒーロー背景と一部UIは
   `nx--{slug}` フックで **作品ごとに意匠を一部だけ変える**(相手名は一切出さない)。
   発表日時(`reveal_at`)を実時間が過ぎると、相手を伏せたまま「発表準備中」へ自動遷移する
@@ -176,7 +176,8 @@ URLが変わるため、CDN・ブラウザの古いキャッシュを確実に�
 
 > コラボ相手・用語の表記根拠は `project-notes/collab-research.md`、未着手アイデアは
 > `project-notes/backlog.md` を参照(いずれも `.vercelignore` で配信対象外)。
-> 第2弾の相手作品名はリポジトリのどこにも記載しない方針。
+> 第2弾の相手作品名は **発表ステージ(`data-reveal-stage="full"`)とその生成データに限り記載可**。
+> 発表前導線(ティザー表示・`<title>`/description・ハブ・ニュース・検索・sitemap)には出さない。
 
 ### 製品・OS・ニュースの演出(ライン別・旗艦別)
 

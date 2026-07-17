@@ -321,7 +321,7 @@ COLLABS = [
     },
     {
         # 第2弾ティザー枠(ハブに「近日公開」でのみ表示)
-        "slug": "next", "game": "???", "studio": "COMING SOON",
+        "slug": "wave2", "game": "???", "studio": "COMING SOON",
         "active": False, "motif": "teaser",
         "tokens": {
             "bg": "#0c0c0e", "bg2": "#141416", "ink": "#f2f2f4", "soft": "#9a9aa6",
@@ -384,8 +384,8 @@ COLLABS = [
     },
     {
         # 第2弾ティザー枠②(相手・詳細は非公開。ヒントで匂わせるのみ)
-        "slug": "next-2", "game": "???", "studio": "COMING SOON",
-        "active": False, "motif": "teaser", "assets_slug": "next",
+        "slug": "wave2-2", "game": "???", "studio": "COMING SOON",
+        "active": False, "motif": "teaser", "assets_slug": "wave2",
         "tokens": {
             "bg": "#0a0e24", "bg2": "#141a3a", "ink": "#eef0ff", "soft": "#9aa0c8",
             "accent": "#d8b45c", "accent2": "#7d8cff", "line": "rgba(216,180,92,.35)",
@@ -443,8 +443,8 @@ COLLABS = [
     },
     {
         # 第2弾ティザー枠③(相手・詳細は非公開。ヒントで匂わせるのみ)
-        "slug": "next-3", "game": "???", "studio": "COMING SOON",
-        "active": False, "motif": "teaser", "assets_slug": "next",
+        "slug": "wave2-3", "game": "???", "studio": "COMING SOON",
+        "active": False, "motif": "teaser", "assets_slug": "wave2",
         "tokens": {
             "bg": "#08150f", "bg2": "#10241b", "ink": "#eafaf2", "soft": "#8fb8a8",
             "accent": "#2fd0a0", "accent2": "#f2f2f4", "line": "rgba(47,208,160,.35)",
@@ -480,8 +480,8 @@ COLLABS = [
     },
     {
         # 第2弾ティザー枠④(相手・詳細は非公開。ヒントで匂わせるのみ)
-        "slug": "next-4", "game": "???", "studio": "COMING SOON",
-        "active": False, "motif": "teaser", "assets_slug": "next",
+        "slug": "wave2-4", "game": "???", "studio": "COMING SOON",
+        "active": False, "motif": "teaser", "assets_slug": "wave2",
         "tokens": {
             "bg": "#0f0c1a", "bg2": "#1a1430", "ink": "#f4f0ff", "soft": "#b0a6cc",
             "accent": "#33ccdd", "accent2": "#ff5fa2", "line": "rgba(51,204,221,.35)",
