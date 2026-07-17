@@ -2561,6 +2561,63 @@ def _cl_cooling(cfg):
 </section>"""
 
 
+# 専用SoC×専用冷却の連携ストーリー(LP連携図用)。「同じ一点を守る」文言。
+COLLAB_SYNERGY = {
+    "genshin": ("色", "幻彩エンジンの色管理と、元素環の先回り色温度制御。二つの専用設計が、同じ「色の忠実さ」を守るために連動します。"),
+    "wuwa": ("速さ", "疾波ガバナーの瞬間クロックと、共振鎖の同時立ち上げ。二つの専用設計が、同じ「4.1GHzの速さ」を守るために連動します。"),
+    "nte": ("夜", "夜想のデュアルISPと、夜霧のセンサー直下スプレッダ。二つの専用設計が、同じ「夜の画質」を守るために連動します。"),
+    "endfield": ("持続", "定速ガバナーの先読み制御と、機関の密閉冷却。二つの専用設計が、同じ「持続99%」を守るために連動します。"),
+}
+
+
+def _cl_synergy(cfg):
+    """冷却×シリコン連携図(LP用)。専用SoCと専用冷却が同じ一点を守る接続ダイアグラム。"""
+    slug = cfg["slug"]
+    soc = next((c for c in COLLAB_SILICON.get(slug, []) if c["key"] == "soc"), None)
+    cool = COLLAB_COOLING.get(slug)
+    syn = COLLAB_SYNERGY.get(slug)
+    if not (soc and cool and syn):
+        return ""
+    point, story = syn
+    return f"""
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">ONE DESIGN DESK</p><h2 class="cl-h2">SoCと冷却は、同じ設計卓から。</h2>
+    <p class="cl-lead">{esc(story)}</p></div>
+    <div class="cl-syn">
+      <a class="cl-syn__node" href="{collab_silicon_url(slug, 'soc')}">
+        <span class="cl-syn__k">専用SoC</span><b>{esc(soc['name'])}</b><span class="cl-syn__s">{esc(soc['kicker'])}</span></a>
+      <div class="cl-syn__link" aria-hidden="true"><span class="cl-syn__wire"></span><b>{esc(point)}</b><span class="cl-syn__wire"></span></div>
+      <a class="cl-syn__node" href="{collab_cooling_url(slug)}">
+        <span class="cl-syn__k">専用冷却</span><b>{esc(cool['name'])}</b><span class="cl-syn__s">{esc(cool['kicker'])}</span></a>
+    </div>
+  </div>
+</section>"""
+
+
+def _cl_tabband(cfg):
+    """タブレット導線バンド(LP用)。発表前は「予告中」、発表日時経過後は
+    data-reveal/data-soon 機構でラベルが「発表済み — 詳細へ」に自動で切り替わる。"""
+    t = cfg.get("tablet")
+    if not t:
+        return ""
+    rv = t.get("reveal_at", "")
+    date_label = f"{rv[:10].replace('-', '/')} 発表予定"
+    return f"""
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-tabband">
+      <div>
+        <p class="cl-eyebrow">COLLABORATION TABLET</p>
+        <h2 class="cl-h2">{esc(t['device'])}<span class="cl-tabband__st" data-reveal="{esc(rv)}" data-soon="発表済み — 詳細へ">{esc(date_label)}</span></h2>
+        <p class="cl-lead">{esc(t['lead'])}</p>
+      </div>
+      <a class="cl-btn cl-btn--primary" href="/collab/{cfg['slug']}/tablet/">{esc(t['device'])} のページへ</a>
+    </div>
+  </div>
+</section>"""
+
+
 def _cl_note(cfg):
     return (f'<p class="cl-note">{esc(cfg["note"])} 本サイトは架空企業「株式会社朱雀」のデモンストレーションであり、'
             f'実在の商品・価格・提携・販売を示すものではありません。</p>'
@@ -2799,6 +2856,8 @@ def _collab_lp_genshin(cfg, phone, accs):
 {gs_ext}
 {_cl_silicon(cfg)}
 {_cl_cooling(cfg)}
+{_cl_synergy(cfg)}
+{_cl_tabband(cfg)}
 {_cl_accs(cfg, accs)}
 {_cl_bundle(cfg)}
 {_cl_schedule(cfg)}
@@ -2988,6 +3047,8 @@ def _collab_lp_wuwa(cfg, phone, accs):
 {ww_ext}
 {_cl_silicon(cfg)}
 {_cl_cooling(cfg)}
+{_cl_synergy(cfg)}
+{_cl_tabband(cfg)}
 {_cl_accs(cfg, accs)}
 {_cl_bundle(cfg)}
 {_cl_schedule(cfg)}
@@ -3189,6 +3250,8 @@ def _collab_lp_nte(cfg, phone, accs):
 {nt_ext}
 {_cl_silicon(cfg)}
 {_cl_cooling(cfg)}
+{_cl_synergy(cfg)}
+{_cl_tabband(cfg)}
 {_cl_accs(cfg, accs)}
 {_cl_bundle(cfg)}
 {_cl_schedule(cfg)}
@@ -3671,7 +3734,8 @@ def _collab_lp_endfield(cfg, phone, accs):
     </div>
   </div>
 </section>
-
+{_cl_synergy(cfg)}
+{_cl_tabband(cfg)}
 {_cl_faq(cfg)}
 {_cl_note(cfg)}"""
 

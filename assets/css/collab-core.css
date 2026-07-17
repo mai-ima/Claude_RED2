@@ -610,3 +610,48 @@
   .cl-count.is-imminent .cl-count__unit b { animation: none; }
   .cl-ring__fg { transition: none; }
 }
+
+/* 冷却×シリコン連携図(G-B): SoCと冷却が同じ一点を守る接続ダイアグラム */
+.cl-syn { display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(12px, 2vw, 24px); align-items: stretch; }
+.cl-syn__node {
+  display: flex; flex-direction: column; gap: 6px; justify-content: center;
+  border: 1px solid var(--cl-line); border-radius: 16px;
+  padding: clamp(18px, 2.6vw, 30px);
+  background: color-mix(in srgb, var(--cl-bg2) 72%, transparent);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .3s ease;
+}
+.cl-syn__node:hover { transform: translateY(-3px); border-color: var(--cl-accent);
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--cl-glow, var(--cl-accent)) 22%, transparent); }
+.cl-syn__k { font-size: .7rem; font-weight: 700; letter-spacing: .26em; color: var(--cl-accent); text-transform: uppercase; }
+.cl-syn__node b { font-size: clamp(1.05rem, .9rem + .8vw, 1.35rem); color: var(--cl-ink); line-height: 1.35; }
+.cl-syn__s { font-size: .82rem; color: var(--cl-soft); line-height: 1.7; }
+.cl-syn__link { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-width: 84px; }
+.cl-syn__link b {
+  display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%;
+  border: 1.5px solid var(--cl-accent); color: var(--cl-accent);
+  font-size: .95rem; font-weight: 800;
+  background: color-mix(in srgb, var(--cl-accent) 10%, transparent);
+}
+.cl-syn__wire { flex: 1; width: 2px; min-height: 16px;
+  background: linear-gradient(180deg, transparent, var(--cl-accent), transparent); }
+@media (max-width: 760px) {
+  .cl-syn { grid-template-columns: 1fr; }
+  .cl-syn__link { flex-direction: row; min-height: 56px; }
+  .cl-syn__wire { width: auto; height: 2px; min-height: 0; min-width: 16px;
+    background: linear-gradient(90deg, transparent, var(--cl-accent), transparent); }
+}
+
+/* タブレット導線バンド(G-B): 発表前=予告中 / 発表後=ラベル自動切替 */
+.cl-tabband {
+  display: flex; align-items: center; justify-content: space-between; gap: 22px; flex-wrap: wrap;
+  border: 1.5px solid var(--cl-line); border-radius: 22px;
+  padding: clamp(24px, 3.6vw, 42px);
+  background:
+    radial-gradient(60% 120% at 88% 0%, color-mix(in srgb, var(--cl-glow, var(--cl-accent)) 16%, transparent), transparent 70%),
+    color-mix(in srgb, var(--cl-bg2) 82%, transparent);
+}
+.cl-tabband__st {
+  display: inline-block; margin-left: 14px; padding: 5px 14px; vertical-align: middle;
+  border: 1px solid var(--cl-accent); border-radius: 999px;
+  font-size: .72rem; font-weight: 800; letter-spacing: .08em; color: var(--cl-accent);
+}
