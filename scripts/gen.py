@@ -2404,6 +2404,8 @@ COLLAB_FONTS = {
     "wuwa": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700;900&display=swap" media="print" onload="this.media='all'">""",
     "nte": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;1,800;1,900&display=swap" media="print" onload="this.media='all'">""",
     "endfield": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" media="print" onload="this.media='all'">""",
+    # 第2弾ティザー共有(発表LP: 星軌 SEIKI のセリフ体用。非ブロッキング)
+    "next": """<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" media="print" onload="this.media='all'">""",
 }
 
 
@@ -3774,6 +3776,192 @@ def _collab_lp_endfield(cfg, phone, accs):
 TEASER_SINCE = {"wave2": "2026-07-11T20:00:00", "tablet": "2026-07-10T20:00:00"}
 
 
+def _reveal_common_tail(cfg, rv, sib_links):
+    """発表LP共通の末尾(FAQ・兄弟・権利注記)。"""
+    faq = "".join(
+        f'<details class="cl-faq__i"><summary>{esc(q)}</summary><p>{esc(a)}</p></details>'
+        for q, a in rv.get("faq", []))
+    faq_html = f"""
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FAQ</p><h2 class="cl-h2">よくある質問</h2></div>
+    <div class="cl-faq">{faq}</div>
+  </div>
+</section>""" if faq else ""
+    return f"""{faq_html}
+<section class="cl-section nx-siblings">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">2ND WAVE</p><h2 class="cl-h2">第2弾は、複数進行中。</h2></div>
+    <div class="nx-sib__grid">{sib_links}</div>
+  </div>
+</section>
+<div class="cl-wrap"><p class="cl-note">{esc(rv['note'])} 掲載内容は発表第一報であり、仕様・同梱物は変更される場合があります。</p></div>"""
+
+
+def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd):
+    """空洞 KUDO × ゼンレスゾーンゼロ — 正式発表フルLP。
+    公式サイトの設計言語(黒×ライムイエロー・平行四辺形タグ・大番号セクション・
+    フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。"""
+    phone_art = svg_art.svg_phone("kudo", "#141417", "#d4fa4c", "空洞 KUDO", "くうどう", line="suzaku", hz="144Hz")
+    stats = "".join(
+        f'<div class="zz-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
+        for s in rv["stats"])
+    feats = "".join(f"""
+      <div class="zz-card">
+        <span class="zz-tag">FILE {esc(f["no"])}</span>
+        <h3 class="zz-card__t">{esc(f["title"])}</h3>
+        <p class="zz-card__b">{esc(f["body"])}</p>
+      </div>""" for f in rv["features"])
+    sched = "".join(
+        f'<div class="zz-sched"><span class="zz-sched__no">{no}</span><b>{esc(d)}</b><span>{esc(t)}</span></div>'
+        for no, (d, t) in enumerate([(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")], 1))
+    return f"""
+<div data-reveal-stage="full" hidden aria-hidden="true" class="zz-lp">
+<section class="zz-hero">
+  <span class="zz-hero__ghost" aria-hidden="true">KUDO</span>
+  <p class="zz-plate"><span class="zz-plate__no">00</span>OFFICIALLY ANNOUNCED</p>
+  <p class="zz-hero__title" role="heading" aria-level="1">空洞 <span>KUDO</span></p>
+  <p class="zz-hero__sub">SUZAKU × {esc(rv['game'])} — 共同設計、正式発表。</p>
+  <div class="zz-hero__art">{phone_art}</div>
+  <p class="zz-hero__lead">{esc(rv['copy'])}</p>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">01</span>設定ファイル — THE CITY</p>
+    <h2 class="zz-h2">新エリー都には、<br>数多くのホロウが存在します。</h2>
+    <p class="zz-lead">{esc(rv['world'])}</p>
+    <div class="zz-stats">{stats}</div>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">02</span>頭脳 — DEDICATED SOC</p>
+    <h2 class="zz-h2">{esc(rv['soc']['name'])}</h2>
+    <p class="zz-kick">{esc(rv['soc']['kicker'])}</p>
+    <p class="zz-lead">{esc(rv['soc']['body'])}</p>
+    <div class="zz-specrow"><span>3nm</span><span>最大 {esc(rv['soc']['clock'])}</span><span>AnTuTu {esc(rv['soc']['antutu'])}</span></div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">03</span>冷却 — DEDICATED COOLING</p>
+    <h2 class="zz-h2">{esc(rv['cooling']['name'])}</h2>
+    <p class="zz-kick">{esc(rv['cooling']['kicker'])}</p>
+    <p class="zz-lead">{esc(rv['cooling']['body'])}</p>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">04</span>ゲームの特徴 — FEATURES</p>
+    <div class="zz-cards">{feats}</div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">05</span>スケジュール — SCHEDULE</p>
+    <div class="zz-scheds">{sched}</div>
+    <div class="zz-buy">
+      <p class="zz-buy__price">{yen(rv['price'])}<small>(税込)・数量限定{rv['qty']:,}台</small></p>
+      <div class="cl-buy__cta">
+        <a class="zz-btn" href="/news/">ニュースルームで発表を見る</a>
+        <a class="zz-btn zz-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
+      </div>
+    </div>
+  </div>
+</section>
+{_reveal_common_tail(cfg, rv, sib_links)}
+</div>"""
+
+
+def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd):
+    """星軌 SEIKI × 崩壊:スターレイル — 正式発表フルLP。
+    公式サイト(深紺の星空・金細線カード・セリフ体・ページ番号)と車内UI
+    (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。"""
+    phone_art = svg_art.svg_phone("seiki", "#101830", "#d8b45c", "星軌 SEIKI", "せいき", line="suzaku", hz="165Hz")
+    stats = "".join(
+        f'<div class="sr-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
+        for s in rv["stats"])
+    feats = "".join(f"""
+      <div class="sr-card">
+        <span class="sr-card__no">{esc(f["no"])}</span>
+        <h3 class="sr-card__t">{esc(f["title"])}</h3>
+        <p class="sr-card__b">{esc(f["body"])}</p>
+      </div>""" for f in rv["features"])
+    sched = "".join(
+        f'<div class="sr-sched"><b>{esc(d)}</b><span>{esc(t)}</span></div>'
+        for d, t in [(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")])
+    return f"""
+<div data-reveal-stage="full" hidden aria-hidden="true" class="sr-lp">
+<section class="sr-hero">
+  <p class="sr-eyebrow">OFFICIALLY ANNOUNCED — SUZAKU × {esc(rv['game'])}</p>
+  <p class="sr-hero__title" role="heading" aria-level="1">星軌 <span>SEIKI</span></p>
+  <p class="sr-hero__sub">共同設計、正式発表。次の停車駅は、あなたの手のひら。</p>
+  <div class="sr-hero__art sr-frame">{phone_art}</div>
+  <p class="sr-hero__lead">{esc(rv['copy'])}</p>
+  <p class="sr-pageno">01 <small>/ 06</small></p>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-holo" role="note">
+      <span class="sr-holo__mark" aria-hidden="true">◆</span>
+      <b class="sr-holo__t">乗車認証</b>
+      <p class="sr-holo__b">予約は {esc(rv['reserve'])} 20:00 から。認証を完了しても、旅程はいつでも変更できます。</p>
+    </div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">WORLD</p><h2 class="sr-h2">銀河を巡る、星穹列車。</h2></div>
+    <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['world'])}</p></div>
+    <div class="sr-stats">{stats}</div>
+    <p class="sr-pageno">02 <small>/ 06</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">DEDICATED SILICON</p><h2 class="sr-h2">{esc(rv['soc']['name'])}</h2>
+    <p class="sr-kick">{esc(rv['soc']['kicker'])}</p></div>
+    <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['soc']['body'])}</p>
+    <div class="sr-specrow"><span>3nm</span><span>最大 {esc(rv['soc']['clock'])}</span><span>AnTuTu {esc(rv['soc']['antutu'])}</span></div></div>
+    <p class="sr-pageno">03 <small>/ 06</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">DEDICATED COOLING</p><h2 class="sr-h2">{esc(rv['cooling']['name'])}</h2>
+    <p class="sr-kick">{esc(rv['cooling']['kicker'])}</p></div>
+    <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['cooling']['body'])}</p></div>
+    <p class="sr-pageno">04 <small>/ 06</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">FEATURES</p><h2 class="sr-h2">旅の装備。</h2></div>
+    <div class="sr-cards">{feats}</div>
+    <p class="sr-pageno">05 <small>/ 06</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">SCHEDULE</p><h2 class="sr-h2">時刻表。</h2></div>
+    <div class="sr-scheds">{sched}</div>
+    <div class="sr-buy sr-frame sr-pad">
+      <p class="sr-buy__price">{yen(rv['price'])}<small>(税込)・数量限定{rv['qty']:,}台</small></p>
+      <div class="cl-buy__cta">
+        <a class="sr-btn" href="/news/">ニュースルームで発表を見る</a>
+        <a class="sr-btn sr-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
+      </div>
+    </div>
+    <p class="sr-pageno">06 <small>/ 06</small></p>
+  </div>
+</section>
+{_reveal_common_tail(cfg, rv, sib_links)}
+</div>"""
+
+
 def _cl_ring():
     """発表までの進捗リング(SVG円弧)。collab-core.js が data-since/data-until から
     経過割合を計算して描画する。JS無効時は装飾なし(aria-hidden)。"""
@@ -3814,7 +4002,12 @@ def _collab_lp_teaser(cfg, phone, accs):
     # 相手名は発表ステージの中にのみ置き、ティザー表示・<title>/description・
     # ハブ・ニュースなど発表前の導線には出さない(ユーザー承認済みの方針)。
     rv = cfg.get("reveal")
-    if rv:
+    # 本気LP版(第1弾級の作り込み)。データに price があるものは専用ビルダーで描く。
+    if rv and rv.get("price") and cfg["slug"] == "next":
+        revealed_stage = _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd)
+    elif rv and rv.get("price") and cfg["slug"] == "next-2":
+        revealed_stage = _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd)
+    elif rv:
         rv_points = "".join(
             f'<div class="cl-arch"><b class="cl-arch__t">{esc(p["title"])}</b><p class="cl-arch__b">{esc(p["body"])}</p></div>'
             for p in rv["points"])
