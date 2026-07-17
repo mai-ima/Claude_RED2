@@ -75,6 +75,30 @@ def main():
         except Exception as e:
             fails.append(f"sitemap.xml が不正: {e}")
 
+    # 3.5) 二状態ページの検査: タブレット4枚に予告/発表の両ステージがあり、
+    #      <head>(title/description)に発表後情報(価格)が漏れていないこと
+    sys.path.insert(0, str(SCRIPTS))
+    try:
+        from data_collab import COLLABS
+        for c in COLLABS:
+            t = c.get("tablet")
+            if not t or not t.get("price"):
+                continue
+            page = ROOT / "collab" / c["slug"] / "tablet" / "index.html"
+            if not page.exists():
+                fails.append(f"タブレットページが無い: {c['slug']}")
+                continue
+            html = page.read_text(encoding="utf-8")
+            for stage in ('data-reveal-stage="teaser"', 'data-reveal-stage="full"'):
+                if stage not in html:
+                    fails.append(f"{c['slug']}: {stage} がありません(二状態が壊れています)")
+            head = html.split("</head>", 1)[0]
+            price_str = f"{t['price']:,}"
+            if price_str in head or "¥" in head:
+                fails.append(f"{c['slug']}: <head> に発表前に出せない価格情報が漏れています")
+    except Exception as e:
+        fails.append(f"二状態ページ検査でエラー: {e}")
+
     # 4) データ検証(strict=False で結果だけ受け取る)
     sys.path.insert(0, str(SCRIPTS))
     try:

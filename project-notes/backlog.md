@@ -21,3 +21,16 @@
   - 夜行: 夜霧 NIGHT MIST(夜間撮影の発熱対策)
   - 前線: 機関 KIKAN(広温度域・密閉式の現場冷却)
 - ステータス: **完了。標準の氷刃/旋風とは別設計として扱う。**
+
+## 設計メモ: 二状態ページ(予告⇄発表の自動切替・サイクルG)
+
+- 対象: `/collab/{slug}/tablet/`(4枚・フルLP付き)と第2弾ティザー4枚(発表演出のみ)。
+- 仕組み: 同一URLに `data-reveal-stage="teaser"` と `data-reveal-stage="full"`(既定 hidden +
+  aria-hidden)を両方描画し、`collab-core.js` が `data-until`(reveal_at)と実時刻を比較。
+  ゼロ到達(または読込時に経過済み)で teaser を隠し full を表示、`body.is-revealed` を付与。
+- ネタバレ防止: `<title>`/description には発表前情報のみ(価格は書かない)。selftest が
+  二状態マーカーの存在と head への価格漏れを機械検査する。interact.js に切替の実地テストあり。
+- カウントダウンUI: `data-since`(予告ニュース公開日時)→ reveal_at の経過割合を進捗リングで表示。
+  残り24時間で `is-imminent`(グローパルス、reduced-motion では無効)。
+- 第2弾の正式発表時の手順: 相手名解禁後は、ティザーの full ステージを本物の発表LPに差し替える
+  (現在は名前なしの REVEALED 演出)。相手名はそれまでリポジトリのどこにも書かない。

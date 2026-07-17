@@ -53,6 +53,29 @@ const BASE = process.env.AUDIT_BASE || 'http://localhost:8930';
     ok('チップclickでURL更新(?q=原神)', /q=%E5%8E%9F%E7%A5%9E|q=原神/.test(decodeURI(url)) || /原神/.test(decodeURIComponent(url)), url);
   }
 
+  // 4) 二状態ページの自動切替(G-A): data-until を過去日時に差し替えてリロードすると
+  //    予告ステージが隠れ、発表ステージ(フルLP)が表示されること
+  await page.goto(BASE + '/collab/genshin/tablet/', { waitUntil: 'networkidle' });
+  const teaser0 = await page.$eval('[data-reveal-stage="teaser"]', el => !el.hidden);
+  const full0 = await page.$eval('[data-reveal-stage="full"]', el => el.hidden);
+  ok('タブレット初期状態は予告表示・発表hidden', teaser0 && full0);
+  // DOMの data-until を過去日時にして collab-core.js を再実行させる(route差し替え)
+  await page.route('**/collab/genshin/tablet/', async route => {
+    const res = await route.fetch();
+    let body = await res.text();
+    body = body.replace(/data-until="[^"]+"/, 'data-until="2020-01-01T00:00:00"');
+    await route.fulfill({ response: res, body });
+  });
+  await page.goto(BASE + '/collab/genshin/tablet/', { waitUntil: 'networkidle' });
+  await page.waitForTimeout(400);
+  const revealed = await page.evaluate(() => document.body.classList.contains('is-revealed'));
+  const teaser1 = await page.$eval('[data-reveal-stage="teaser"]', el => el.hidden);
+  const full1 = await page.$eval('[data-reveal-stage="full"]', el => !el.hidden);
+  ok('期限経過でフルLPへ自動切替(is-revealed)', revealed && teaser1 && full1);
+  const priceShown = await page.$eval('[data-reveal-stage="full"]', el => /¥/.test(el.textContent));
+  ok('発表ステージに価格が表示される', priceShown);
+  await page.unroute('**/collab/genshin/tablet/');
+
   console.log(results.join('\n'));
   const failed = results.filter(r => r.startsWith('FAIL'));
   await browser.close();

@@ -103,6 +103,26 @@ def check_collab(errs):
         for need in ("soc", "gpu", "mem", "ssd"):
             if need not in keys:
                 _err(errs, f"silicon:{slug}", f"部品 '{need}' がありません")
+    # タブレットのフルLPデータ(price がある=二状態ページ対象)の必須キーとSoC整合
+    for c in COLLABS:
+        t = c.get("tablet")
+        if not t or not t.get("price"):
+            continue
+        where = f"tablet:{c['slug']}"
+        for key in ("tagline", "qty", "reserve", "release", "until", "stats", "highlights", "specs"):
+            if not t.get(key):
+                _err(errs, where, f"フルLP必須キー '{key}' がありません")
+        if len(t.get("stats", [])) < 3:
+            _err(errs, where, "stats は3個以上必要です")
+        if len(t.get("highlights", [])) < 3:
+            _err(errs, where, "highlights は3本必要です")
+        # スマホ版と同じ専用SoC名(先頭語)が specs に含まれるか
+        soc = next((x for x in COLLAB_SILICON.get(c["slug"], []) if x["key"] == "soc"), None)
+        if soc:
+            soc_head = soc["name"].split(" ")[0]
+            spec_text = str(t.get("specs", ""))
+            if soc_head not in spec_text:
+                _err(errs, where, f"specs にスマホ版と同じ専用SoC名({soc_head})がありません")
 
 
 def check_news(errs):

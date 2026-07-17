@@ -227,7 +227,19 @@
       { display: "原神", variants: ["げんしん", "原神", "genshin"] },
       { display: "鳴潮", variants: ["めいちょう", "鳴潮", "wuwa"] },
       { display: "NTE", variants: ["えぬてぃーいー", "nte"] },
-      { display: "エンドフィールド", variants: ["えんどふぃーるど", "endfield", "エンドフィールド"] }
+      { display: "エンドフィールド", variants: ["えんどふぃーるど", "endfield", "エンドフィールド"] },
+      { display: "元素環", variants: ["げんそかん", "元素環", "element loop", "えれめんとるーぷ"] },
+      { display: "共振鎖", variants: ["きょうしんさ", "共振鎖", "resonance chain", "れぞなんすちぇーん"] },
+      { display: "夜霧", variants: ["よぎり", "夜霧", "night mist", "ないとみすと"] },
+      { display: "機関", variants: ["きかん", "機関", "kikan"] },
+      { display: "七耀 Pad", variants: ["しちようぱっど", "七耀pad", "しちようpad"] },
+      { display: "残響 Pad", variants: ["ざんきょうぱっど", "残響pad", "ざんきょうpad"] },
+      { display: "夜行 Pad", variants: ["やこうぱっど", "夜行pad", "やこうpad"] },
+      { display: "前線 Pad", variants: ["ぜんせんぱっど", "前線pad", "ぜんせんpad"] },
+      { display: "元素炉", variants: ["げんそろ", "元素炉", "gensoro"] },
+      { display: "共振", variants: ["きょうしん", "共振", "kyoshin"] },
+      { display: "夜想", variants: ["やそう", "夜想", "yaso"] },
+      { display: "基幹", variants: ["きかんえふわん", "基幹", "kikan-f1"] }
     ].map(function (g) { return { display: g.display, nvar: g.variants.map(szNorm) }; });
 
     /* 生クエリの各語について、別表記なら代表表示名へ置換した提案文字列を返す(なければ null)。 */

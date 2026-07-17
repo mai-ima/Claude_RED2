@@ -3800,7 +3800,7 @@ def _collab_lp_teaser(cfg, phone, accs):
     sib_links = "".join(
         f'<a class="nx-sib" style="--cl-accent:{c["tokens"]["accent"]}" href="/collab/{c["slug"]}/">'
         f'<span class="nx-sib__q">???</span>'
-        f'<span class="nx-sib__d" data-reveal="{esc(c.get("reveal_at", ""))}" data-soon="まもなく発表">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
+        f'<span class="nx-sib__d" data-reveal="{esc(c.get("reveal_at", ""))}" data-soon="発表済み">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
         f'<span class="nx-sib__go">ティザーを見る →</span></a>'
         for c in sibs)
     reveal = cfg.get("reveal_at", "")
@@ -4140,7 +4140,7 @@ def build_collab_hub():
                 f'<a class="collab-card collab-card--soon" style="{style}" href="/collab/{cfg["slug"]}/">'
                 f'<span class="collab-card__game">{esc(cfg["game"])}</span>'
                 f'<span class="collab-card__edition">{esc(cfg["edition"])}</span>'
-                f'<span class="collab-card__tag" data-reveal="{esc(cfg.get("reveal_at", ""))}" data-soon="まもなく公開 — 発表準備中">{reveal_tag}</span>'
+                f'<span class="collab-card__tag" data-reveal="{esc(cfg.get("reveal_at", ""))}" data-soon="正式発表 — 続報を見る">{reveal_tag}</span>'
                 f'<span class="collab-card__go">ティザーを見る →</span></a>')
 
     # コラボタブレット予告(第1弾の続き)。ページは未公開のため表示のみ。
@@ -4163,7 +4163,7 @@ def build_collab_hub():
             f'{tab_icon}'
             f'<span class="collab-tabcard__game">SUZAKU × {esc(cfg["game"])}</span>'
             f'<span class="collab-tabcard__name">{esc(tab_dev) if tab_dev else "コラボレーションタブレット"}</span>'
-            f'<span class="collab-tabcard__tag" data-reveal="{esc(trv_iso)}" data-soon="COMING SOON — まもなく発表">{tab_tag}</span>'
+            f'<span class="collab-tabcard__tag" data-reveal="{esc(trv_iso)}" data-soon="発表済み — 詳細へ">{tab_tag}</span>'
             f'<span class="collab-tabcard__go">予告を見る →</span></a>')
     body = f"""
 <section class="hero hero--sub">
