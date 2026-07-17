@@ -3802,7 +3802,8 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd):
     """空洞 KUDO × ゼンレスゾーンゼロ — 正式発表フルLP。
     公式サイトの設計言語(黒×ライムイエロー・平行四辺形タグ・大番号セクション・
     フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。"""
-    phone_art = svg_art.svg_phone("kudo", "#141417", "#d4fa4c", "空洞 KUDO", "くうどう", line="suzaku", hz="144Hz")
+    # 量産版レンダリング完成までは仮デザインSVG(PROTOTYPE表記入り)を掲出する
+    phone_art = svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz")
     stats = "".join(
         f'<div class="zz-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -3880,7 +3881,8 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd):
     """星軌 SEIKI × 崩壊:スターレイル — 正式発表フルLP。
     公式サイト(深紺の星空・金細線カード・セリフ体・ページ番号)と車内UI
     (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。"""
-    phone_art = svg_art.svg_phone("seiki", "#101830", "#d8b45c", "星軌 SEIKI", "せいき", line="suzaku", hz="165Hz")
+    # 量産版レンダリング完成までは仮デザインSVG(PROTOTYPE表記入り)を掲出する
+    phone_art = svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail")
     stats = "".join(
         f'<div class="sr-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])

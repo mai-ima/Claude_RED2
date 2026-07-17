@@ -1314,6 +1314,81 @@ def svg_die(gid, label, sub, glow, accent2=None):
 _UID_SEQ = 0  # ページ内 id 衝突防止の呼び出し連番(ビルド順固定=決定的)
 
 
+def svg_prototype(pid, glow, label, kana="", style="zzz", note="PROTOTYPE — 仮デザイン"):
+    """発表直後の「仮デザイン」製品SVG(340×600・スマホと同じ実機比率)。
+
+    正式レンダリング(svg_phone の専用描画)が完成するまでの繋ぎとして、
+    設計図風のワイヤーフレーム+PROTOTYPE刻印で「量産版と異なる」ことを
+    視覚的に明示する。style: "zzz"=黒×ライム(ハザード帯)、"srail"=紺×金(星と括弧)。"""
+    global _UID_SEQ
+    _UID_SEQ += 1
+    u = f"proto{pid.replace('-', '')}n{_UID_SEQ}"
+    acc = glow
+    ink = "#eef0f4"
+    # 図面グリッド(端末輪郭の内側のみ)
+    grid = "".join(f'<path d="M{x} 44 V556" stroke="{acc}" stroke-opacity="0.07"/>' for x in range(70, 300, 28)) + \
+           "".join(f'<path d="M56 {y} H284" stroke="{acc}" stroke-opacity="0.07"/>' for y in range(70, 560, 28))
+    if style == "srail":
+        # 星屑(紺×金): 図面の余白に小さな四芒星を散らす
+        pts = [(30, 80, 5), (318, 130, 4), (24, 300, 3.4), (316, 340, 5), (30, 500, 4), (312, 520, 3.4)]
+        deco = "".join(
+            f'<path d="M{x} {y - s} L{x + s * 0.32} {y - s * 0.32} L{x + s} {y} L{x + s * 0.32} {y + s * 0.32} '
+            f'L{x} {y + s} L{x - s * 0.32} {y + s * 0.32} L{x - s} {y} L{x - s * 0.32} {y - s * 0.32} Z" '
+            f'fill="{acc}" opacity="0.55"/>' for x, y, s in pts)
+        # 金のコーナーブラケット(乗車認証UI準拠)
+        deco += f"""
+<path d="M14 26 v-12 h12 M326 14 h-12 M326 14 v12" stroke="{acc}" stroke-width="2" fill="none" opacity="0.8"/>
+<path d="M14 574 v12 h12 M326 586 h-12 v-12" stroke="{acc}" stroke-width="2" fill="none" opacity="0.8"/>"""
+        stamp_font = "'Shippori Mincho','Noto Sans JP',serif"
+    else:
+        # ハザードストライプ帯(黒×ライム)
+        stripes = "".join(
+            f'<rect x="{i * 24}" y="0" width="12" height="10" fill="{acc}" transform="skewX(-30)"/>'
+            for i in range(16))
+        deco = f"""
+<g transform="translate(20 588)" opacity="0.75">{stripes}</g>"""
+        stamp_font = "'Noto Sans JP',sans-serif"
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label}(仮デザイン)">
+<defs>
+<radialGradient id="pg{u}" cx="0.5" cy="0.42" r="0.75">
+  <stop offset="0" stop-color="{acc}" stop-opacity="0.14"/>
+  <stop offset="1" stop-color="{acc}" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect x="0" y="0" width="340" height="600" fill="url(#pg{u})"/>
+{deco}
+<!-- 端末外形(ワイヤーフレーム) -->
+{grid}
+<rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 7" opacity="0.9"/>
+<rect x="52" y="39" width="236" height="522" rx="40" fill="none" stroke="{ink}" stroke-opacity="0.22" stroke-width="1.2"/>
+<path d="M170 30 v14 M170 556 v14 M43 300 h14 M283 300 h14" stroke="{acc}" stroke-width="1.6" opacity="0.7"/>
+<!-- 寸法線 -->
+<path d="M315 30 h14 M315 570 h14 M322 30 V570" stroke="{ink}" stroke-opacity="0.4" stroke-width="1.2"/>
+<path d="M322 30 l-4 9 h8 z M322 570 l-4 -9 h8 z" fill="{ink}" fill-opacity="0.4"/>
+<text x="334" y="304" font-family="monospace" font-size="10" fill="{ink}" opacity="0.55" text-anchor="middle" transform="rotate(90 334 304)">H 164mm(設計値)</text>
+<path d="M43 24 v-8 M297 24 v-8 M43 20 H297" stroke="{ink}" stroke-opacity="0.4" stroke-width="1.2"/>
+<text x="170" y="12" font-family="monospace" font-size="10" fill="{ink}" opacity="0.55" text-anchor="middle">W 76.5mm(設計値)</text>
+<!-- カメラ島プレース(調整中) -->
+<rect x="66" y="60" width="208" height="96" rx="18" fill="none" stroke="{acc}" stroke-width="1.6" stroke-dasharray="6 5" opacity="0.85"/>
+<circle cx="108" cy="98" r="21" fill="none" stroke="{ink}" stroke-opacity="0.4" stroke-width="1.4" stroke-dasharray="4 4"/>
+<circle cx="163" cy="98" r="16" fill="none" stroke="{ink}" stroke-opacity="0.35" stroke-width="1.3" stroke-dasharray="4 4"/>
+<text x="170" y="144" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.55" text-anchor="middle" letter-spacing="2">CAMERA MODULE — 調整中</text>
+<!-- 冷却窓プレース(検証中) -->
+<circle cx="170" cy="330" r="50" fill="none" stroke="{acc}" stroke-width="1.6" stroke-dasharray="7 6" opacity="0.85"/>
+<path d="M170 330 m-50 0 h100 M170 280 v100" stroke="{ink}" stroke-opacity="0.2" stroke-width="1"/>
+<text x="170" y="400" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.55" text-anchor="middle" letter-spacing="2">COOLING — 設計検証中</text>
+<!-- 機体名+PROTOTYPEスタンプ -->
+<text x="170" y="452" font-family="{stamp_font}" font-size="15" font-weight="800" fill="{ink}" opacity="0.85" text-anchor="middle" letter-spacing="2.5">{label}</text>
+{f'<text x="170" y="474" font-family="{stamp_font}" font-size="9" fill="{ink}" opacity="0.45" text-anchor="middle" letter-spacing="4">{kana}</text>' if kana else ''}
+<g transform="rotate(-6 170 516)">
+  <rect x="84" y="496" width="172" height="40" rx="6" fill="none" stroke="{acc}" stroke-width="2.4" opacity="0.95"/>
+  <text x="170" y="514" font-family="monospace" font-size="14" font-weight="800" fill="{acc}" text-anchor="middle" letter-spacing="4">PROTOTYPE</text>
+  <text x="170" y="529" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="{acc}" text-anchor="middle" letter-spacing="1.5">仮デザイン — 量産版と異なります</text>
+</g>
+<text x="170" y="560" font-family="monospace" font-size="7.5" fill="{ink}" opacity="0.4" text-anchor="middle" letter-spacing="2">{note} ・ RENDERING IN PROGRESS</text>
+</svg>"""
+
+
 def svg_art(kind, glow="#e8442e", body_hex="#181820", motif=None):
     """feature-split・アクセサリ用のアートパネル(480×360)。
 
