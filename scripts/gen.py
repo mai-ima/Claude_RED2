@@ -3798,6 +3798,30 @@ def _reveal_common_tail(cfg, rv, sib_links):
 <div class="cl-wrap"><p class="cl-note">{esc(rv['note'])} 掲載内容は発表第一報であり、仕様・同梱物は変更される場合があります。</p></div>"""
 
 
+def _rv_spec(rv, group, key):
+    """reveal ブロックの specs(第一報仕様)から1項目を引く。"""
+    for g, rows in rv.get("specs", []):
+        if g == group:
+            for k, v in rows:
+                if k == key:
+                    return v
+    return ""
+
+
+def _reveal_vs_rows(rv):
+    """発表LPの「vs SUZAKU 4」比較行。旗艦側は実データから引いて矛盾を防ぐ。
+    正直な比較にする(旗艦がHzと電池で勝ち、コラボ機が専用SoCの絶対性能で勝つ)。"""
+    s4 = PRODUCT_BY_ID["suzaku-4"]
+    return [
+        ("SoC", f"{rv['soc']['name']}(専用・最大 {rv['soc']['clock']})", get_spec(s4, ["性能"], "SoC")),
+        ("AnTuTu", rv["soc"]["antutu"], f"{product_antutu(s4)}万点"),
+        ("リフレッシュレート", _rv_spec(rv, "ディスプレイ", "リフレッシュレート"), get_spec(s4, ["ディスプレイ"], "リフレッシュレート")),
+        ("冷却", f"{rv['cooling']['name']}(専用)", get_spec(s4, ["冷却"], "冷却システム")),
+        ("バッテリー", _rv_spec(rv, "バッテリー", "容量"), get_spec(s4, ["バッテリー", "バッテリー・充電"], "バッテリー容量") or get_spec(s4, ["バッテリー", "バッテリー・充電"], "容量")),
+        ("価格 / 提供", f"{yen(rv['price'])}・数量限定{rv['qty']:,}台", f"{yen(s4['price'])}〜・通常販売"),
+    ]
+
+
 def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     """空洞 KUDO × ゼンレスゾーンゼロ — 正式発表フルLP。
     公式サイトの設計言語(黒×ライムイエロー・平行四辺形タグ・大番号セクション・
@@ -3818,6 +3842,29 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     sched = "".join(
         f'<div class="zz-sched"><span class="zz-sched__no">{no}</span><b>{esc(d)}</b><span>{esc(t)}</span></div>'
         for no, (d, t) in enumerate([(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")], 1))
+    colors = "".join(
+        f'<div class="zz-color"><span class="zz-color__chip" style="--chip:{c["hex"]}" aria-hidden="true"></span>'
+        f'<b class="zz-color__n">{esc(c["name"])}</b><span class="zz-color__en">{esc(c["en"])}</span>'
+        f'<p class="zz-color__b">{esc(c["note"])}</p></div>'
+        for c in rv.get("colors", []))
+    bundle = "".join(
+        f'<div class="zz-boxitem"><span class="zz-boxitem__no">{i:02d}</span>'
+        f'<b>{esc(t)}</b><p>{esc(b)}</p></div>'
+        for i, (t, b) in enumerate(rv.get("bundle", []), 1))
+    devlog = "".join(
+        f'<div class="zz-log"><span class="zz-log__d">{esc(d)}</span>'
+        f'<b class="zz-log__t">{esc(t)}</b><p class="zz-log__b">{esc(b)}</p></div>'
+        for d, t, b in rv.get("devlog", []))
+    spec_tables = "".join(
+        f'<div class="zz-table"><b class="zz-table__g">{esc(g)}</b><dl>'
+        + "".join(f'<div class="zz-table__r"><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>' for k, v in rows)
+        + '</dl></div>'
+        for g, rows in rv.get("specs", []))
+    vs_rows = "".join(
+        f'<div class="zz-vsrow"><span class="zz-vsrow__k">{esc(k)}</span>'
+        f'<span class="zz-vsrow__a"><i>空洞 KUDO</i>{esc(a)}</span>'
+        f'<span class="zz-vsrow__b"><i>SUZAKU 4</i>{esc(b)}</span></div>'
+        for k, a, b in _reveal_vs_rows(rv))
     purl = f"/collab/{rv['url_slug']}/" if rv.get("url_slug") else ""
     wrap_attr = "" if standalone else ' data-reveal-stage="full" hidden aria-hidden="true"'
     title_html = ('<h1 class="zz-hero__title">空洞 <span>KUDO</span></h1>' if standalone
@@ -3842,6 +3889,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <p class="zz-plate"><span class="zz-plate__no">01</span>設定ファイル — THE CITY</p>
     <h2 class="zz-h2">新エリー都には、<br>数多くのホロウが存在します。</h2>
     <p class="zz-lead">{esc(rv['world'])}</p>
+    <p class="zz-lead">配色は {esc(rv.get('accent_note', ''))}。看板の光、路地の影、警告テープ — 街を構成する3つの明度を、そのまま筐体の3層に割り当てました。派手なのに、あの街では風景に溶ける。それがこの配色の狙いです。</p>
     <div class="zz-stats">{stats}</div>
   </div>
 </section>
@@ -3868,11 +3916,101 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
   <div class="cl-wrap">
     <p class="zz-plate"><span class="zz-plate__no">04</span>ゲームの特徴 — FEATURES</p>
     <div class="zz-cards">{feats}</div>
+    <h2 class="zz-h2" style="margin-top:46px">TVモード・テーマパックの中身。</h2>
+    <p class="zz-lead">同梱テーマパックは「置き換え」ではなく「改装」です。OSの標準機能はそのまま、見た目と音だけがあのブラウン管に変わります(すべてデモ表記)。</p>
+    <div class="zz-boxlist">
+      <div class="zz-boxitem"><span class="zz-boxitem__no">A</span><b>ロック画面「放送休止」</b><p>待受はカラーバーとノイズの狭間。持ち上げると「放送再開」のカットインで解錠画面へ。時計はテロップ風に流れます。</p></div>
+      <div class="zz-boxitem"><span class="zz-boxitem__no">B</span><b>ホーム「チャンネル一覧」</b><p>アプリ一覧を番組表として再構成。よく使うアプリほど太いチャンネル枠になります。フォルダは「録画一覧」。</p></div>
+      <div class="zz-boxitem"><span class="zz-boxitem__no">C</span><b>充電画面「働くボンプ」</b><p>充電中は画面の隅でボンプが小さく発電作業。充電速度が上がると作業も忙しくなります。満充電で、ひと休み。</p></div>
+    </div>
+    <div class="zz-alert" role="note">
+      <span class="zz-alert__k" aria-hidden="true">▲ WARNING</span>
+      <p>ホロウ出現領域では、本端末の排熱表示が警告色に変わります — というのは作品世界の話。現実の空洞 KUDOは、負荷が跳ねた時にだけ静かに光ります。</p>
+    </div>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">05</span>カラー — COLORWAYS</p>
+    <h2 class="zz-h2">3色、すべて開発中。</h2>
+    <div class="zz-colors">{colors}</div>
+    <p class="zz-note">{esc(rv.get("colors_note", ""))}</p>
   </div>
 </section>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">05</span>スケジュール — SCHEDULE</p>
+    <p class="zz-plate"><span class="zz-plate__no">06</span>同梱物 — COLLECTOR'S BOX</p>
+    <h2 class="zz-h2">箱から、もう新エリー都。</h2>
+    <div class="zz-boxlist">{bundle}</div>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">07</span>開発ログ — DEV LOG</p>
+    <h2 class="zz-h2">発表までの、5か月。</h2>
+    <div class="zz-logs">{devlog}</div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">08</span>主要仕様 — SPECS(第一報)</p>
+    <div class="zz-tables">{spec_tables}</div>
+    <p class="zz-note">{esc(rv.get("specs_note", ""))}</p>
+    <h2 class="zz-h2" style="margin-top:42px">vs SUZAKU 4。</h2>
+    <p class="zz-lead">旗艦は万能に、空洞は一点に。どちらが勝ちかは、あなたの遊び方が決めます。</p>
+    <div class="zz-vs">{vs_rows}</div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">09</span>音と振動 — SOUND &amp; HAPTICS</p>
+    <h2 class="zz-h2">耳と手のひらにも、あの街を。</h2>
+    <p class="zz-lead">音響は作品側の監修のもと、通知・充電・警告のすべてを新エリー都の音で作り直しました。うるさくはしない — けれど、聞けば一発で分かる音に。</p>
+    <div class="zz-cards">
+      <div class="zz-card"><span class="zz-tag">SOUND 01</span><h3 class="zz-card__t">ザッピング起動音</h3><p class="zz-card__b">電源投入はブラウン管の「バチッ」から。チャンネルが合うようにロック画面へつながります。深夜モードでは無音起動に切り替わります(デモ表記)。</p></div>
+      <div class="zz-card"><span class="zz-tag">SOUND 02</span><h3 class="zz-card__t">シグナル通知音</h3><p class="zz-card__b">通知は3段階の重要度で音が変わります。最重要だけが警告色のシグナル音、それ以外は路地裏の生活音みたいに控えめ。音量を絞っても背面LEDが「光で鳴らして」くれます。</p></div>
+      <div class="zz-card"><span class="zz-tag">HAPTICS</span><h3 class="zz-card__t">警報の鼓動</h3><p class="zz-card__b">ゲーム中の高負荷立ち上がりを、低く短いパルスで手に伝える専用ハプティクス。画面から目を離さずに、端末の「今」が分かります。強度は5段階+オフ。</p></div>
+    </div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">10</span>開発の声 — VOICES</p>
+    <h2 class="zz-h2">作った側の、言い分。</h2>
+    <div class="zz-cards">
+      <div class="zz-card"><span class="zz-tag">SUZAKU — プロダクトデザイン統括</span><p class="zz-card__b">「いちばん難しかったのは、警告色を上品にしないことです。整えると、あの街じゃなくなる。ストライプの角度も、テープの毛羽立ちも、わざと少し乱してあります。乱し方の精度には自信があります。」</p></div>
+      <div class="zz-card"><span class="zz-tag">作品側アートチーム(コメント・デモ表記)</span><p class="zz-card__b">「最初の試作を見たとき、『これは新エリー都の路地に落ちていても違和感がない』と話しました。私たちの街の道具として自然であること — それがこの共同設計に出した唯一の注文です。」</p></div>
+    </div>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">11</span>アクセサリ — COMING NEXT</p>
+    <h2 class="zz-h2">相棒の、相棒たち。</h2>
+    <p class="zz-lead">空洞 KUDO専用のコラボアクセサリも同時開発中です。第2報で、シルエットの答え合わせを。</p>
+    <div class="zz-specrow"><span>??? — 充電系</span><span>??? — グリップ系</span><span>??? — オーディオ系</span></div>
+    <p class="zz-note">アクセサリの名称・仕様・価格は正式発表第2報で公開します。第1弾と同じく、単なる色替え品ではなく本体と同じ設計言語で新規に起こしています。本体の予約枠とは別に用意します。</p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">12</span>予約の流れ — HOW TO ORDER</p>
+    <h2 class="zz-h2">迷わず、並ばず、逃さず。</h2>
+    <p class="zz-lead">数量限定モデルですが、買ったあとの扱いは旗艦機と同じです。OSアップデート・修理受付・サポート窓口はSUZAKU標準機と共通 — 限定だからこそ、長く使えることを約束します。受付終了後の再販は予定していません。</p>
+    <div class="zz-scheds">
+      <div class="zz-sched"><span class="zz-sched__no">1</span><b>SUZAKUアカウントを準備</b><span>予約はSUZAKUストアのアカウントで受け付けます。事前に作成しておくと当日が速い。</span></div>
+      <div class="zz-sched"><span class="zz-sched__no">2</span><b>{esc(rv["reserve"])} 20:00 予約</b><span>カラー3色から選択して予約。お一人様1台・先着順です。</span></div>
+      <div class="zz-sched"><span class="zz-sched__no">3</span><b>{esc(rv["release"])} 発売</b><span>予約順に出荷します。出荷状況はマイページと発送通知でお知らせ。</span></div>
+      <div class="zz-sched"><span class="zz-sched__no">4</span><b>{esc(rv["until"])} 受付終了</b><span>数量{rv["qty"]:,}台に達し次第、期日前でも受付を終了します。</span></div>
+    </div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">13</span>スケジュール — SCHEDULE</p>
     <div class="zz-scheds">{sched}</div>
     <div class="zz-buy">
       <p class="zz-buy__price">{yen(rv['price'])}<small>(税込)・数量限定{rv['qty']:,}台</small></p>
@@ -3908,6 +4046,29 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     sched = "".join(
         f'<div class="sr-sched"><b>{esc(d)}</b><span>{esc(t)}</span></div>'
         for d, t in [(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")])
+    colors = "".join(
+        f'<div class="sr-color sr-frame"><span class="sr-color__chip" style="--chip:{c["hex"]}" aria-hidden="true"></span>'
+        f'<b class="sr-color__n">{esc(c["name"])}</b><span class="sr-color__en">{esc(c["en"])}</span>'
+        f'<p class="sr-color__b">{esc(c["note"])}</p></div>'
+        for c in rv.get("colors", []))
+    bundle = "".join(
+        f'<div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span>'
+        f'<b>{esc(t)}</b><p>{esc(b)}</p></div>'
+        for t, b in rv.get("bundle", []))
+    devlog = "".join(
+        f'<div class="sr-log"><span class="sr-log__d">{esc(d)}</span><span class="sr-log__dot" aria-hidden="true"></span>'
+        f'<div><b class="sr-log__t">{esc(t)}</b><p class="sr-log__b">{esc(b)}</p></div></div>'
+        for d, t, b in rv.get("devlog", []))
+    spec_tables = "".join(
+        f'<div class="sr-table sr-frame"><b class="sr-table__g">{esc(g)}</b><dl>'
+        + "".join(f'<div class="sr-table__r"><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>' for k, v in rows)
+        + '</dl></div>'
+        for g, rows in rv.get("specs", []))
+    vs_rows = "".join(
+        f'<div class="sr-vsrow"><span class="sr-vsrow__k">{esc(k)}</span>'
+        f'<span class="sr-vsrow__a"><i>星軌 SEIKI</i>{esc(a)}</span>'
+        f'<span class="sr-vsrow__b"><i>SUZAKU 4</i>{esc(b)}</span></div>'
+        for k, a, b in _reveal_vs_rows(rv))
     purl = f"/collab/{rv['url_slug']}/" if rv.get("url_slug") else ""
     wrap_attr = "" if standalone else ' data-reveal-stage="full" hidden aria-hidden="true"'
     title_html = ('<h1 class="sr-hero__title">星軌 <span>SEIKI</span></h1>' if standalone
@@ -3923,7 +4084,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
   <p class="sr-hero__sub">共同設計、正式発表。次の停車駅は、あなたの手のひら。</p>
   <div class="sr-hero__art sr-frame">{phone_art}</div>
   <p class="sr-hero__lead">{esc(rv['copy'])}</p>
-  <p class="sr-pageno">01 <small>/ 06</small></p>
+  <p class="sr-pageno">01 <small>/ 14</small></p>
 </section>
 <section class="cl-section">
   <div class="cl-wrap">
@@ -3937,9 +4098,10 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
 <section class="cl-section">
   <div class="cl-wrap">
     <div class="sr-head"><p class="sr-eyebrow">WORLD</p><h2 class="sr-h2">銀河を巡る、星穹列車。</h2></div>
-    <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['world'])}</p></div>
+    <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['world'])}</p>
+    <p class="sr-lead" style="margin-top:14px">意匠は {esc(rv.get('accent_note', ''))}。紺は夜空、金は星図、紫は認証のホログラム — 役割のない色をひとつも置いていません。画面を消しているときの背面が、いちばん雄弁であるように。</p></div>
     <div class="sr-stats">{stats}</div>
-    <p class="sr-pageno">02 <small>/ 06</small></p>
+    <p class="sr-pageno">02 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -3948,7 +4110,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <p class="sr-kick">{esc(rv['soc']['kicker'])}</p></div>
     <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['soc']['body'])}</p>
     <div class="sr-specrow"><span>3nm</span><span>最大 {esc(rv['soc']['clock'])}</span><span>AnTuTu {esc(rv['soc']['antutu'])}</span></div></div>
-    <p class="sr-pageno">03 <small>/ 06</small></p>
+    <p class="sr-pageno">03 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -3956,14 +4118,102 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <div class="sr-head"><p class="sr-eyebrow">DEDICATED COOLING</p><h2 class="sr-h2">{esc(rv['cooling']['name'])}</h2>
     <p class="sr-kick">{esc(rv['cooling']['kicker'])}</p></div>
     <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['cooling']['body'])}</p></div>
-    <p class="sr-pageno">04 <small>/ 06</small></p>
+    <p class="sr-pageno">04 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
   <div class="cl-wrap">
     <div class="sr-head"><p class="sr-eyebrow">FEATURES</p><h2 class="sr-h2">旅の装備。</h2></div>
     <div class="sr-cards">{feats}</div>
-    <p class="sr-pageno">05 <small>/ 06</small></p>
+    <div class="sr-head" style="margin-top:46px"><p class="sr-eyebrow">WINDOW AOD</p><h2 class="sr-h2">車窓のバリエーション。</h2>
+    <p class="sr-kick">常時表示は3つの車窓から選べます(すべてデモ表記)。</p></div>
+    <div class="sr-frame sr-pad"><div class="sr-boxlist">
+      <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>銀河標準</b><p>星が右から左へゆっくり流れる標準の車窓。通知が来ると、ひとつだけ星が明るく瞬きます。時刻は窓枠の隅に小さく。</p></div>
+      <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>雪の都</b><p>永冬 EITOと連動する車窓。端末温度が低いほど雪が静かに降り、負荷が上がると吹雪きます。温度計としても読める画面です。</p></div>
+      <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>デッキの窓</b><p>連結部のデッキから見た、少し斜めの車窓。バッテリー残量が「次の停車駅までの距離」として表示されます。長旅の夜に。</p></div>
+    </div></div>
+    <p class="sr-pageno">05 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">COLORWAYS</p><h2 class="sr-h2">3つの車体色。</h2>
+    <p class="sr-kick">いずれも開発中 — 最終色は予約開始までに。</p></div>
+    <div class="sr-colors">{colors}</div>
+    <p class="sr-note">{esc(rv.get("colors_note", ""))}</p>
+    <p class="sr-pageno">06 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">COLLECTOR'S BOX</p><h2 class="sr-h2">手荷物一式。</h2>
+    <p class="sr-kick">箱を開けたときから、乗車は始まっている。</p></div>
+    <div class="sr-frame sr-pad"><div class="sr-boxlist">{bundle}</div></div>
+    <p class="sr-pageno">07 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">DEV LOG</p><h2 class="sr-h2">これまでの旅程。</h2>
+    <p class="sr-kick">キックオフから発表まで、5つの停車駅。</p></div>
+    <div class="sr-logs">{devlog}</div>
+    <p class="sr-pageno">08 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">SPECS — 第一報</p><h2 class="sr-h2">主要仕様。</h2></div>
+    <div class="sr-tables">{spec_tables}</div>
+    <p class="sr-note">{esc(rv.get("specs_note", ""))}</p>
+    <div class="sr-head" style="margin-top:46px"><p class="sr-eyebrow">COMPARISON</p><h2 class="sr-h2">vs SUZAKU 4。</h2>
+    <p class="sr-kick">旗艦は万能に、星軌は静けさと一瞬の全力に。</p></div>
+    <div class="sr-frame sr-pad"><div class="sr-vs">{vs_rows}</div></div>
+    <p class="sr-pageno">09 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">SOUND &amp; HAPTICS</p><h2 class="sr-h2">車内の音。</h2>
+    <p class="sr-kick">静けさも、音のうち。</p></div>
+    <div class="sr-cards">
+      <div class="sr-card"><span class="sr-card__no">S1</span><h3 class="sr-card__t">車内チャイム通知</h3><p class="sr-card__b">通知音は列車の車内チャイムを模した短い和音。重要度が上がると、停車駅アナウンスのように一音だけ長く鳴ります。深夜帯は自動で音量が沈みます(デモ表記)。</p></div>
+      <div class="sr-card"><span class="sr-card__no">S2</span><h3 class="sr-card__t">星の流れる無音</h3><p class="sr-card__b">車窓AODは意図的に無音です。星が流れる常時表示に音を付けない — 永冬 EITOの静音設計と合わせて、「鳴らさない」ことをいちばん贅沢な仕様にしました。</p></div>
+      <div class="sr-card"><span class="sr-card__no">S3</span><h3 class="sr-card__t">発車の合図</h3><p class="sr-card__b">ゲーム起動時のハプティクスは、列車がゆっくり動き出すときの床の震えを再現した長い立ち上がり。必殺技の瞬間だけ、連結器の「ガチン」という短い衝撃に変わります。</p></div>
+    </div>
+    <p class="sr-pageno">10 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">VOICES</p><h2 class="sr-h2">乗務員の記録。</h2></div>
+    <div class="sr-frame sr-pad"><div class="sr-boxlist">
+      <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>SUZAKU — プロダクトデザイン統括</b><p>「金の細線は、飾りではなく星図です。筐体の線をたどると、起動画面の星図とつながるように引いてあります。気づいた人だけが得をする意匠を、今回はたくさん仕込みました。」</p></div>
+      <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>作品側アートチーム(コメント・デモ表記)</b><p>「お願いしたのは『旅の道具であること』。画面を消しているときの佇まいまで含めて、長い旅に持っていきたくなる一台になっているか — 最終試作の車窓AODを見て、答えは出ました。」</p></div>
+      <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>SUZAKU — サウンドデザイン</b><p>「録ったのは音ではなく、静けさです。深夜の車両基地で無音を収録して、その『しん』とした質感を通知音の余白に敷きました。鳴った瞬間より、鳴り終わったあとが本体です。」</p></div>
+    </div></div>
+    <p class="sr-pageno">11 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">ACCESSORIES — COMING NEXT</p><h2 class="sr-h2">次の車両。</h2>
+    <p class="sr-kick">星軌 SEIKI専用のコラボアクセサリも同時開発中。編成の全貌は、第2報で。</p></div>
+    <div class="sr-specrow"><span>??? — 充電系</span><span>??? — スタンド系</span><span>??? — オーディオ系</span></div>
+    <p class="sr-note">アクセサリの名称・仕様・価格は正式発表第2報で公開します。第1弾と同じく、単なる色替え品ではなく本体と同じ設計言語 — 紺と金と、あの静けさ — で新規に起こしています。本体の予約枠とは別に用意します。</p>
+    <p class="sr-pageno">12 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">HOW TO ORDER</p><h2 class="sr-h2">乗車の手順。</h2></div>
+    <p class="sr-kick">切符は片道でも、旅の保証は往復です。数量限定モデルながら、OSアップデート・修理受付・サポート窓口はSUZAKU標準機と共通。受付終了後の再販は予定していません — この編成は、一度きりの運行です。</p>
+    <div class="sr-scheds">
+      <div class="sr-sched"><b>1. SUZAKUアカウントを準備</b><span>予約はSUZAKUストアのアカウントで受け付けます。事前作成で当日の改札が速く通れます。</span></div>
+      <div class="sr-sched"><b>2. {esc(rv["reserve"])} 20:00 予約</b><span>車体色3色から選択して予約。お一人様1台・先着順です。</span></div>
+      <div class="sr-sched"><b>3. {esc(rv["release"])} 発売</b><span>予約順に出荷します。出荷状況はマイページと発送通知でお知らせ。</span></div>
+      <div class="sr-sched"><b>4. {esc(rv["until"])} 受付終了</b><span>数量{rv["qty"]:,}台に達し次第、期日前でも受付を終了します。</span></div>
+    </div>
+    <p class="sr-pageno">13 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -3978,7 +4228,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
         <a class="sr-btn sr-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
       </div>
     </div>
-    <p class="sr-pageno">06 <small>/ 06</small></p>
+    <p class="sr-pageno">14 <small>/ 14</small></p>
   </div>
 </section>
 {_reveal_common_tail(cfg, rv, sib_links)}
