@@ -2090,7 +2090,7 @@ def build_tech_hub(hub_key):
   <div class="container">
     <div class="section-head"><p class="eyebrow">WHERE IT MATTERS</p><h2 class="t-h2">メモリは、どこに効くのか。</h2>
     <p class="t-soft">ベンチの数字ではなく、指先の体感に翻訳すると — 疾風が効くのはこの3場面です。</p></div>
-    <div class="grid grid--3 grid--cards reveal-stagger">
+    <div class="grid grid--3 reveal-stagger">
       <div class="card"><p class="eyebrow">SWITCH</p><h3 class="t-h4">アプリの切り替え</h3><p class="t-small t-soft">大容量+高帯域のメモリは、ゲームを中断して攻略サイトを見て戻っても、ロード画面に戻されません。24GB構成なら大型タイトルの多重起動も保持します。</p></div>
       <div class="card"><p class="eyebrow">STREAM</p><h3 class="t-h4">オープンワールドの描き込み</h3><p class="t-small t-soft">広い世界の移動はテクスチャの先読み勝負。11,000Mbps級の帯域が、視界の先の描き込みを一歩早く済ませます。</p></div>
       <div class="card"><p class="eyebrow">LATENCY</p><h3 class="t-h4">入力から表示まで</h3><p class="t-small t-soft">SoCと同じ設計卓でタイミングを詰める垂直統合により、入力応答チェーンの見えない待ち時間を削ります。</p></div>
@@ -2104,7 +2104,7 @@ def build_tech_hub(hub_key):
   <div class="container">
     <div class="section-head"><p class="eyebrow">WHERE IT MATTERS</p><h2 class="t-h2">ストレージは、待ち時間の科学。</h2>
     <p class="t-soft">読み込み5,800MB/sという数字が意味するのは、日々のこの3つの「待たない」です。</p></div>
-    <div class="grid grid--3 grid--cards reveal-stagger">
+    <div class="grid grid--3 reveal-stagger">
       <div class="card"><p class="eyebrow">LAUNCH</p><h3 class="t-h4">大型タイトルの起動 1.9秒</h3><p class="t-small t-soft">瞬 SHUN-S2 は大型タイトルの起動を1.9秒まで短縮。リトライの摩擦が消えると、練習の回数が変わります。</p></div>
       <div class="card"><p class="eyebrow">BURST</p><h3 class="t-h4">連写・8K動画を受け止める</h3><p class="t-small t-soft">書き込みバーストに強いコントローラ設計で、連写やスクリーンショット連打でも詰まりません。</p></div>
       <div class="card"><p class="eyebrow">ENDURE</p><h3 class="t-h4">毎日書いても、劣化しにくい</h3><p class="t-small t-soft">録画・配信で書き込みが多い使い方を想定した耐久設計。コラボ「坑道」はTBW3倍の高耐久セルを採用します。</p></div>
@@ -4683,7 +4683,7 @@ def build_product_hubs():
   <div class="container">
     <div class="section-head"><p class="eyebrow">WHICH ONE</p><h2 class="t-h2">選び方は、3つの質問で。</h2>
     <p class="t-soft">迷ったら、この3問だけ。答えの先に、あなたのラインがあります。</p></div>
-    <div class="grid grid--3 grid--cards reveal-stagger">
+    <div class="grid grid--3 reveal-stagger">
       <div class="card"><p class="eyebrow">Q1. なにで遊ぶ?</p><h3 class="t-h4">ゲームを最優先なら</h3><p class="t-small t-soft">冷却と持続性能に全振りした <a href="/products/phone/suzaku-4/">SUZAKU 4</a>。予算を抑えるなら前年旗艦の心臓を積む <a href="/products/phone/neo-3/">Neo 3</a>(8万円以下)。</p></div>
       <div class="card"><p class="eyebrow">Q2. 毎日つかう?</p><h3 class="t-h4">日常+カメラなら</h3><p class="t-small t-soft">旗艦と同じ天眼センサーを178gに積む <a href="/products/phone/tsubame-3/">TSUBAME 3</a>。3万円台で妥協しない <a href="/products/phone/tsubame-lite-2/">Lite 2</a> も。</p></div>
       <div class="card"><p class="eyebrow">Q3. 画面は大きく?</p><h3 class="t-h4">大画面で遊ぶ・観るなら</h3><p class="t-small t-soft">据え置きの最高峰 <a href="/products/tablet/pad-2/">SUZAKU Pad 2</a>、持ち出せる <a href="/products/tablet/pad-neo/">Pad Neo</a>、家族の一枚 <a href="/products/tablet/t-pad-2/">TSUBAME Pad 2</a>。</p></div>
