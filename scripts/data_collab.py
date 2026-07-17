@@ -340,6 +340,8 @@ COLLABS = [
         "reveal": {
             "game": "ゼンレスゾーンゼロ", "studio": "HoYoverse",
             "device": "空洞 KUDO",
+            # 発表後の製品専用URL(/collab/{url_slug}/)。発表前導線には出さない
+            "url_slug": "kudo",
             "copy": "新エリー都でプロキシとして生きる、あなたへ。ホロウの淵まで連れて行ける一台「空洞 KUDO」を、HoYoverseと共同設計しました。",
             # ---- フルLP用データ(発表ステージを第1弾級に作り込む) ----
             "accent_note": "ライムイエロー×漆黒(公式サイトのシグナルカラーに準拠)",
@@ -399,6 +401,8 @@ COLLABS = [
         "reveal": {
             "game": "崩壊:スターレイル", "studio": "HoYoverse",
             "device": "星軌 SEIKI",
+            # 発表後の製品専用URL(/collab/{url_slug}/)。発表前導線には出さない
+            "url_slug": "seiki",
             "copy": "銀河を巡る星穹列車の、次の停車駅へ。開拓者のための一台「星軌 SEIKI」を、HoYoverseと共同設計しました。",
             # ---- フルLP用データ(発表ステージを第1弾級に作り込む) ----
             "accent_note": "深宇宙の紺×星屑の金+ホログラム紫(公式サイト/車内UIに準拠)",

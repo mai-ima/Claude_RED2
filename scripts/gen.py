@@ -3798,10 +3798,12 @@ def _reveal_common_tail(cfg, rv, sib_links):
 <div class="cl-wrap"><p class="cl-note">{esc(rv['note'])} 掲載内容は発表第一報であり、仕様・同梱物は変更される場合があります。</p></div>"""
 
 
-def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd):
+def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     """空洞 KUDO × ゼンレスゾーンゼロ — 正式発表フルLP。
     公式サイトの設計言語(黒×ライムイエロー・平行四辺形タグ・大番号セクション・
-    フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。"""
+    フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。
+    standalone=True で製品専用ページ(/collab/kudo/)の本文になる:
+    hidden ステージ属性なし・見出しは実 h1・末尾にティザーアーカイブへの小ボタン。"""
     # 量産版レンダリング完成までは仮デザインSVG(PROTOTYPE表記入り)を掲出する
     phone_art = svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz")
     stats = "".join(
@@ -3816,12 +3818,20 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd):
     sched = "".join(
         f'<div class="zz-sched"><span class="zz-sched__no">{no}</span><b>{esc(d)}</b><span>{esc(t)}</span></div>'
         for no, (d, t) in enumerate([(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")], 1))
+    purl = f"/collab/{rv['url_slug']}/" if rv.get("url_slug") else ""
+    wrap_attr = "" if standalone else ' data-reveal-stage="full" hidden aria-hidden="true"'
+    title_html = ('<h1 class="zz-hero__title">空洞 <span>KUDO</span></h1>' if standalone
+                  else '<p class="zz-hero__title" role="heading" aria-level="1">空洞 <span>KUDO</span></p>')
+    # ティザー内の発表ステージからは製品専用ページへ誘導。専用ページ自身には出さない
+    purl_btn = f'<a class="zz-btn" href="{purl}">製品ページで詳しく見る</a>' if (purl and not standalone) else ""
+    archive_btn = (f'<div class="cl-wrap cl-archive-link"><a class="cl-minibtn" href="/collab/{cfg["slug"]}/teaser/">'
+                   f'▶ 発表前のティザー(カウントダウン)アーカイブ</a></div>' if standalone else "")
     return f"""
-<div data-reveal-stage="full" hidden aria-hidden="true" class="zz-lp">
+<div{wrap_attr} class="zz-lp">
 <section class="zz-hero">
   <span class="zz-hero__ghost" aria-hidden="true">KUDO</span>
   <p class="zz-plate"><span class="zz-plate__no">00</span>OFFICIALLY ANNOUNCED</p>
-  <p class="zz-hero__title" role="heading" aria-level="1">空洞 <span>KUDO</span></p>
+  {title_html}
   <p class="zz-hero__sub">SUZAKU × {esc(rv['game'])} — 共同設計、正式発表。</p>
   <div class="zz-hero__art">{phone_art}</div>
   <p class="zz-hero__lead">{esc(rv['copy'])}</p>
@@ -3867,20 +3877,23 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd):
     <div class="zz-buy">
       <p class="zz-buy__price">{yen(rv['price'])}<small>(税込)・数量限定{rv['qty']:,}台</small></p>
       <div class="cl-buy__cta">
-        <a class="zz-btn" href="/news/">ニュースルームで発表を見る</a>
+        {purl_btn}
+        <a class="zz-btn{' zz-btn--ghost' if purl_btn else ''}" href="/news/">ニュースルームで発表を見る</a>
         <a class="zz-btn zz-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
       </div>
     </div>
   </div>
 </section>
 {_reveal_common_tail(cfg, rv, sib_links)}
+{archive_btn}
 </div>"""
 
 
-def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd):
+def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     """星軌 SEIKI × 崩壊:スターレイル — 正式発表フルLP。
     公式サイト(深紺の星空・金細線カード・セリフ体・ページ番号)と車内UI
-    (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。"""
+    (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。
+    standalone=True で製品専用ページ(/collab/seiki/)の本文になる。"""
     # 量産版レンダリング完成までは仮デザインSVG(PROTOTYPE表記入り)を掲出する
     phone_art = svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail")
     stats = "".join(
@@ -3895,11 +3908,18 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd):
     sched = "".join(
         f'<div class="sr-sched"><b>{esc(d)}</b><span>{esc(t)}</span></div>'
         for d, t in [(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")])
+    purl = f"/collab/{rv['url_slug']}/" if rv.get("url_slug") else ""
+    wrap_attr = "" if standalone else ' data-reveal-stage="full" hidden aria-hidden="true"'
+    title_html = ('<h1 class="sr-hero__title">星軌 <span>SEIKI</span></h1>' if standalone
+                  else '<p class="sr-hero__title" role="heading" aria-level="1">星軌 <span>SEIKI</span></p>')
+    purl_btn = f'<a class="sr-btn" href="{purl}">製品ページで詳しく見る</a>' if (purl and not standalone) else ""
+    archive_btn = (f'<div class="cl-wrap cl-archive-link"><a class="cl-minibtn" href="/collab/{cfg["slug"]}/teaser/">'
+                   f'▶ 発表前のティザー(カウントダウン)アーカイブ</a></div>' if standalone else "")
     return f"""
-<div data-reveal-stage="full" hidden aria-hidden="true" class="sr-lp">
+<div{wrap_attr} class="sr-lp">
 <section class="sr-hero">
   <p class="sr-eyebrow">OFFICIALLY ANNOUNCED — SUZAKU × {esc(rv['game'])}</p>
-  <p class="sr-hero__title" role="heading" aria-level="1">星軌 <span>SEIKI</span></p>
+  {title_html}
   <p class="sr-hero__sub">共同設計、正式発表。次の停車駅は、あなたの手のひら。</p>
   <div class="sr-hero__art sr-frame">{phone_art}</div>
   <p class="sr-hero__lead">{esc(rv['copy'])}</p>
@@ -3953,7 +3973,8 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd):
     <div class="sr-buy sr-frame sr-pad">
       <p class="sr-buy__price">{yen(rv['price'])}<small>(税込)・数量限定{rv['qty']:,}台</small></p>
       <div class="cl-buy__cta">
-        <a class="sr-btn" href="/news/">ニュースルームで発表を見る</a>
+        {purl_btn}
+        <a class="sr-btn{' sr-btn--ghost' if purl_btn else ''}" href="/news/">ニュースルームで発表を見る</a>
         <a class="sr-btn sr-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
       </div>
     </div>
@@ -3961,6 +3982,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd):
   </div>
 </section>
 {_reveal_common_tail(cfg, rv, sib_links)}
+{archive_btn}
 </div>"""
 
 
@@ -3973,26 +3995,41 @@ def _cl_ring():
       <span class="cl-ring__pct">--</span></div>""")
 
 
-def _collab_lp_teaser(cfg, phone, accs):
-    """コラボ第2弾ティザー — 暗闇+スキャンライン+シルエット+発表カウントダウン。
-    コラボ相手は未発表のため、固有名詞は一切出さない(ヒントで匂わせるのみ)。"""
-    hints = "".join(
+def _teaser_hints_html(cfg):
+    """ティザーのヒントカード群(ティザー本編とアーカイブページで共用)。"""
+    return "".join(
         f'<div class="nx-hint reveal"><span class="nx-hint__no">{esc(no)}</span>'
         f'<h2 class="nx-hint__t">{esc(t)}</h2><p class="nx-hint__b">{esc(b)}</p>'
         f'<span class="nx-hint__tape" aria-hidden="true">CLASSIFIED</span></div>'
         for no, t, b in cfg.get("hints", []))
+
+
+def _teaser_sib_links(cfg):
+    """第2弾の他ティザーへのクロスリンク(自分は除く)。
+    発表済み(url_slug 持ち)の枠は、発表後に main.js が href を製品専用ページへ
+    自動差替できるよう data-reveal / data-reveal-href を <a> に付ける。"""
+    sibs = [c for c in COLLABS if c.get("motif") == "teaser" and c["slug"] != cfg["slug"]]
+    out = ""
+    for c in sibs:
+        us = (c.get("reveal") or {}).get("url_slug")
+        swap = (f' data-reveal="{esc(c.get("reveal_at", ""))}" data-reveal-href="/collab/{us}/"' if us else "")
+        out += (
+            f'<a class="nx-sib" style="--cl-accent:{c["tokens"]["accent"]}" href="/collab/{c["slug"]}/"{swap}>'
+            f'<span class="nx-sib__q">???</span>'
+            f'<span class="nx-sib__d" data-reveal="{esc(c.get("reveal_at", ""))}" data-soon="発表済み">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
+            f'<span class="nx-sib__go">ティザーを見る →</span></a>')
+    return out
+
+
+def _collab_lp_teaser(cfg, phone, accs):
+    """コラボ第2弾ティザー — 暗闇+スキャンライン+シルエット+発表カウントダウン。
+    コラボ相手は未発表のため、固有名詞は一切出さない(ヒントで匂わせるのみ)。"""
+    hints = _teaser_hints_html(cfg)
     links = "".join(
         f'<a class="nx-past" href="/collab/{c["slug"]}/"><span class="nx-past__no">{i + 1:02d}</span>'
         f'<b>{esc(c["edition"])}</b><span class="nx-past__st">受付中</span></a>'
         for i, c in enumerate([c for c in COLLABS if c.get("active")]))
-    # 第2弾の他ティザーへのクロスリンク(自分は除く)
-    sibs = [c for c in COLLABS if c.get("motif") == "teaser" and c["slug"] != cfg["slug"]]
-    sib_links = "".join(
-        f'<a class="nx-sib" style="--cl-accent:{c["tokens"]["accent"]}" href="/collab/{c["slug"]}/">'
-        f'<span class="nx-sib__q">???</span>'
-        f'<span class="nx-sib__d" data-reveal="{esc(c.get("reveal_at", ""))}" data-soon="発表済み">{c.get("reveal_at", "")[:10].replace("-", "/")} 発表予定</span>'
-        f'<span class="nx-sib__go">ティザーを見る →</span></a>'
-        for c in sibs)
+    sib_links = _teaser_sib_links(cfg)
     reveal = cfg.get("reveal_at", "")
     reveal_ymd = reveal[:10].replace("-", ".")
     since = TEASER_SINCE["wave2"]  # 予告開始(第2弾予告ニュースの公開日時)
@@ -4091,7 +4128,7 @@ def _collab_lp_teaser(cfg, phone, accs):
 <section class="cl-section nx-count">
   <div class="cl-wrap">
     <div class="cl-head"><p class="cl-eyebrow">REVEAL</p><h2 class="cl-h2">発表まで。</h2></div>
-    <div class="cl-count nx-count__panel" data-until="{esc(reveal)}" data-since="{esc(since)}" role="timer" aria-label="発表までの残り時間">
+    <div class="cl-count nx-count__panel" data-until="{esc(reveal)}" data-since="{esc(since)}"{f' data-reveal-url="/collab/{rv["url_slug"]}/"' if rv and rv.get("url_slug") else ''} role="timer" aria-label="発表までの残り時間">
       <div class="cl-count__row">
         <span class="cl-count__unit"><b data-c="d">--</b><i>日</i></span>
         <span class="cl-count__unit"><b data-c="h">--</b><i>時間</i></span>
@@ -4368,12 +4405,15 @@ def build_collab_hub():
         elif cfg.get("motif") == "teaser":
             reveal_ym = cfg.get("reveal_at", "")[:7].replace("-", ".")
             reveal_tag = f"近日公開 — {reveal_ym} 発表予定" if reveal_ym else "近日公開 — ティザー公開中"
+            # 発表済み枠(url_slug 持ち)は、発表後に main.js が href を製品専用ページへ差し替える
+            us = (cfg.get("reveal") or {}).get("url_slug")
+            swap = (f' data-reveal="{esc(cfg.get("reveal_at", ""))}" data-reveal-href="/collab/{us}/"' if us else "")
             wave2_cards += (
-                f'<a class="collab-card collab-card--soon" style="{style}" href="/collab/{cfg["slug"]}/">'
+                f'<a class="collab-card collab-card--soon" style="{style}" href="/collab/{cfg["slug"]}/"{swap}>'
                 f'<span class="collab-card__game">{esc(cfg["game"])}</span>'
                 f'<span class="collab-card__edition">{esc(cfg["edition"])}</span>'
-                f'<span class="collab-card__tag" data-reveal="{esc(cfg.get("reveal_at", ""))}" data-soon="正式発表 — 続報を見る">{reveal_tag}</span>'
-                f'<span class="collab-card__go">ティザーを見る →</span></a>')
+                f'<span class="collab-card__tag" data-reveal="{esc(cfg.get("reveal_at", ""))}" data-soon="正式発表 — 製品ページへ">{reveal_tag}</span>'
+                f'<span class="collab-card__go" data-reveal="{esc(cfg.get("reveal_at", ""))}" data-soon="発表を見る →">ティザーを見る →</span></a>')
 
     # コラボタブレット予告(第1弾の続き)。ページは未公開のため表示のみ。
     tab_icon = ('<svg viewBox="0 0 48 34" aria-hidden="true" class="collab-tabcard__ic">'
@@ -4745,6 +4785,86 @@ def build_collab_silicon_hub():
                 body, "dark", [("コラボレーション", "/collab/"), ("専用シリコン", None)], "コラボレーション")
 
 
+def build_collab_reveal_product_page(cfg):
+    """発表済み第2弾の製品専用ページ(/collab/{url_slug}/)。
+    ティザーの発表ステージと同じフルLPを単独URLで持つ。発表前導線からは
+    リンクされず(発表後に JS が href を差し替える)、noindex で検索・
+    サイトマップにも載せない。<title> の相手名は発表データ由来で方針上OK。"""
+    rv = cfg.get("reveal") or {}
+    us = rv.get("url_slug")
+    if not (us and rv.get("price")):
+        return
+    sib_links = _teaser_sib_links(cfg)
+    reveal_ymd = cfg.get("reveal_at", "")[:10].replace("-", ".")
+    builder = _reveal_lp_zzz if cfg["slug"] == "wave2" else _reveal_lp_srail
+    body = builder(cfg, rv, sib_links, reveal_ymd, standalone=True)
+    render_page(f"/collab/{us}/",
+                f"{rv['device']} — SUZAKU × {rv['game']} 正式発表",
+                f"SUZAKU × {rv['game']} 共同設計「{rv['device']}」の正式発表ページ。"
+                f"専用SoC・専用冷却・{rv['reserve']}予約開始/{rv['release']}発売の数量限定モデルです。",
+                body, theme="dark", crumbs=None, group="コラボレーション",
+                layout="collab", collab=cfg, noindex=True)
+
+
+_WAVE2_NO = {"wave2": "①", "wave2-2": "②", "wave2-3": "③", "wave2-4": "④"}
+
+
+def build_collab_teaser_archive(cfg):
+    """発表済みティザーの保存版(/collab/{slug}/teaser/・noindex)。
+    カウントダウン(終了表示)とヒントを当時のまま残し、正式ページへ誘導する。
+    相手名はこのページには出さない(リンク先URLのみ)。"""
+    rv = cfg.get("reveal") or {}
+    us = rv.get("url_slug")
+    if not us:
+        return
+    no = _WAVE2_NO.get(cfg["slug"], "")
+    reveal = cfg.get("reveal_at", "")
+    reveal_ymd = reveal[:10].replace("-", "/")
+    hints = _teaser_hints_html(cfg)
+    body = f"""
+<div class="nx-archive">
+<section class="nx-hero nx-hero--{cfg['slug']}">
+  <div class="nx-hero__scan" aria-hidden="true"></div>
+  <div class="nx-motif" aria-hidden="true"></div>
+  <p class="nx-hero__eyebrow">TEASER ARCHIVE — 発表前の記録</p>
+  <h1 class="nx-hero__title"><span class="nx-q">???</span><small>このティザーは役目を終えました。</small></h1>
+  <div class="nx-hero__sil reveal">{svg_art.svg_art('silhouette', cfg['tokens']['glow'])}</div>
+  <p class="nx-hero__lead">発表前に公開していたティザー{no}の保存版です。カウントダウンとヒントを、当時のまま残しています。正式な製品情報は、発表ページでご覧ください。</p>
+</section>
+<section class="cl-section nx-count">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">COUNTDOWN — ENDED</p><h2 class="cl-h2">発表まで。</h2></div>
+    <div class="cl-count nx-count__panel is-ended">
+      <div class="cl-count__row">
+        <span class="cl-count__unit"><b>0</b><i>日</i></span>
+        <span class="cl-count__unit"><b>00</b><i>時間</i></span>
+        <span class="cl-count__unit"><b>00</b><i>分</i></span>
+        <span class="cl-count__unit"><b>00</b><i>秒</i></span>
+      </div>
+      <p class="cl-count__end">{esc(reveal_ymd)} 20:00 (JST) — 発表済み</p>
+    </div>
+    <div class="cl-buy__cta" style="margin-top:26px;justify-content:center">
+      <a class="cl-btn cl-btn--primary" href="/collab/{us}/">正式発表ページへ</a>
+      <a class="cl-btn cl-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
+    </div>
+  </div>
+</section>
+<section class="cl-section nx-hints">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">TEASER</p><h2 class="cl-h2">手がかりは、これだけ — でした。</h2>
+    <p class="cl-lead">発表前に公開していた4つのヒント。答え合わせは、正式発表ページで。</p></div>
+    <div class="nx-hints__grid">{hints}</div>
+  </div>
+</section>
+<div class="cl-wrap"><p class="cl-note">このページは発表前ティザーのアーカイブです。掲載当時の表記(発表予定日時・ヒント)をそのまま保存しており、最新の製品情報ではありません。</p></div>
+</div>"""
+    render_page(f"/collab/{cfg['slug']}/teaser/",
+                f"ティザーアーカイブ {no} — 発表前の記録",
+                f"コラボレーション第2弾 ティザー{no}の保存版。発表カウントダウンとヒントを当時のまま残しています。",
+                body, theme="dark", crumbs=None, group="コラボレーション",
+                layout="collab", collab=cfg, noindex=True)
+
+
 def build_collab_pages():
     build_collab_hub()
     build_collab_silicon_hub()
@@ -4759,6 +4879,8 @@ def build_collab_pages():
                 build_collab_tablet_teaser(cfg)
         elif cfg.get("motif") == "teaser":
             build_collab_page(cfg)  # 第2弾ティザー(カウントダウン+シルエット・相手非公開)
+            build_collab_reveal_product_page(cfg)  # 発表済み枠のみ: 製品専用URL
+            build_collab_teaser_archive(cfg)       # 発表済み枠のみ: ティザー保存版
     build_collab_redirects()
 
 

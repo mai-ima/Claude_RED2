@@ -655,3 +655,15 @@
   border: 1px solid var(--cl-accent); border-radius: 999px;
   font-size: .72rem; font-weight: 800; letter-spacing: .08em; color: var(--cl-accent);
 }
+
+/* 発表済みページ末尾の小さなアーカイブ導線(H-2)+ティザー保存版 */
+.cl-archive-link { text-align: center; padding-bottom: 46px; }
+.cl-minibtn {
+  display: inline-block; padding: 9px 18px;
+  border: 1px solid var(--cl-line); border-radius: 999px;
+  font-size: .74rem; font-weight: 700; letter-spacing: .06em;
+  color: var(--cl-soft, var(--cl-ink)); text-decoration: none;
+  opacity: .8; transition: opacity .2s ease, border-color .2s ease, color .2s ease;
+}
+.cl-minibtn:hover { opacity: 1; border-color: var(--cl-accent); color: var(--cl-accent); }
+.nx-archive .cl-count.is-ended .cl-count__unit b { color: var(--cl-soft, #9a9aa6); text-shadow: none; }

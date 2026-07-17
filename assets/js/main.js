@@ -468,6 +468,12 @@
         el.classList.add("is-soon");
       }
     });
+    // 発表済みリンクの自動差替: data-reveal(ISO日時)を過ぎたら、
+    // href を data-reveal-href(製品専用ページ等)へ書き換える。
+    $$("a[data-reveal][data-reveal-href]").forEach(function (el) {
+      var t = new Date(el.getAttribute("data-reveal")).getTime();
+      if (!isNaN(t) && now >= t) el.setAttribute("href", el.getAttribute("data-reveal-href"));
+    });
   })();
 
   /* ---------- 旗艦ショーケース(スクロール連動で有効な柱を追従) ---------- */

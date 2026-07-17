@@ -52,11 +52,21 @@
       ringFg.style.strokeDashoffset = String(100 - Math.round(p * 100));
       if (ringPct) ringPct.textContent = Math.round(p * 100) + "%";
     };
+    // 製品専用ページを持つ発表カウントダウン(第2弾の発表済み枠)。
+    // 発表後にあとから訪れた人は、ティザーではなく専用ページへ直接送る。
+    // 見ている最中にゼロへ到達した場合は、その場の切替演出(revealFull)を優先する。
+    var revealUrl = countEl.getAttribute("data-reveal-url");
+    var liveAtLoad = until - Date.now() > 0;
     var timer = null;
     var tick = function () {
       var now = Date.now();
       var diff = until - now;
       if (diff <= 0) {
+        if (revealUrl && !liveAtLoad) {
+          if (timer) clearInterval(timer);
+          window.location.replace(revealUrl);
+          return;
+        }
         if (slots.d) slots.d.textContent = "0";
         if (slots.h) slots.h.textContent = "00";
         if (slots.m) slots.m.textContent = "00";
