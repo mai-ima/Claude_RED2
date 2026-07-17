@@ -3817,7 +3817,7 @@ def _collab_lp_teaser(cfg, phone, accs):
   <div class="nx-hero__scan" aria-hidden="true"></div>
   <div class="nx-motif" aria-hidden="true"></div>
   <p class="nx-hero__eyebrow">OFFICIALLY ANNOUNCED</p>
-  <h1 class="nx-hero__title"><span class="nx-q" data-nx-glitch>REVEALED</span><small>共同設計、正式発表。</small></h1>
+  <p class="nx-hero__title" role="heading" aria-level="1"><span class="nx-q" data-nx-glitch>REVEALED</span><small>共同設計、正式発表。</small></p>
   <div class="nx-hero__sil nx-hero__sil--lit reveal">{svg_art.svg_art('silhouette', cfg['tokens']['glow'])}</div>
   <p class="nx-hero__lead">このコラボレーションは、{esc(reveal_ymd)} に正式発表されました。相手作品・製品の詳細、予約と発売のスケジュールは、続報として順次公開します。</p>
 </section>
@@ -4005,7 +4005,7 @@ def _tablet_full_stage(cfg, t):
   <div class="cl-wrap cl-shero__grid">
     <div>
       <p class="cl-shero__kick">SUZAKU × {esc(cfg['game'])} — COLLABORATION TABLET</p>
-      <h1 class="cl-shero__title">{esc(t['device'])}</h1>
+      <p class="cl-shero__title" role="heading" aria-level="1">{esc(t['device'])}</p>
       <p class="cl-lead" style="max-width:560px">{esc(t['tagline'])}<br>{esc(t['lead'])}</p>
       <div class="cl-hero__tags"><span class="cl-tag">{yen(t['price'])}(税込)</span><span class="cl-tag">数量限定 {t['qty']:,}台</span><span class="cl-tag">{esc(t['release'])} 発売</span></div>
     </div>

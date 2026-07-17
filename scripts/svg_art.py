@@ -1311,6 +1311,9 @@ def svg_die(gid, label, sub, glow, accent2=None):
 </svg>"""
 
 
+_UID_SEQ = 0  # ページ内 id 衝突防止の呼び出し連番(ビルド順固定=決定的)
+
+
 def svg_art(kind, glow="#e8442e", body_hex="#181820", motif=None):
     """feature-split・アクセサリ用のアートパネル(480×360)。
 
@@ -1321,7 +1324,11 @@ def svg_art(kind, glow="#e8442e", body_hex="#181820", motif=None):
     b = body_hex
     # 同一ページに複数インライン展開しても勾配定義が衝突しないよう、
     # パラメータ由来の決定的なID接尾辞を付ける
-    u = (kind + glow + body_hex + (motif or "")).replace("#", "")
+    # 同一ページに同じ (kind, glow) で複数回展開しても id が衝突しないよう、
+    # パラメータに加えて呼び出し連番も付ける(ビルド順は固定なので出力は決定的)。
+    global _UID_SEQ
+    _UID_SEQ += 1
+    u = (kind + glow + body_hex + (motif or "")).replace("#", "") + f"n{_UID_SEQ}"
     bl = _shade(b, 0.4)
     bl2 = _shade(b, 0.14)
     bd = _shade(b, -0.4)

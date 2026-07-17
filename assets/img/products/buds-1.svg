@@ -1,37 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label=""><defs>
-<radialGradient id="agbudsd9a441d9dce4" cx="0.5" cy="0.4" r="0.8">
+<radialGradient id="agbudsd9a441d9dce4n4" cx="0.5" cy="0.4" r="0.8">
   <stop offset="0" stop-color="#d9a441" stop-opacity="0.7"/>
   <stop offset="0.55" stop-color="#d9a441" stop-opacity="0.16"/>
   <stop offset="1" stop-color="#d9a441" stop-opacity="0"/>
 </radialGradient>
-<linearGradient id="albudsd9a441d9dce4" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="albudsd9a441d9dce4n4" x1="0" y1="0" x2="1" y2="0">
   <stop offset="0" stop-color="#d9a441" stop-opacity="0"/>
   <stop offset="0.5" stop-color="#d9a441"/>
   <stop offset="1" stop-color="#d9a441" stop-opacity="0"/>
 </linearGradient>
-<linearGradient id="mbbudsd9a441d9dce4" x1="0" y1="0" x2="0.85" y2="1">
+<linearGradient id="mbbudsd9a441d9dce4n4" x1="0" y1="0" x2="0.85" y2="1">
   <stop offset="0" stop-color="#e8eaef"/>
   <stop offset="0.3" stop-color="#dee1e8"/>
   <stop offset="0.65" stop-color="#d9dce4"/>
   <stop offset="1" stop-color="#828489"/>
 </linearGradient>
-<linearGradient id="mtbudsd9a441d9dce4" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="mtbudsd9a441d9dce4n4" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#ffffff" stop-opacity="0.3"/>
   <stop offset="0.4" stop-color="#ffffff" stop-opacity="0.05"/>
   <stop offset="1" stop-color="#000000" stop-opacity="0.3"/>
 </linearGradient>
-<radialGradient id="glbudsd9a441d9dce4" cx="0.38" cy="0.32" r="0.95">
+<radialGradient id="glbudsd9a441d9dce4n4" cx="0.38" cy="0.32" r="0.95">
   <stop offset="0" stop-color="#39414f"/>
   <stop offset="0.4" stop-color="#12151d"/>
   <stop offset="1" stop-color="#04040a"/>
 </radialGradient>
-<filter id="fzbudsd9a441d9dce4" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
+<filter id="fzbudsd9a441d9dce4n4" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
 </defs>
 <rect width="480" height="360" fill="#0b0b10"/>
 <path d="M40 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M80 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M120 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M160 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M200 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M240 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M280 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M320 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M360 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M400 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M440 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 40 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 80 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 120 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 160 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 200 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 240 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 280 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 320 H480" stroke="#ffffff" stroke-opacity="0.03"/>
-<ellipse cx="240" cy="176" rx="225" ry="145" fill="url(#agbudsd9a441d9dce4)"/><ellipse cx="215" cy="296" rx="120" ry="10" fill="#000" opacity="0.45" filter="url(#fzbudsd9a441d9dce4)"/>
-<rect x="118" y="118" width="190" height="160" rx="34" fill="url(#mbbudsd9a441d9dce4)"/>
-<rect x="118" y="118" width="190" height="160" rx="34" fill="url(#mtbudsd9a441d9dce4)"/>
+<ellipse cx="240" cy="176" rx="225" ry="145" fill="url(#agbudsd9a441d9dce4n4)"/><ellipse cx="215" cy="296" rx="120" ry="10" fill="#000" opacity="0.45" filter="url(#fzbudsd9a441d9dce4n4)"/>
+<rect x="118" y="118" width="190" height="160" rx="34" fill="url(#mbbudsd9a441d9dce4n4)"/>
+<rect x="118" y="118" width="190" height="160" rx="34" fill="url(#mtbudsd9a441d9dce4n4)"/>
 <rect x="119.6" y="119.6" width="186.8" height="156.8" rx="32.4" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1.6"/>
 <path d="M120 184 h186" stroke="#000000" stroke-opacity="0.5" stroke-width="3"/>
 <path d="M120 188 h186" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1.2"/>
@@ -40,18 +40,18 @@
 <rect x="196" y="270" width="34" height="8" rx="4" fill="#000000" opacity="0.5"/>
 <text x="213" y="246" font-family="sans-serif" font-size="9" fill="#1c1c26" opacity="0.4" text-anchor="middle" letter-spacing="3">SUZAKU</text>
 <g transform="rotate(-14 352 172)">
-<circle cx="352" cy="172" r="24" fill="url(#mbbudsd9a441d9dce4)" stroke="#e5e7ed" stroke-width="1.6"/>
-<circle cx="352" cy="172" r="24" fill="url(#mtbudsd9a441d9dce4)"/>
-<rect x="342" y="190" width="19" height="52" rx="9" fill="url(#mbbudsd9a441d9dce4)" stroke="#e5e7ed" stroke-width="1.4"/>
-<rect x="342" y="190" width="19" height="52" rx="9" fill="url(#mtbudsd9a441d9dce4)"/>
+<circle cx="352" cy="172" r="24" fill="url(#mbbudsd9a441d9dce4n4)" stroke="#e5e7ed" stroke-width="1.6"/>
+<circle cx="352" cy="172" r="24" fill="url(#mtbudsd9a441d9dce4n4)"/>
+<rect x="342" y="190" width="19" height="52" rx="9" fill="url(#mbbudsd9a441d9dce4n4)" stroke="#e5e7ed" stroke-width="1.4"/>
+<rect x="342" y="190" width="19" height="52" rx="9" fill="url(#mtbudsd9a441d9dce4n4)"/>
 <rect x="345" y="228" width="13" height="4" rx="2" fill="#d9a441" opacity="0.9"/>
 <circle cx="352" cy="172" r="7" fill="#d9a441" opacity="0.55"/>
 </g>
 <g transform="rotate(62 402 268)">
-<circle cx="402" cy="268" r="24" fill="url(#mbbudsd9a441d9dce4)" stroke="#e5e7ed" stroke-width="1.6"/>
+<circle cx="402" cy="268" r="24" fill="url(#mbbudsd9a441d9dce4n4)" stroke="#e5e7ed" stroke-width="1.6"/>
 <ellipse cx="402" cy="268" rx="15" ry="15" fill="#828489"/>
 <ellipse cx="402" cy="268" rx="9" ry="9" fill="#07070b" stroke="#e1e3e9" stroke-width="1"/>
-<rect x="392" y="286" width="19" height="52" rx="9" fill="url(#mbbudsd9a441d9dce4)" stroke="#e5e7ed" stroke-width="1.4"/>
+<rect x="392" y="286" width="19" height="52" rx="9" fill="url(#mbbudsd9a441d9dce4n4)" stroke="#e5e7ed" stroke-width="1.4"/>
 </g>
 <path d="M330 96 q-12 14 0 28 M348 84 q-20 24 0 48" fill="none" stroke="#d9a441" stroke-width="2.6" stroke-linecap="round" opacity="0.55"/>
 <text x="240" y="330" font-family="sans-serif" font-size="10" fill="#e9e9f2" opacity="0.6" text-anchor="middle" letter-spacing="3">38ms LOW LATENCY ・ LDAC</text></svg>

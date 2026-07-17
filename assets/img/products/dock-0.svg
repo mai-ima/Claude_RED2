@@ -1,42 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label=""><defs>
-<radialGradient id="agdockd9a44116161e" cx="0.5" cy="0.4" r="0.8">
+<radialGradient id="agdockd9a44116161en8" cx="0.5" cy="0.4" r="0.8">
   <stop offset="0" stop-color="#d9a441" stop-opacity="0.7"/>
   <stop offset="0.55" stop-color="#d9a441" stop-opacity="0.16"/>
   <stop offset="1" stop-color="#d9a441" stop-opacity="0"/>
 </radialGradient>
-<linearGradient id="aldockd9a44116161e" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="aldockd9a44116161en8" x1="0" y1="0" x2="1" y2="0">
   <stop offset="0" stop-color="#d9a441" stop-opacity="0"/>
   <stop offset="0.5" stop-color="#d9a441"/>
   <stop offset="1" stop-color="#d9a441" stop-opacity="0"/>
 </linearGradient>
-<linearGradient id="mbdockd9a44116161e" x1="0" y1="0" x2="0.85" y2="1">
+<linearGradient id="mbdockd9a44116161en8" x1="0" y1="0" x2="0.85" y2="1">
   <stop offset="0" stop-color="#737378"/>
   <stop offset="0.3" stop-color="#37373e"/>
   <stop offset="0.65" stop-color="#16161e"/>
   <stop offset="1" stop-color="#0d0d12"/>
 </linearGradient>
-<linearGradient id="mtdockd9a44116161e" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="mtdockd9a44116161en8" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#ffffff" stop-opacity="0.3"/>
   <stop offset="0.4" stop-color="#ffffff" stop-opacity="0.05"/>
   <stop offset="1" stop-color="#000000" stop-opacity="0.3"/>
 </linearGradient>
-<radialGradient id="gldockd9a44116161e" cx="0.38" cy="0.32" r="0.95">
+<radialGradient id="gldockd9a44116161en8" cx="0.38" cy="0.32" r="0.95">
   <stop offset="0" stop-color="#39414f"/>
   <stop offset="0.4" stop-color="#12151d"/>
   <stop offset="1" stop-color="#04040a"/>
 </radialGradient>
-<filter id="fzdockd9a44116161e" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
+<filter id="fzdockd9a44116161en8" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
 </defs>
 <rect width="480" height="360" fill="#0b0b10"/>
 <path d="M40 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M80 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M120 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M160 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M200 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M240 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M280 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M320 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M360 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M400 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M440 0 V360" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 40 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 80 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 120 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 160 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 200 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 240 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 280 H480" stroke="#ffffff" stroke-opacity="0.03"/><path d="M0 320 H480" stroke="#ffffff" stroke-opacity="0.03"/>
-<ellipse cx="240" cy="176" rx="225" ry="145" fill="url(#agdockd9a44116161e)"/><ellipse cx="240" cy="318" rx="140" ry="10" fill="#000" opacity="0.45" filter="url(#fzdockd9a44116161e)"/>
+<ellipse cx="240" cy="176" rx="225" ry="145" fill="url(#agdockd9a44116161en8)"/><ellipse cx="240" cy="318" rx="140" ry="10" fill="#000" opacity="0.45" filter="url(#fzdockd9a44116161en8)"/>
 <rect x="196" y="64" width="120" height="222" rx="18" fill="#0c0c14" stroke="#616166" stroke-width="2" transform="rotate(-8 256 175)"/>
 <rect x="204" y="72" width="104" height="206" rx="12" fill="#07070b" transform="rotate(-8 256 175)"/>
-<rect x="204" y="72" width="104" height="206" rx="12" fill="url(#agdockd9a44116161e)" opacity="0.55" transform="rotate(-8 256 175)"/>
+<rect x="204" y="72" width="104" height="206" rx="12" fill="url(#agdockd9a44116161en8)" opacity="0.55" transform="rotate(-8 256 175)"/>
 <path d="M256 128 c-6 22 -28 31 -28 54 a28 28 0 0 0 56 0 c0 -23 -22 -32 -28 -54z" fill="none" stroke="#d9a441" stroke-width="3" stroke-linejoin="round" transform="rotate(-8 256 175)"/>
 <text x="256" y="238" font-family="sans-serif" font-size="9" fill="#9c9cb0" text-anchor="middle" letter-spacing="2" transform="rotate(-8 256 175)">80W WIRELESS</text>
-<path d="M132 306 L354 306 L332 236 a16 16 0 0 0 -15 -11 L172 225 a16 16 0 0 0 -16 12 Z" fill="url(#mbdockd9a44116161e)"/>
-<path d="M132 306 L354 306 L332 236 a16 16 0 0 0 -15 -11 L172 225 a16 16 0 0 0 -16 12 Z" fill="url(#mtdockd9a44116161e)"/>
+<path d="M132 306 L354 306 L332 236 a16 16 0 0 0 -15 -11 L172 225 a16 16 0 0 0 -16 12 Z" fill="url(#mbdockd9a44116161en8)"/>
+<path d="M132 306 L354 306 L332 236 a16 16 0 0 0 -15 -11 L172 225 a16 16 0 0 0 -16 12 Z" fill="url(#mtdockd9a44116161en8)"/>
 <rect x="120" y="300" width="246" height="18" rx="9" fill="#0b0b0f"/>
 <rect x="170" y="305" width="14" height="8" rx="2" fill="#07070b"/><rect x="196" y="305" width="14" height="8" rx="2" fill="#07070b"/><rect x="222" y="305" width="14" height="8" rx="2" fill="#07070b"/><rect x="248" y="305" width="14" height="8" rx="2" fill="#07070b"/><rect x="274" y="305" width="14" height="8" rx="2" fill="#07070b"/><rect x="300" y="305" width="14" height="8" rx="2" fill="#07070b"/>
 <circle cx="336" cy="264" r="4.5" fill="#d9a441"/>
