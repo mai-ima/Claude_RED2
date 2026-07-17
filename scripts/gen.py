@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from data_products import ALL_PRODUCTS, PHONES, TABLETS, ACCESSORIES, LINES, BIZ_PRODUCTS, BIZ_OS  # noqa: E402
+from data_products import ALL_PRODUCTS, PHONES, TABLETS, ACCESSORIES, LINES, BIZ_PRODUCTS, BIZ_OS, PRODUCT_FAQ  # noqa: E402
 from data_collab import (COLLABS, COLLAB_SILICON, COLLAB_COOLING, COLLAB_SOC_CLOCK,  # noqa: E402
                          COLLAB_SILICON_ARCH, COLLAB_SILICON_FAQ, collab_by_slug)
 from data_tech import TECHS, OS_VERSIONS  # noqa: E402
@@ -1400,7 +1400,8 @@ def build_product_page(p):
 
     # --- 同梱物 + 製品FAQ + 対応アクセサリ + サポート ---
     box_html = "".join(f"<li>{esc(x)}</li>" for x in box_items(p))
-    faq_items = LINE_FAQ.get(p["line"], LINE_FAQ["acc"])
+    # 製品別FAQ(PRODUCT_FAQ)があれば優先し、無い製品は共通のライン別FAQを使う
+    faq_items = PRODUCT_FAQ.get(p["id"]) or LINE_FAQ.get(p["line"], LINE_FAQ["acc"])
     faq_html = "".join(
         f'<div class="accordion__item"><button class="accordion__q" aria-expanded="false"><span>{esc(q)}</span></button>'
         f'<div class="accordion__a"><div class="accordion__a-inner"><div class="accordion__a-body"><p>{a}</p></div></div></div></div>'
