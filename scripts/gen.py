@@ -3866,6 +3866,12 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
         f'<span class="zz-vsrow__a"><i>空洞 KUDO</i>{esc(a)}</span>'
         f'<span class="zz-vsrow__b"><i>SUZAKU 4</i>{esc(b)}</span></div>'
         for k, a, b in _reveal_vs_rows(rv))
+    acc_cards = "".join(
+        f'<div class="zz-acc"><div class="zz-acc__art">{svg_art.svg_wave2_acc(a["kind"], "zzz", a["name"])}</div>'
+        f'<span class="zz-tag">{esc(a["type"])}</span>'
+        f'<h3 class="zz-acc__n">{esc(a["name"])}</h3>'
+        f'<p class="zz-acc__b">{esc(a["body"])}</p></div>'
+        for a in rv.get("accessories", []))
     purl = f"/collab/{rv['url_slug']}/" if rv.get("url_slug") else ""
     wrap_attr = "" if standalone else ' data-reveal-stage="full" hidden aria-hidden="true"'
     title_html = ('<h1 class="zz-hero__title">空洞 <span>KUDO</span></h1>' if standalone
@@ -3989,11 +3995,11 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
 <div class="zz-film" aria-hidden="true"></div>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">11</span>アクセサリ — COMING NEXT</p>
+    <p class="zz-plate"><span class="zz-plate__no">11</span>アクセサリ — FIRST LOOK</p>
     <h2 class="zz-h2">相棒の、相棒たち。</h2>
-    <p class="zz-lead">空洞 KUDO専用のコラボアクセサリも同時開発中です。第2報で、シルエットの答え合わせを。</p>
-    <div class="zz-specrow"><span>??? — 充電系</span><span>??? — グリップ系</span><span>??? — オーディオ系</span></div>
-    <p class="zz-note">アクセサリの名称・仕様・価格は正式発表第2報で公開します。第1弾と同じく、単なる色替え品ではなく本体と同じ設計言語で新規に起こしています。本体の予約枠とは別に用意します。</p>
+    <p class="zz-lead">空洞 KUDO専用のコラボアクセサリも同時開発中です。名称とデザインスケッチを、ここで先行公開します。</p>
+    <div class="zz-accs">{acc_cards}</div>
+    <p class="zz-note">{esc(rv.get("acc_note", ""))}</p>
   </div>
 </section>
 <section class="cl-section">
@@ -4070,6 +4076,12 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
         f'<span class="sr-vsrow__a"><i>星軌 SEIKI</i>{esc(a)}</span>'
         f'<span class="sr-vsrow__b"><i>SUZAKU 4</i>{esc(b)}</span></div>'
         for k, a, b in _reveal_vs_rows(rv))
+    acc_cards = "".join(
+        f'<div class="sr-acc sr-frame"><div class="sr-acc__art">{svg_art.svg_wave2_acc(a["kind"], "srail", a["name"])}</div>'
+        f'<span class="sr-acc__t">{esc(a["type"])}</span>'
+        f'<h3 class="sr-acc__n">{esc(a["name"])}</h3>'
+        f'<p class="sr-acc__b">{esc(a["body"])}</p></div>'
+        for a in rv.get("accessories", []))
     purl = f"/collab/{rv['url_slug']}/" if rv.get("url_slug") else ""
     wrap_attr = "" if standalone else ' data-reveal-stage="full" hidden aria-hidden="true"'
     title_html = ('<h1 class="sr-hero__title">星軌 <span>SEIKI</span></h1>' if standalone
@@ -4197,10 +4209,10 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
 </section>
 <section class="cl-section">
   <div class="cl-wrap">
-    <div class="sr-head"><p class="sr-eyebrow">ACCESSORIES — COMING NEXT</p><h2 class="sr-h2">次の車両。</h2>
-    <p class="sr-kick">星軌 SEIKI専用のコラボアクセサリも同時開発中。編成の全貌は、第2報で。</p></div>
-    <div class="sr-specrow"><span>??? — 充電系</span><span>??? — スタンド系</span><span>??? — オーディオ系</span></div>
-    <p class="sr-note">アクセサリの名称・仕様・価格は正式発表第2報で公開します。第1弾と同じく、単なる色替え品ではなく本体と同じ設計言語 — 紺と金と、あの静けさ — で新規に起こしています。本体の予約枠とは別に用意します。</p>
+    <div class="sr-head"><p class="sr-eyebrow">ACCESSORIES — FIRST LOOK</p><h2 class="sr-h2">次の車両。</h2>
+    <p class="sr-kick">星軌 SEIKI専用のコラボアクセサリも同時開発中。名称とデザインスケッチを先行公開します。</p></div>
+    <div class="sr-accs">{acc_cards}</div>
+    <p class="sr-note">{esc(rv.get("acc_note", ""))}</p>
     <p class="sr-pageno">12 <small>/ 14</small></p>
   </div>
 </section>
@@ -5570,6 +5582,24 @@ def build_dev_hub():
         f'<h3 class="t-h4">{esc(t)}</h3><p class="t-small t-soft">{esc(d)}</p>'
         f'<p class="link-arrow">開く</p></a>'
         for t, href, d in tools)
+    # 第2弾 発表ステージ(正式運用版)の点検導線。発表前は通常導線から辿れないため、
+    # 内容チェックはこの内部ハブから行う(相手名は出さず、機体名・URLのみ)。
+    wave2_pages = []
+    for c in COLLABS:
+        us = (c.get("reveal") or {}).get("url_slug")
+        if not us:
+            continue
+        dev = c["reveal"].get("device", us)
+        no = _WAVE2_NO.get(c["slug"], "")
+        wave2_pages.append((f"{dev} — 正式発表ページ", f"/collab/{us}/",
+                            f"カウントダウン終了後の本番導線。ティザー{no}({c['slug']})の切替先・転送先。"))
+        wave2_pages.append((f"ティザー{no} 保存版アーカイブ", f"/collab/{c['slug']}/teaser/",
+                            "発表前カウントダウンとヒントの記録。正式ページ末尾の小ボタンからも到達可。"))
+    wave2_cards = "".join(
+        f'<a class="card card--hover" href="{href}"><p class="eyebrow">STAGING</p>'
+        f'<h3 class="t-h4">{esc(t)}</h3><p class="t-small t-soft">{esc(d)}</p>'
+        f'<p class="link-arrow">開く</p></a>'
+        for t, href, d in wave2_pages)
     pre_style = ("background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);"
                  "padding:18px;overflow-x:auto;font-size:.85rem;line-height:1.9;color:var(--text-soft)")
     body = f"""
@@ -5595,6 +5625,12 @@ def build_dev_hub():
   <div class="section-head"><p class="eyebrow">INTERNAL TOOLS</p><h2 class="t-h2">内部ツール</h2>
   <p class="t-soft">目視点検用の内部ページ。ここからアクセスできます。</p></div>
   <div class="grid grid--3 grid--cards">{tool_cards}</div>
+</div></section>
+
+<section class="section--sm"><div class="container">
+  <div class="section-head"><p class="eyebrow">2ND WAVE — STAGING</p><h2 class="t-h2">第2弾 発表ステージ(正式運用版)の点検</h2>
+  <p class="t-soft">カウントダウン終了後に本番導線へ載る正式ページとティザー保存版。発表前は通常導線から辿れない(noindex)ため、点検はここから。</p></div>
+  <div class="grid grid--2 grid--cards">{wave2_cards}</div>
 </div></section>
 
 <div class="band-light" data-theme="light"><section class="section--sm"><div class="container container--narrow">
@@ -5638,6 +5674,30 @@ def build_svg_gallery():
             accs += (
                 f'<figure class="svgg-acc"><img src="{pimg(a["id"], i)}" alt="{esc(a["name"])} {esc(c["name"])}" loading="lazy" width="480" height="360">'
                 f'<figcaption>{esc(a["name"])} — {esc(c["name"])} <code>{a["id"]}-{i}</code></figcaption></figure>')
+    # 仮デザインSVG(svg_prototype): 汎用の使い回し版と、作品意匠の個別版を並べて点検
+    protos = [
+        ("汎用プレースホルダ(使い回し可)", "generic",
+         svg_art.svg_prototype("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic")),
+        ("空洞 KUDO 仮デザイン(黒×ライム)", "zzz",
+         svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz")),
+        ("星軌 SEIKI 仮デザイン(深紺×金)", "srail",
+         svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail")),
+    ]
+    proto_cells = "".join(
+        f'<figure class="svgg-proto"><div class="svgg-proto__art">{svg}</div>'
+        f'<figcaption>{esc(t)} <code>svg_prototype/{s}</code></figcaption></figure>'
+        for t, s, svg in protos)
+    # 第2弾コラボアクセサリのデザイン先行公開アート(svg_wave2_acc)
+    w2acc_cells = ""
+    for c in COLLABS:
+        rv = c.get("reveal") or {}
+        if not rv.get("url_slug"):
+            continue
+        style = "zzz" if c["slug"] == "wave2" else "srail"
+        for a in rv.get("accessories", []):
+            w2acc_cells += (
+                f'<figure class="svgg-acc"><div class="svgg-proto__art">{svg_art.svg_wave2_acc(a["kind"], style, a["name"])}</div>'
+                f'<figcaption>{esc(a["name"])}({esc(a["type"])}) <code>svg_wave2_acc/{a["kind"]}/{style}</code></figcaption></figure>')
     body = f"""
 <style>
 .svgg-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }}
@@ -5646,6 +5706,11 @@ def build_svg_gallery():
 .svgg-pair__imgs img, .svgg-acc img {{ width: 100%; height: auto; min-width: 0; }}
 .svgg-pair figcaption, .svgg-acc figcaption {{ margin-top: 8px; text-align: center; font-size: 0.82rem; color: var(--text-soft); }}
 .svgg-pair figcaption code, .svgg-acc figcaption code {{ color: var(--accent); }}
+.svgg-proto {{ margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px; }}
+.svgg-proto__art {{ background: #0e0e12; border-radius: var(--r-md); padding: 10px; }}
+.svgg-proto__art svg {{ width: 100%; height: auto; display: block; }}
+.svgg-proto figcaption {{ margin-top: 8px; text-align: center; font-size: 0.82rem; color: var(--text-soft); }}
+.svgg-proto figcaption code {{ color: var(--accent); }}
 </style>
 <section class="section">
   <div class="container">
@@ -5655,6 +5720,12 @@ def build_svg_gallery():
     <div class="svgg-grid">{pairs}</div>
     <h2 class="t-h3" style="margin:32px 0 16px">アクセサリ — 全バリエーション</h2>
     <div class="svgg-grid">{accs}</div>
+    <h2 class="t-h3" style="margin:32px 0 6px">仮デザインSVG(svg_prototype)</h2>
+    <p class="t-small t-soft" style="margin-bottom:16px">発表直後の繋ぎに使うプレースホルダ。汎用版はどの製品でも使い回し可、個別版は各コラボ先の設計言語で描き分ける。</p>
+    <div class="svgg-grid">{proto_cells}</div>
+    <h2 class="t-h3" style="margin:32px 0 6px">第2弾コラボアクセサリ — デザイン先行公開アート</h2>
+    <p class="t-small t-soft" style="margin-bottom:16px">正式発表ページのアクセサリ節で使用中(svg_wave2_acc)。価格・発売日は第2報。</p>
+    <div class="svgg-grid">{w2acc_cells}</div>
   </div>
 </section>"""
     render_page("/dev/svg-gallery/", "SVG全点検グリッド(内部QA)",

@@ -1314,79 +1314,271 @@ def svg_die(gid, label, sub, glow, accent2=None):
 _UID_SEQ = 0  # ページ内 id 衝突防止の呼び出し連番(ビルド順固定=決定的)
 
 
-def svg_prototype(pid, glow, label, kana="", style="zzz", note="PROTOTYPE — 仮デザイン"):
+def svg_prototype(pid, glow, label, kana="", style="generic", note="PROTOTYPE — 仮デザイン"):
     """発表直後の「仮デザイン」製品SVG(340×600・スマホと同じ実機比率)。
 
-    正式レンダリング(svg_phone の専用描画)が完成するまでの繋ぎとして、
-    設計図風のワイヤーフレーム+PROTOTYPE刻印で「量産版と異なる」ことを
-    視覚的に明示する。style: "zzz"=黒×ライム(ハザード帯)、"srail"=紺×金(星と括弧)。"""
+    正式レンダリング(svg_phone の専用描画)が完成するまでの繋ぎ。
+    style:
+      "generic" = どの製品でも使い回せる中立の図面プレースホルダ(glow で差し色のみ)
+      "zzz"     = 空洞 KUDO 用。黒×ライム・ハザード帯・平行四辺形プレート・
+                  フィルム穴・ゴースト文字・ブラウン管テストパターン(ゼンゼロ公式準拠)
+      "srail"   = 星軌 SEIKI 用。深紺×金・星図と星座線・路線図マーカー・
+                  ホログラム紫の乗車認証・乗車券スタブ(スタレ公式+車内UI準拠)"""
     global _UID_SEQ
     _UID_SEQ += 1
     u = f"proto{pid.replace('-', '')}n{_UID_SEQ}"
     acc = glow
     ink = "#eef0f4"
-    # 図面グリッド(端末輪郭の内側のみ)
+    ghost = label.split()[-1] if " " in label else label
+    head = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label}(仮デザイン)">'
+            f'<defs><radialGradient id="pg{u}" cx="0.5" cy="0.35" r="0.85">'
+            f'<stop offset="0" stop-color="{acc}" stop-opacity="0.15"/>'
+            f'<stop offset="1" stop-color="{acc}" stop-opacity="0"/>'
+            f'</radialGradient></defs>'
+            f'<rect width="340" height="600" fill="url(#pg{u})"/>')
+
+    if style == "zzz":
+        # ---- 空洞 KUDO: 黒×ライムのハザード図面 ----
+        stripes = "".join(
+            f'<rect x="{i * 26}" y="0" width="13" height="12" fill="{acc}" transform="skewX(-30)"/>'
+            for i in range(16))
+        holes = "".join(
+            f'<rect x="4" y="{y}" width="10" height="10" rx="2" fill="#ffffff" opacity="0.14"/>'
+            f'<rect x="326" y="{y}" width="10" height="10" rx="2" fill="#ffffff" opacity="0.14"/>'
+            for y in range(52, 556, 30))
+        scan = "".join(f'<path d="M86 {y} H254" stroke="{acc}" stroke-opacity="0.2"/>' for y in range(86, 138, 8))
+        blades = "".join(
+            f'<path d="M170 330 L170 292" stroke="{acc}" stroke-width="7" stroke-linecap="round" opacity="0.5" transform="rotate({a} 170 330)"/>'
+            for a in range(0, 360, 45))
+        return head + f"""
+<text x="172" y="392" font-family="'Noto Sans JP',sans-serif" font-size="116" font-weight="900" font-style="italic" fill="#ffffff" opacity="0.05" text-anchor="middle" letter-spacing="-2">{ghost}</text>
+<g transform="translate(6 4)" opacity="0.85">{stripes}</g>
+<g transform="translate(6 586)" opacity="0.85">{stripes}</g>
+{holes}
+<rect x="46" y="33" width="254" height="540" rx="47" fill="none" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.4"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="{acc}" stroke-width="2.4" stroke-dasharray="14 6"/>
+<g transform="translate(70 44) skewX(-12)"><rect width="182" height="22" fill="{acc}"/></g>
+<text x="78" y="59" font-family="monospace" font-size="10.5" font-weight="800" fill="#101010" letter-spacing="2">FILE 00 — PROTOTYPE</text>
+<rect x="70" y="74" width="200" height="70" rx="10" fill="#0c0c0e" stroke="{acc}" stroke-width="1.6"/>
+{scan}
+<path d="M100 74 l-12 -14 M124 74 l9 -14" stroke="{acc}" stroke-width="1.6" opacity="0.7"/>
+<circle cx="236" cy="109" r="15" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="170" y="160" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.6" text-anchor="middle" letter-spacing="2">CAMERA — 試験放送中(調整中)</text>
+<circle cx="170" cy="330" r="52" fill="none" stroke="{acc}" stroke-width="1.8" stroke-dasharray="8 6"/>
+{blades}
+<circle cx="170" cy="330" r="10" fill="#0c0c0e" stroke="{acc}" stroke-width="1.6"/>
+<path d="M43 306 h-9 M43 354 h-9 M297 306 h9 M297 354 h9" stroke="{acc}" stroke-width="3" opacity="0.7"/>
+<text x="170" y="404" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.6" text-anchor="middle" letter-spacing="2">COOLING — 冷巷ダクト風洞試験中</text>
+<text x="170" y="452" font-family="'Noto Sans JP',sans-serif" font-size="17" font-weight="900" font-style="italic" fill="{ink}" text-anchor="middle" letter-spacing="2">{label}</text>
+{f'<text x="170" y="472" font-family="monospace" font-size="9" fill="{ink}" opacity="0.45" text-anchor="middle" letter-spacing="5">{kana}</text>' if kana else ''}
+<g transform="rotate(-4 170 514)">
+  <g transform="translate(86 494) skewX(-12)"><rect width="176" height="40" fill="{acc}"/></g>
+  <text x="166" y="512" font-family="monospace" font-size="14" font-weight="800" fill="#101010" text-anchor="middle" letter-spacing="4">PROTOTYPE</text>
+  <text x="166" y="527" font-family="'Noto Sans JP',sans-serif" font-size="8" font-weight="700" fill="#101010" text-anchor="middle" letter-spacing="1.5">仮デザイン — 量産版と異なります</text>
+</g>
+<text x="170" y="566" font-family="monospace" font-size="7.5" fill="{ink}" opacity="0.4" text-anchor="middle" letter-spacing="2">{note} ・ ZERO DESIGN LOG</text>
+</svg>"""
+
+    if style == "srail":
+        # ---- 星軌 SEIKI: 深紺×金の星図路線図 ----
+        stars = "".join(
+            f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+            for x, y, r, o in [(70, 210, 1.2, .5), (120, 188, .9, .35), (206, 214, 1.1, .45),
+                               (250, 186, .8, .4), (96, 246, .8, .3), (232, 250, 1.2, .35),
+                               (150, 550, .9, .3), (250, 60, 1, .35), (90, 66, .8, .3)])
+        star4 = "".join(
+            f'<path d="M{x} {y - s} L{x + s * .3} {y - s * .3} L{x + s} {y} L{x + s * .3} {y + s * .3} '
+            f'L{x} {y + s} L{x - s * .3} {y + s * .3} L{x - s} {y} L{x - s * .3} {y - s * .3} Z" fill="{acc}" opacity="0.6"/>'
+            for x, y, s in [(316, 90, 5), (26, 402, 4), (314, 470, 4.4), (30, 150, 3.6)])
+        cpts = [(92, 208), (132, 184), (178, 206), (224, 180), (250, 212)]
+        constellation = ('<polyline points="' + " ".join(f"{x},{y}" for x, y in cpts) +
+                         f'" fill="none" stroke="{acc}" stroke-width="0.8" opacity="0.5"/>' +
+                         "".join(f'<circle cx="{x}" cy="{y}" r="2" fill="{acc}" opacity="0.85"/>' for x, y in cpts))
+        # 左端の路線図(停車駅=検証工程)
+        route = (f'<path d="M22 92 V520" stroke="{acc}" stroke-width="1.2" opacity="0.55"/>'
+                 + "".join(
+                     f'<path d="M22 {y - 6} l6 6 l-6 6 l-6 -6 z" fill="#0a0e24" stroke="{acc}" stroke-width="1.4"/>'
+                     f'<path d="M28 {y} H43" stroke="{acc}" stroke-width="0.9" opacity="0.5"/>'
+                     for y in (108, 330, 452)))
+        radiator = "".join(f'<path d="M92 {y} H248" stroke="{acc}" stroke-opacity="0.14"/>' for y in range(300, 350, 7))
+        filig = f"""
+<path d="M12 30 v-16 h16 M16 34 v-12 h12" stroke="{acc}" stroke-width="1.4" fill="none" opacity="0.8"/>
+<path d="M328 30 v-16 h-16 M324 34 v-12 h-12" stroke="{acc}" stroke-width="1.4" fill="none" opacity="0.8"/>
+<path d="M12 570 v16 h16 M16 566 v12 h12" stroke="{acc}" stroke-width="1.4" fill="none" opacity="0.8"/>
+<path d="M328 570 v16 h-16 M324 566 v12 h-12" stroke="{acc}" stroke-width="1.4" fill="none" opacity="0.8"/>"""
+        return head + f"""
+{stars}{star4}{filig}{route}
+<rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="{acc}" stroke-width="1.6"/>
+<rect x="50" y="37" width="240" height="526" rx="41" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1" stroke-dasharray="5 6"/>
+<text x="170" y="60" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="10" fill="{acc}" text-anchor="middle" letter-spacing="6" opacity="0.9">開拓設計図 — 第一報</text>
+<rect x="78" y="74" width="184" height="76" rx="14" fill="#080c1e" stroke="{acc}" stroke-width="1.4"/>
+<path d="M170 74 V150 M78 112 H262" stroke="{acc}" stroke-width="1" opacity="0.55"/>
+<circle cx="120" cy="94" r="1" fill="#ffffff" opacity="0.7"/><circle cx="216" cy="90" r="1.3" fill="#ffffff" opacity="0.6"/>
+<circle cx="102" cy="132" r="0.9" fill="#ffffff" opacity="0.5"/><circle cx="238" cy="136" r="1" fill="#ffffff" opacity="0.6"/>
+<path d="M196 122 l14 -8" stroke="#ffffff" stroke-width="0.8" opacity="0.5"/>
+<text x="170" y="166" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.6" text-anchor="middle" letter-spacing="2">CAMERA — 車窓の調律中</text>
+{constellation}
+{radiator}
+<g>
+  <rect x="98" y="292" width="144" height="64" fill="rgba(180,140,255,0.06)" stroke="#b48cff" stroke-width="1.3"/>
+  <path d="M98 300 v-8 h8 M242 292 h-8 M242 292 v8 M98 348 v8 h8 M242 356 h-8 v-8" stroke="#b48cff" stroke-width="1.6" fill="none"/>
+  <path d="M170 306 l8 12 l-8 12 l-8 -12 z" fill="none" stroke="#b48cff" stroke-width="1.6"/>
+  <text x="170" y="348" font-family="monospace" font-size="7.5" fill="#b48cff" text-anchor="middle" letter-spacing="2">乗車認証 — 検証中</text>
+</g>
+<text x="170" y="386" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.6" text-anchor="middle" letter-spacing="2">COOLING — 永冬パネル調律中</text>
+<text x="170" y="452" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="17" font-weight="800" fill="{ink}" text-anchor="middle" letter-spacing="3">{label}</text>
+{f'<text x="170" y="472" font-family="monospace" font-size="9" fill="{ink}" opacity="0.45" text-anchor="middle" letter-spacing="5">{kana}</text>' if kana else ''}
+<g transform="rotate(-3 170 516)">
+  <rect x="74" y="494" width="192" height="44" rx="5" fill="rgba(216,180,92,0.08)" stroke="{acc}" stroke-width="1.5"/>
+  <path d="M224 494 v44" stroke="{acc}" stroke-width="1.1" stroke-dasharray="3 4"/>
+  <circle cx="244" cy="516" r="6.5" fill="none" stroke="{acc}" stroke-width="1.3"/>
+  <text x="148" y="512" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="13" font-weight="800" fill="{acc}" text-anchor="middle" letter-spacing="3">PROTOTYPE</text>
+  <text x="148" y="527" font-family="'Noto Sans JP',sans-serif" font-size="7.5" fill="{acc}" text-anchor="middle" letter-spacing="1.5">仮デザイン — 量産版と異なります</text>
+</g>
+<text x="170" y="566" font-family="monospace" font-size="7.5" fill="{ink}" opacity="0.4" text-anchor="middle" letter-spacing="2">{note} ・ TRAILBLAZE DRAFT</text>
+</svg>"""
+
+    # ---- generic: どの製品でも使える中立プレースホルダ ----
     grid = "".join(f'<path d="M{x} 44 V556" stroke="{acc}" stroke-opacity="0.07"/>' for x in range(70, 300, 28)) + \
            "".join(f'<path d="M56 {y} H284" stroke="{acc}" stroke-opacity="0.07"/>' for y in range(70, 560, 28))
-    if style == "srail":
-        # 星屑(紺×金): 図面の余白に小さな四芒星を散らす
-        pts = [(30, 80, 5), (318, 130, 4), (24, 300, 3.4), (316, 340, 5), (30, 500, 4), (312, 520, 3.4)]
-        deco = "".join(
-            f'<path d="M{x} {y - s} L{x + s * 0.32} {y - s * 0.32} L{x + s} {y} L{x + s * 0.32} {y + s * 0.32} '
-            f'L{x} {y + s} L{x - s * 0.32} {y + s * 0.32} L{x - s} {y} L{x - s * 0.32} {y - s * 0.32} Z" '
-            f'fill="{acc}" opacity="0.55"/>' for x, y, s in pts)
-        # 金のコーナーブラケット(乗車認証UI準拠)
-        deco += f"""
-<path d="M14 26 v-12 h12 M326 14 h-12 M326 14 v12" stroke="{acc}" stroke-width="2" fill="none" opacity="0.8"/>
-<path d="M14 574 v12 h12 M326 586 h-12 v-12" stroke="{acc}" stroke-width="2" fill="none" opacity="0.8"/>"""
-        stamp_font = "'Shippori Mincho','Noto Sans JP',serif"
-    else:
-        # ハザードストライプ帯(黒×ライム)
-        stripes = "".join(
-            f'<rect x="{i * 24}" y="0" width="12" height="10" fill="{acc}" transform="skewX(-30)"/>'
-            for i in range(16))
-        deco = f"""
-<g transform="translate(20 588)" opacity="0.75">{stripes}</g>"""
-        stamp_font = "'Noto Sans JP',sans-serif"
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label}(仮デザイン)">
-<defs>
-<radialGradient id="pg{u}" cx="0.5" cy="0.42" r="0.75">
-  <stop offset="0" stop-color="{acc}" stop-opacity="0.14"/>
-  <stop offset="1" stop-color="{acc}" stop-opacity="0"/>
-</radialGradient>
-</defs>
-<rect x="0" y="0" width="340" height="600" fill="url(#pg{u})"/>
-{deco}
-<!-- 端末外形(ワイヤーフレーム) -->
+    return head + f"""
 {grid}
+<path d="M14 26 v-12 h12 M326 14 h-12 v12 M14 574 v12 h12 M326 586 h-12 v-12" stroke="{ink}" stroke-opacity="0.35" stroke-width="1.4" fill="none"/>
 <rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 7" opacity="0.9"/>
 <rect x="52" y="39" width="236" height="522" rx="40" fill="none" stroke="{ink}" stroke-opacity="0.22" stroke-width="1.2"/>
 <path d="M170 30 v14 M170 556 v14 M43 300 h14 M283 300 h14" stroke="{acc}" stroke-width="1.6" opacity="0.7"/>
-<!-- 寸法線 -->
 <path d="M315 30 h14 M315 570 h14 M322 30 V570" stroke="{ink}" stroke-opacity="0.4" stroke-width="1.2"/>
 <path d="M322 30 l-4 9 h8 z M322 570 l-4 -9 h8 z" fill="{ink}" fill-opacity="0.4"/>
 <text x="334" y="304" font-family="monospace" font-size="10" fill="{ink}" opacity="0.55" text-anchor="middle" transform="rotate(90 334 304)">H 164mm(設計値)</text>
 <path d="M43 24 v-8 M297 24 v-8 M43 20 H297" stroke="{ink}" stroke-opacity="0.4" stroke-width="1.2"/>
 <text x="170" y="12" font-family="monospace" font-size="10" fill="{ink}" opacity="0.55" text-anchor="middle">W 76.5mm(設計値)</text>
-<!-- カメラ島プレース(調整中) -->
 <rect x="66" y="60" width="208" height="96" rx="18" fill="none" stroke="{acc}" stroke-width="1.6" stroke-dasharray="6 5" opacity="0.85"/>
 <circle cx="108" cy="98" r="21" fill="none" stroke="{ink}" stroke-opacity="0.4" stroke-width="1.4" stroke-dasharray="4 4"/>
 <circle cx="163" cy="98" r="16" fill="none" stroke="{ink}" stroke-opacity="0.35" stroke-width="1.3" stroke-dasharray="4 4"/>
 <text x="170" y="144" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.55" text-anchor="middle" letter-spacing="2">CAMERA MODULE — 調整中</text>
-<!-- 冷却窓プレース(検証中) -->
 <circle cx="170" cy="330" r="50" fill="none" stroke="{acc}" stroke-width="1.6" stroke-dasharray="7 6" opacity="0.85"/>
 <path d="M170 330 m-50 0 h100 M170 280 v100" stroke="{ink}" stroke-opacity="0.2" stroke-width="1"/>
 <text x="170" y="400" font-family="monospace" font-size="8.5" fill="{ink}" opacity="0.55" text-anchor="middle" letter-spacing="2">COOLING — 設計検証中</text>
-<!-- 機体名+PROTOTYPEスタンプ -->
-<text x="170" y="452" font-family="{stamp_font}" font-size="15" font-weight="800" fill="{ink}" opacity="0.85" text-anchor="middle" letter-spacing="2.5">{label}</text>
-{f'<text x="170" y="474" font-family="{stamp_font}" font-size="9" fill="{ink}" opacity="0.45" text-anchor="middle" letter-spacing="4">{kana}</text>' if kana else ''}
-<g transform="rotate(-6 170 516)">
-  <rect x="84" y="496" width="172" height="40" rx="6" fill="none" stroke="{acc}" stroke-width="2.4" opacity="0.95"/>
-  <text x="170" y="514" font-family="monospace" font-size="14" font-weight="800" fill="{acc}" text-anchor="middle" letter-spacing="4">PROTOTYPE</text>
-  <text x="170" y="529" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="{acc}" text-anchor="middle" letter-spacing="1.5">仮デザイン — 量産版と異なります</text>
-</g>
-<text x="170" y="560" font-family="monospace" font-size="7.5" fill="{ink}" opacity="0.4" text-anchor="middle" letter-spacing="2">{note} ・ RENDERING IN PROGRESS</text>
+<text x="170" y="452" font-family="'Noto Sans JP',sans-serif" font-size="15" font-weight="800" fill="{ink}" opacity="0.85" text-anchor="middle" letter-spacing="2.5">{label}</text>
+{f'<text x="170" y="474" font-family="monospace" font-size="9" fill="{ink}" opacity="0.45" text-anchor="middle" letter-spacing="4">{kana}</text>' if kana else ''}
+<rect x="84" y="496" width="172" height="40" rx="6" fill="none" stroke="{acc}" stroke-width="2.2" opacity="0.95"/>
+<text x="170" y="514" font-family="monospace" font-size="14" font-weight="800" fill="{acc}" text-anchor="middle" letter-spacing="4">PROTOTYPE</text>
+<text x="170" y="529" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="{acc}" text-anchor="middle" letter-spacing="1.5">仮デザイン — 量産版と異なります</text>
+<text x="170" y="562" font-family="monospace" font-size="7.5" fill="{ink}" opacity="0.4" text-anchor="middle" letter-spacing="2">{note} ・ SUZAKU DESIGN LAB</text>
 </svg>"""
+
+
+def svg_wave2_acc(kind, style, caption=""):
+    """第2弾コラボアクセサリの「デザイン先行公開」アート(480×360)。
+
+    kind: zzz = dock / grip / buds、srail = dock / stand / buds。
+    製品の仮SVGと同じ設計言語で、開発中の意匠をスケッチとして描く。"""
+    global _UID_SEQ
+    _UID_SEQ += 1
+    u = f"w2acc{kind}{style}n{_UID_SEQ}"
+    if style == "srail":
+        acc, bg, ink = "#d8b45c", "#0a0e24", "#eef0ff"
+    else:
+        acc, bg, ink = "#d4fa4c", "#0b0b0d", "#f4f4ef"
+    head = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label="{caption or kind}(デザイン先行公開)">'
+            f'<defs><radialGradient id="ag{u}" cx="0.5" cy="0.4" r="0.8">'
+            f'<stop offset="0" stop-color="{acc}" stop-opacity="0.16"/>'
+            f'<stop offset="1" stop-color="{acc}" stop-opacity="0"/></radialGradient></defs>'
+            f'<rect width="480" height="360" fill="{bg}"/>'
+            f'<rect width="480" height="360" fill="url(#ag{u})"/>')
+    grid = "".join(f'<path d="M{x} 20 V340" stroke="{acc}" stroke-opacity="0.05"/>' for x in range(60, 460, 40))
+    foot = (f'<text x="240" y="344" font-family="monospace" font-size="9" fill="{ink}" opacity="0.45" '
+            f'text-anchor="middle" letter-spacing="3">PROTOTYPE ・ DESIGN PREVIEW</text>')
+
+    if style == "zzz" and kind == "dock":
+        stripes = "".join(f'<rect x="{110 + i * 24}" y="286" width="12" height="10" fill="{acc}" transform="skewX(-30)" opacity="0.8"/>' for i in range(10))
+        return head + grid + f"""
+<rect x="118" y="258" width="250" height="34" rx="10" fill="#141417" stroke="{acc}" stroke-width="1.6"/>
+{stripes}
+<g transform="rotate(-8 268 172)">
+  <rect x="222" y="82" width="98" height="176" rx="16" fill="#101013" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2"/>
+  <rect x="230" y="92" width="82" height="140" rx="8" fill="#0c0c0e"/>
+  <path d="M276 128 l-12 26 h10 l-8 26 l24 -32 h-11 l10 -20 z" fill="{acc}"/>
+</g>
+<path d="M198 258 q-6 -46 24 -74" stroke="{acc}" stroke-width="2.4" fill="none" opacity="0.75"/>
+<circle cx="160" cy="236" r="17" fill="#0c0c0e" stroke="{acc}" stroke-width="2"/>
+<circle cx="160" cy="236" r="6" fill="{acc}"/>
+<path d="M368 292 q34 6 40 30" stroke="{acc}" stroke-width="2.2" fill="none" opacity="0.6"/>
+<text x="140" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">CHARGE DOCK — 充電試験中</text>
+<path d="M118 296 h-14 M368 296 h14" stroke="{acc}" stroke-width="2.4" opacity="0.6"/>
+""" + foot + "</svg>"
+    if style == "zzz" and kind == "grip":
+        tex = "".join(f'<rect x="{150 + i * 34}" y="150" width="14" height="66" fill="{acc}" opacity="0.4" transform="skewX(-18)"/>' for i in range(6))
+        return head + grid + f"""
+<rect x="112" y="146" width="256" height="74" rx="37" fill="#141417" stroke="{acc}" stroke-width="1.8"/>
+<g clip-path="inset(0)">{tex}</g>
+<rect x="150" y="128" width="42" height="14" rx="6" fill="#0c0c0e" stroke="{acc}" stroke-width="1.4"/>
+<rect x="288" y="128" width="42" height="14" rx="6" fill="#0c0c0e" stroke="{acc}" stroke-width="1.4"/>
+<path d="M112 183 h-22 M368 183 h22" stroke="{acc}" stroke-width="3" opacity="0.6"/>
+<circle cx="240" cy="183" r="13" fill="#0c0c0e" stroke="{acc}" stroke-width="1.6"/>
+<path d="M240 176 v14 M233 183 h14" stroke="{acc}" stroke-width="1.6"/>
+<text x="128" y="94" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">GRIP — 滑り止めテープ質感 試作</text>
+<text x="240" y="266" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">冷巷 REIKO のダクトを塞がない開口設計</text>
+""" + foot + "</svg>"
+    if style == "zzz" and kind == "buds":
+        return head + grid + f"""
+<rect x="128" y="104" width="176" height="150" rx="26" fill="#141417" stroke="{acc}" stroke-width="1.8"/>
+<path d="M128 142 h176" stroke="{acc}" stroke-width="1.2" opacity="0.5" stroke-dasharray="6 5"/>
+<circle cx="180" cy="198" r="27" fill="#0c0c0e" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2"/>
+<circle cx="180" cy="198" r="27" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 8"/>
+<circle cx="252" cy="198" r="27" fill="#0c0c0e" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2"/>
+<circle cx="252" cy="198" r="27" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 8"/>
+<text x="180" y="203" font-family="monospace" font-size="12" font-weight="800" fill="{acc}" text-anchor="middle">L</text>
+<text x="252" y="203" font-family="monospace" font-size="12" font-weight="800" fill="{acc}" text-anchor="middle">R</text>
+<path d="M330 150 l14 -10 v20 z M350 132 q22 28 0 56" stroke="{acc}" stroke-width="2" fill="none" opacity="0.75"/>
+<path d="M358 120 q34 40 0 80" stroke="{acc}" stroke-width="2" fill="none" opacity="0.45"/>
+<text x="128" y="84" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">BUDS — ザッピング音 調整中</text>
+""" + foot + "</svg>"
+    if style == "srail" and kind == "dock":
+        return head + grid + f"""
+<circle cx="96" cy="70" r="1.2" fill="#ffffff" opacity="0.6"/><circle cx="410 " cy="96" r="1" fill="#ffffff" opacity="0.5"/>
+<circle cx="380" cy="60" r="1.4" fill="#ffffff" opacity="0.6"/><circle cx="130" cy="120" r="0.9" fill="#ffffff" opacity="0.45"/>
+<rect x="110" y="272" width="260" height="22" rx="6" fill="none" stroke="{acc}" stroke-width="1.8"/>
+<path d="M126 294 v22 M354 294 v22" stroke="{acc}" stroke-width="2.2" opacity="0.7"/>
+<path d="M150 272 V120" stroke="{acc}" stroke-width="2.2"/>
+<path d="M150 96 l20 24 l-20 24 l-20 -24 z" fill="#0a0e24" stroke="{acc}" stroke-width="2"/>
+<text x="150" y="125" font-family="'Shippori Mincho',serif" font-size="10" fill="{acc}" text-anchor="middle">駅</text>
+<g transform="rotate(-3 288 190)">
+  <rect x="240" y="98" width="96" height="174" rx="14" fill="#080c1e" stroke="{acc}" stroke-width="1.6"/>
+  <path d="M252 130 q36 -22 72 8 M252 200 q36 22 72 -8" stroke="{acc}" stroke-width="0.9" fill="none" opacity="0.6"/>
+  <circle cx="288" cy="166" r="2" fill="{acc}"/>
+</g>
+<text x="120" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">SUPPLY DOCK — 停車試験中</text>
+<text x="240" y="322" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">満充電で「発車準備完了」を表示(デモ表記)</text>
+""" + foot + "</svg>"
+    if style == "srail" and kind == "stand":
+        return head + grid + f"""
+<rect x="150" y="80" width="200" height="150" rx="16" fill="#080c1e" stroke="{acc}" stroke-width="1.8"/>
+<path d="M250 80 V230 M150 155 H350" stroke="{acc}" stroke-width="1" opacity="0.6"/>
+<circle cx="196" cy="116" r="1.3" fill="#ffffff" opacity="0.7"/><circle cx="308" cy="108" r="1" fill="#ffffff" opacity="0.55"/>
+<circle cx="214" cy="196" r="1" fill="#ffffff" opacity="0.5"/><circle cx="322" cy="204" r="1.2" fill="#ffffff" opacity="0.6"/>
+<path d="M284 130 l22 -12" stroke="#ffffff" stroke-width="0.9" opacity="0.55"/>
+<path d="M168 230 l-26 60 M332 230 l26 60 M132 290 h216" stroke="{acc}" stroke-width="2" opacity="0.8"/>
+<path d="M150 96 v-8 h8 M350 88 h-8 M350 88 v8 M150 222 v8 h8 M350 230 h-8 v-8" stroke="{acc}" stroke-width="1.6" fill="none"/>
+<text x="150" y="60" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">WINDOW STAND — 額装試験中</text>
+<text x="240" y="318" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">横置きで車窓AODが額縁に収まる寸法(調整中)</text>
+""" + foot + "</svg>"
+    # srail buds(既定)
+    return head + grid + f"""
+<circle cx="200" cy="182" r="72" fill="#080c1e" stroke="{acc}" stroke-width="1.8"/>
+<circle cx="200" cy="182" r="63" fill="none" stroke="{acc}" stroke-width="0.9" opacity="0.55"/>
+<path d="M200 102 l7 10 h-14 z" fill="{acc}"/>
+<circle cx="176" cy="176" r="1.2" fill="#ffffff" opacity="0.7"/><circle cx="222" cy="160" r="1" fill="#ffffff" opacity="0.55"/>
+<circle cx="212" cy="208" r="1.1" fill="#ffffff" opacity="0.6"/>
+<path d="M176 176 L222 160 L212 208" fill="none" stroke="{acc}" stroke-width="0.8" opacity="0.5"/>
+<circle cx="330" cy="150" r="24" fill="#080c1e" stroke="{acc}" stroke-width="1.6"/>
+<circle cx="330" cy="150" r="24" fill="none" stroke="#b48cff" stroke-width="1.2" stroke-dasharray="6 5"/>
+<circle cx="356" cy="216" r="24" fill="#080c1e" stroke="{acc}" stroke-width="1.6"/>
+<circle cx="356" cy="216" r="24" fill="none" stroke="#b48cff" stroke-width="1.2" stroke-dasharray="6 5"/>
+<circle cx="330" cy="150" r="5" fill="#b48cff"/><circle cx="356" cy="216" r="5" fill="#b48cff"/>
+<text x="126" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">BUDS — 車内放送 収録中</text>
+<text x="240" y="322" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">通知を車内アナウンス風に読み上げ(デモ表記)</text>
+""" + foot + "</svg>"
 
 
 def svg_art(kind, glow="#e8442e", body_hex="#181820", motif=None):

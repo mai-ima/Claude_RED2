@@ -533,3 +533,21 @@
   .sr-vsrow { grid-template-columns: 1fr; }
   .sr-vsrow__k { padding-bottom: 2px; }
 }
+
+/* ==== H-3: コラボアクセサリ先行公開カード ==== */
+.zz-accs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 26px; }
+.zz-acc { border: 1px solid #26262b; background: #101013; padding: 16px 18px 20px; }
+.zz-acc__art { margin: -6px -8px 12px; }
+.zz-acc__art svg { width: 100%; height: auto; display: block; }
+.zz-acc__n { margin-top: 10px; font-size: 1.02rem; font-weight: 900; font-style: italic; color: #f4f4ef; }
+.zz-acc__b { margin-top: 8px; font-size: .8rem; line-height: 1.95; color: #9a9a92; }
+.sr-accs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 26px; }
+.sr-acc { padding: 16px 18px 20px; }
+.sr-acc__art { margin: -4px -6px 12px; }
+.sr-acc__art svg { width: 100%; height: auto; display: block; }
+.sr-acc__t { font-family: monospace; font-size: .68rem; letter-spacing: .22em; color: var(--sr-gold, #d8b45c); }
+.sr-acc__n { margin-top: 6px; font-family: var(--sr-serif, serif); font-size: 1.05rem; font-weight: 800; color: #eef0ff; }
+.sr-acc__b { margin-top: 8px; font-size: .8rem; line-height: 2; color: #9aa0c8; }
+@media (max-width: 760px) {
+  .zz-accs, .sr-accs { grid-template-columns: 1fr; }
+}
