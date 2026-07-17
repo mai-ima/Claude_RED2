@@ -3810,8 +3810,45 @@ def _collab_lp_teaser(cfg, phone, accs):
     pct = {"next": 88, "next-2": 85, "next-3": 82, "next-4": 79}.get(cfg["slug"], 82)
     marquee_txt = "".join(f'<span>COMING SOON</span><span>{esc(reveal_ymd)}</span>'
                           f'<span>CLASSIFIED</span><span>???</span>' for _ in range(6))
-    # 発表後ステージ(相手名は出さない): 正式発表の告知と続報導線のみ。
-    revealed_stage = f"""
+    # 発表後ステージ: reveal データ(相手名入りの正式発表)があれば本発表版を描く。
+    # 相手名は発表ステージの中にのみ置き、ティザー表示・<title>/description・
+    # ハブ・ニュースなど発表前の導線には出さない(ユーザー承認済みの方針)。
+    rv = cfg.get("reveal")
+    if rv:
+        rv_points = "".join(
+            f'<div class="cl-arch"><b class="cl-arch__t">{esc(p["title"])}</b><p class="cl-arch__b">{esc(p["body"])}</p></div>'
+            for p in rv["points"])
+        revealed_stage = f"""
+<div data-reveal-stage="full" hidden aria-hidden="true">
+<section class="nx-hero nx-hero--{cfg['slug']} nx-hero--revealed">
+  <div class="nx-hero__scan" aria-hidden="true"></div>
+  <div class="nx-motif" aria-hidden="true"></div>
+  <p class="nx-hero__eyebrow">OFFICIALLY ANNOUNCED — SUZAKU × {esc(rv['game'])}</p>
+  <p class="nx-hero__title" role="heading" aria-level="1"><span class="nx-q" data-nx-glitch>{esc(rv['device'])}</span><small>SUZAKU × {esc(rv['game'])} — 共同設計、正式発表。</small></p>
+  <div class="nx-hero__sil nx-hero__sil--lit reveal">{svg_art.svg_art('silhouette', cfg['tokens']['glow'])}</div>
+  <p class="nx-hero__lead">{esc(rv['copy'])}</p>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">FIRST LOOK</p><h2 class="cl-h2">いま、言えること。</h2>
+    <p class="cl-lead">{esc(reveal_ymd)} 20:00(JST)発表。実機・仕様・価格・予約スケジュールは続報として本ページとニュースルームで順次公開します。</p></div>
+    <div class="cl-archs">{rv_points}</div>
+    <div class="cl-buy__cta" style="margin-top:26px">
+      <a class="cl-btn cl-btn--primary" href="/news/">ニュースルームで発表を見る</a>
+      <a class="cl-btn cl-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
+    </div>
+  </div>
+</section>
+<section class="cl-section nx-siblings">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">2ND WAVE</p><h2 class="cl-h2">第2弾は、複数進行中。</h2></div>
+    <div class="nx-sib__grid">{sib_links}</div>
+  </div>
+</section>
+<div class="cl-wrap"><p class="cl-note">{esc(rv['note'])} 掲載内容は発表第一報であり、仕様・同梱物は変更される場合があります。</p></div>
+</div>"""
+    else:
+        revealed_stage = f"""
 <div data-reveal-stage="full" hidden aria-hidden="true">
 <section class="nx-hero nx-hero--{cfg['slug']} nx-hero--revealed">
   <div class="nx-hero__scan" aria-hidden="true"></div>
