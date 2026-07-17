@@ -320,3 +320,8 @@
 .nx--next-4 .nx-marquee__track span:nth-child(4n+2) { color: #ffce5a; }
 .nx--next-4 .nx-marquee__track span:nth-child(4n+3) { color: #33ccdd; }
 .nx--next-4 .nx-marquee__track span:nth-child(4n) { color: #7d8cff; }
+
+/* 発表後ステージ(REVEALED): シルエットの発光を強め、機密テープ演出を外す */
+.nx-hero--revealed .nx-hero__title .nx-q { text-shadow: 0 0 34px var(--cl-glow), 0 0 90px var(--cl-glow); letter-spacing: .1em; }
+.nx-hero__sil--lit svg { filter: drop-shadow(0 0 46px var(--cl-glow)) saturate(1.25) brightness(1.18); }
+.nx-hero--revealed .nx-hero__scan { opacity: .4; }

@@ -564,3 +564,13 @@
 .cl-cool__body .cl-points { margin-top: 16px; }
 .cl-cool__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
 @media (max-width: 860px) { .cl-cool { grid-template-columns: 1fr; } }
+
+/* 二状態ページ(タブレット発表): 発表ステージ到着時のフェード演出 */
+[data-reveal-stage="full"].is-arriving { animation: clArrive .9s cubic-bezier(.22,1,.36,1) both; }
+@keyframes clArrive {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-stage="full"].is-arriving { animation: none; }
+}

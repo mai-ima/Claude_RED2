@@ -3702,7 +3702,41 @@ def _collab_lp_teaser(cfg, phone, accs):
     pct = {"next": 88, "next-2": 85, "next-3": 82, "next-4": 79}.get(cfg["slug"], 82)
     marquee_txt = "".join(f'<span>COMING SOON</span><span>{esc(reveal_ymd)}</span>'
                           f'<span>CLASSIFIED</span><span>???</span>' for _ in range(6))
+    # 発表後ステージ(相手名は出さない): 正式発表の告知と続報導線のみ。
+    revealed_stage = f"""
+<div data-reveal-stage="full" hidden aria-hidden="true">
+<section class="nx-hero nx-hero--{cfg['slug']} nx-hero--revealed">
+  <div class="nx-hero__scan" aria-hidden="true"></div>
+  <div class="nx-motif" aria-hidden="true"></div>
+  <p class="nx-hero__eyebrow">OFFICIALLY ANNOUNCED</p>
+  <h1 class="nx-hero__title"><span class="nx-q" data-nx-glitch>REVEALED</span><small>共同設計、正式発表。</small></h1>
+  <div class="nx-hero__sil nx-hero__sil--lit reveal">{svg_art.svg_art('silhouette', cfg['tokens']['glow'])}</div>
+  <p class="nx-hero__lead">このコラボレーションは、{esc(reveal_ymd)} に正式発表されました。相手作品・製品の詳細、予約と発売のスケジュールは、続報として順次公開します。</p>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">NEXT</p><h2 class="cl-h2">ここから、始まる。</h2></div>
+    <div class="cl-archs">
+      <div class="cl-arch"><b class="cl-arch__t">発表済み</b><p class="cl-arch__b">{esc(reveal_ymd)} 20:00(JST)に正式発表しました。発表内容の詳細は、ニュースルームでご確認いただけます。</p></div>
+      <div class="cl-arch"><b class="cl-arch__t">詳細は続報で</b><p class="cl-arch__b">筐体・専用シリコン・冷却・予約スケジュールは、続報として本ページとニュースルームで順次公開します。</p></div>
+      <div class="cl-arch"><b class="cl-arch__t">思想は変わらない</b><p class="cl-arch__b">第1弾と同じく、色替えでは終わらせません。筐体もチップも、その作品のためだけに新規設計します。</p></div>
+    </div>
+    <div class="cl-buy__cta" style="margin-top:26px">
+      <a class="cl-btn cl-btn--primary" href="/news/">ニュースルームで発表を見る</a>
+      <a class="cl-btn cl-btn--ghost" href="/collab/#wave2">第2弾のほかの作品</a>
+    </div>
+  </div>
+</section>
+<section class="cl-section nx-siblings">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">2ND WAVE</p><h2 class="cl-h2">第2弾は、複数進行中。</h2></div>
+    <div class="nx-sib__grid">{sib_links}</div>
+  </div>
+</section>
+{_cl_note(cfg)}
+</div>"""
     return f"""
+<div data-reveal-stage="teaser">
 <section class="nx-hero nx-hero--{cfg['slug']}">
   <div class="nx-hero__scan" aria-hidden="true"></div>
   <div class="nx-motif" aria-hidden="true"></div>
@@ -3789,7 +3823,9 @@ def _collab_lp_teaser(cfg, phone, accs):
     <div style="margin-top:22px"><a class="cl-btn cl-btn--ghost" href="/news/">発表はニュースでお知らせします</a></div>
   </div>
 </section>
-{_cl_note(cfg)}"""
+{_cl_note(cfg)}
+</div>
+{revealed_stage}"""
 
 
 _COLLAB_LP_BUILDERS = {
@@ -3823,9 +3859,90 @@ def build_collab_page(cfg):
                 layout="collab", collab=cfg)
 
 
+def _tablet_full_stage(cfg, t):
+    """タブレット発表後のフルLP(既定 hidden)。reveal_at 到達で collab-core.js が
+    予告ステージと入れ替えて表示する。数値はスマホ版と整合したデータ(cfg["tablet"])から描く。"""
+    if not t.get("price"):
+        return ""  # フルLPデータ未定義なら予告のみ(後方互換)
+    slug = cfg["slug"]
+    phone = PRODUCT_BY_ID.get(cfg.get("phone_id") or "")
+    body_hex = (phone["colors"][0]["hex"] if phone and phone.get("colors") else cfg["tokens"]["bg2"])
+    glow = (phone.get("glow") if phone else None) or cfg["tokens"]["glow"]
+    hz = {"wuwa": "165Hz"}.get(slug, "144Hz")
+    art = svg_art.svg_tablet(f"tab-{slug}", body_hex, glow, t["device"], kana="", line="pad", hz=hz)
+    stats = "".join(
+        f'<div class="cl-stat"><b class="cl-stat__v">{esc(s["v"])}<i>{esc(s["u"])}</i></b>'
+        f'<span class="cl-stat__l">{esc(s["l"])}</span></div>'
+        for s in t.get("stats", []))
+    highlights = "".join(
+        f'<div class="cl-arch"><b class="cl-arch__t">{esc(h["title"])}</b><p class="cl-arch__b">{esc(h["body"])}</p></div>'
+        for h in t.get("highlights", []))
+    spec_tables = ""
+    for gname, rows in t.get("specs", []):
+        trs = "".join(f'<tr><th scope="row">{esc(k)}</th><td>{esc(v)}</td></tr>' for k, v in rows)
+        spec_tables += (f'<div class="cl-head" style="margin-top:26px"><h3 class="t-h4" style="color:var(--cl-ink)">{esc(gname)}</h3></div>'
+                        f'<div class="cl-delta"><table><tbody>{trs}</tbody></table></div>')
+    sched = "".join(
+        f'<div class="cl-sched__i"><span class="cl-sched__d">{esc(d)}</span>'
+        f'<b class="cl-sched__t">{esc(label)}</b><p class="cl-sched__b">{esc(note)}</p></div>'
+        for d, label, note in [
+            (t["reserve"], "予約受付開始", "SUZAKUストアで 20:00 から先行予約を受付"),
+            (t["release"], "発売", "オンライン・秋葉原直営で同時発売"),
+            (t["until"], "受付終了", f"数量限定{t['qty']:,}台・期間限定の受付終了"),
+        ])
+    return f"""
+<div data-reveal-stage="full" hidden aria-hidden="true">
+<section class="cl-section cl-shero">
+  <div class="cl-wrap cl-shero__grid">
+    <div>
+      <p class="cl-shero__kick">SUZAKU × {esc(cfg['game'])} — COLLABORATION TABLET</p>
+      <h1 class="cl-shero__title">{esc(t['device'])}</h1>
+      <p class="cl-lead" style="max-width:560px">{esc(t['tagline'])}<br>{esc(t['lead'])}</p>
+      <div class="cl-hero__tags"><span class="cl-tag">{yen(t['price'])}(税込)</span><span class="cl-tag">数量限定 {t['qty']:,}台</span><span class="cl-tag">{esc(t['release'])} 発売</span></div>
+    </div>
+    <div class="cl-shero__art">{art}</div>
+  </div>
+</section>
+<section class="cl-section"><div class="cl-wrap"><div class="cl-stats">{stats}</div></div></section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">HIGHLIGHTS</p><h2 class="cl-h2">大画面で、その世界を。</h2></div>
+    <div class="cl-archs">{highlights}</div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">SPEC</p><h2 class="cl-h2">主要スペック</h2></div>
+    {spec_tables}
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="cl-head"><p class="cl-eyebrow">SCHEDULE</p><h2 class="cl-h2">予約と発売。</h2></div>
+    <div class="cl-sched">{sched}</div>
+  </div>
+</section>
+<section class="cl-section cl-buy">
+  <div class="cl-wrap cl-buy__inner">
+    <div>
+      <p class="cl-eyebrow">SUZAKU × {esc(cfg['game'])}</p>
+      <h2 class="cl-h2">{esc(t['device'])}<span class="cl-buy__price">{yen(t['price'])}<small>(税込)</small></span></h2>
+    </div>
+    <div class="cl-buy__cta">
+      <a class="cl-btn cl-btn--primary" href="/collab/{slug}/">スマートフォン版「{esc(cfg['device'])}」を見る</a>
+      <a class="cl-btn cl-btn--ghost" href="/collab/">すべてのコラボレーション</a>
+    </div>
+  </div>
+</section>
+{_cl_note(cfg)}
+</div>"""
+
+
 def build_collab_tablet_teaser(cfg):
-    """コラボタブレットの予告ページ(/collab/{slug}/tablet/)。相手は公開済み・製品詳細は準備中。
-    各コラボの意匠(collab-{slug} テーマ+専用フォント)を使い、発表カウントダウンで予告する。"""
+    """コラボタブレットのページ(/collab/{slug}/tablet/)— 二状態ページ。
+    予告ステージ(カウントダウン)と発表ステージ(フルLP・既定hidden)を同一URLに持ち、
+    reveal_at と実時刻の判定で collab-core.js がゼロ到達の瞬間に自動で入れ替える。
+    <title>/description は発表前情報のみ(価格等のネタバレを含めない)。"""
     t = cfg["tablet"]
     reveal = t.get("reveal_at", "")
     points = [
@@ -3835,6 +3952,7 @@ def build_collab_tablet_teaser(cfg):
     ]
     pts = "".join(f"<li>{esc(p)}</li>" for p in points)
     body = f"""
+<div data-reveal-stage="teaser">
 <section class="cl-section cl-shero">
   <div class="cl-wrap">
     <p class="cl-shero__kick">SUZAKU × {esc(cfg['game'])} — COLLABORATION TABLET</p>
@@ -3869,10 +3987,12 @@ def build_collab_tablet_teaser(cfg):
     <a class="cl-btn cl-btn--ghost" href="/collab/">すべてのコラボレーション</a>
   </div>
 </section>
-{_cl_note(cfg)}"""
+{_cl_note(cfg)}
+</div>
+{_tablet_full_stage(cfg, t)}"""
     render_page(f"/collab/{cfg['slug']}/tablet/",
-                f"{cfg['edition']} タブレット — COMING SOON",
-                f"SUZAKU × {cfg['game']} コラボレーションタブレット「{t['device']}」の予告ページ。発表カウントダウンを公開中です。",
+                f"{cfg['edition']} タブレット — {t['device']}",
+                f"SUZAKU × {cfg['game']} コラボレーションタブレット「{t['device']}」のページ。発表までのカウントダウンを公開中です。",
                 body, theme=_COLLAB_THEME.get(cfg['slug'], "dark"), crumbs=None,
                 group="コラボレーション", layout="collab", collab=cfg)
 

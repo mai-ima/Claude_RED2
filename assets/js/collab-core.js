@@ -26,6 +26,22 @@
     // アクティブなコラボの「受付終了カウントダウン」には無いため、この有無で用途を判別する。
     var soonEl = countEl.querySelector(".cl-count__soon");
     var endEl = countEl.querySelector(".cl-count__end");
+    // 二状態ページ(タブレット等): 発表ステージがあれば、ゼロ到達でフルLPへ自動切替。
+    var stageT = document.querySelector('[data-reveal-stage="teaser"]');
+    var stageF = document.querySelector('[data-reveal-stage="full"]');
+    var revealFull = function () {
+      if (!stageF || document.body.classList.contains("is-revealed")) return false;
+      document.body.classList.add("is-revealed");
+      if (stageT) { stageT.hidden = true; stageT.setAttribute("aria-hidden", "true"); }
+      stageF.hidden = false;
+      stageF.removeAttribute("aria-hidden");
+      if (!reduce) {
+        stageF.classList.add("is-arriving");
+        setTimeout(function () { stageF.classList.remove("is-arriving"); }, 950);
+      }
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+      return true;
+    };
     var timer = null;
     var tick = function () {
       var diff = until - Date.now();
@@ -35,8 +51,8 @@
         if (slots.m) slots.m.textContent = "00";
         if (slots.s) slots.s.textContent = "00";
         countEl.classList.add("is-ended");
-        // 発表日時を過ぎたら、相手は伏せたまま「発表準備中」の受け皿へ切り替える。
-        if (soonEl) {
+        // フルLPを持つページは発表状態へ切替。無ければ「発表準備中」の受け皿へ。
+        if (!revealFull() && soonEl) {
           soonEl.hidden = false;
           if (endEl) endEl.textContent = "まもなく発表(準備中)";
         }
