@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="星軌 SEIKI(仮デザイン)"><defs><radialGradient id="pgprotoseikin35" cx="0.5" cy="0.35" r="0.85"><stop offset="0" stop-color="#d8b45c" stop-opacity="0.15"/><stop offset="1" stop-color="#d8b45c" stop-opacity="0"/></radialGradient></defs><rect width="340" height="600" fill="url(#pgprotoseikin35)"/>
+<circle cx="70" cy="210" r="1.2" fill="#ffffff" opacity="0.5"/><circle cx="120" cy="188" r="0.9" fill="#ffffff" opacity="0.35"/><circle cx="206" cy="214" r="1.1" fill="#ffffff" opacity="0.45"/><circle cx="250" cy="186" r="0.8" fill="#ffffff" opacity="0.4"/><circle cx="96" cy="246" r="0.8" fill="#ffffff" opacity="0.3"/><circle cx="232" cy="250" r="1.2" fill="#ffffff" opacity="0.35"/><circle cx="150" cy="550" r="0.9" fill="#ffffff" opacity="0.3"/><circle cx="250" cy="60" r="1" fill="#ffffff" opacity="0.35"/><circle cx="90" cy="66" r="0.8" fill="#ffffff" opacity="0.3"/><path d="M316 85 L317.5 88.5 L321 90 L317.5 91.5 L316 95 L314.5 91.5 L311 90 L314.5 88.5 Z" fill="#d8b45c" opacity="0.6"/><path d="M26 398 L27.2 400.8 L30 402 L27.2 403.2 L26 406 L24.8 403.2 L22 402 L24.8 400.8 Z" fill="#d8b45c" opacity="0.6"/><path d="M314 465.6 L315.32 468.68 L318.4 470 L315.32 471.32 L314 474.4 L312.68 471.32 L309.6 470 L312.68 468.68 Z" fill="#d8b45c" opacity="0.6"/><path d="M30 146.4 L31.08 148.92 L33.6 150 L31.08 151.08 L30 153.6 L28.92 151.08 L26.4 150 L28.92 148.92 Z" fill="#d8b45c" opacity="0.6"/>
+<path d="M12 30 v-16 h16 M16 34 v-12 h12" stroke="#d8b45c" stroke-width="1.4" fill="none" opacity="0.8"/>
+<path d="M328 30 v-16 h-16 M324 34 v-12 h-12" stroke="#d8b45c" stroke-width="1.4" fill="none" opacity="0.8"/>
+<path d="M12 570 v16 h16 M16 566 v12 h12" stroke="#d8b45c" stroke-width="1.4" fill="none" opacity="0.8"/>
+<path d="M328 570 v16 h-16 M324 566 v12 h-12" stroke="#d8b45c" stroke-width="1.4" fill="none" opacity="0.8"/><path d="M22 92 V520" stroke="#d8b45c" stroke-width="1.2" opacity="0.55"/><path d="M22 102 l6 6 l-6 6 l-6 -6 z" fill="#0a0e24" stroke="#d8b45c" stroke-width="1.4"/><path d="M28 108 H43" stroke="#d8b45c" stroke-width="0.9" opacity="0.5"/><path d="M22 324 l6 6 l-6 6 l-6 -6 z" fill="#0a0e24" stroke="#d8b45c" stroke-width="1.4"/><path d="M28 330 H43" stroke="#d8b45c" stroke-width="0.9" opacity="0.5"/><path d="M22 446 l6 6 l-6 6 l-6 -6 z" fill="#0a0e24" stroke="#d8b45c" stroke-width="1.4"/><path d="M28 452 H43" stroke="#d8b45c" stroke-width="0.9" opacity="0.5"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="#d8b45c" stroke-width="1.6"/>
+<rect x="50" y="37" width="240" height="526" rx="41" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1" stroke-dasharray="5 6"/>
+<text x="170" y="60" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="10" fill="#d8b45c" text-anchor="middle" letter-spacing="6" opacity="0.9">開拓設計図 — 第一報</text>
+<rect x="78" y="74" width="184" height="76" rx="14" fill="#080c1e" stroke="#d8b45c" stroke-width="1.4"/>
+<path d="M170 74 V150 M78 112 H262" stroke="#d8b45c" stroke-width="1" opacity="0.55"/>
+<circle cx="120" cy="94" r="1" fill="#ffffff" opacity="0.7"/><circle cx="216" cy="90" r="1.3" fill="#ffffff" opacity="0.6"/>
+<circle cx="102" cy="132" r="0.9" fill="#ffffff" opacity="0.5"/><circle cx="238" cy="136" r="1" fill="#ffffff" opacity="0.6"/>
+<path d="M196 122 l14 -8" stroke="#ffffff" stroke-width="0.8" opacity="0.5"/>
+<text x="170" y="166" font-family="monospace" font-size="8.5" fill="#eef0f4" opacity="0.6" text-anchor="middle" letter-spacing="2">CAMERA — 車窓の調律中</text>
+<polyline points="92,208 132,184 178,206 224,180 250,212" fill="none" stroke="#d8b45c" stroke-width="0.8" opacity="0.5"/><circle cx="92" cy="208" r="2" fill="#d8b45c" opacity="0.85"/><circle cx="132" cy="184" r="2" fill="#d8b45c" opacity="0.85"/><circle cx="178" cy="206" r="2" fill="#d8b45c" opacity="0.85"/><circle cx="224" cy="180" r="2" fill="#d8b45c" opacity="0.85"/><circle cx="250" cy="212" r="2" fill="#d8b45c" opacity="0.85"/>
+<path d="M92 300 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 307 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 314 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 321 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 328 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 335 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 342 H248" stroke="#d8b45c" stroke-opacity="0.14"/><path d="M92 349 H248" stroke="#d8b45c" stroke-opacity="0.14"/>
+<g>
+  <rect x="98" y="292" width="144" height="64" fill="rgba(180,140,255,0.06)" stroke="#b48cff" stroke-width="1.3"/>
+  <path d="M98 300 v-8 h8 M242 292 h-8 M242 292 v8 M98 348 v8 h8 M242 356 h-8 v-8" stroke="#b48cff" stroke-width="1.6" fill="none"/>
+  <path d="M170 306 l8 12 l-8 12 l-8 -12 z" fill="none" stroke="#b48cff" stroke-width="1.6"/>
+  <text x="170" y="348" font-family="monospace" font-size="7.5" fill="#b48cff" text-anchor="middle" letter-spacing="2">乗車認証 — 検証中</text>
+</g>
+<text x="170" y="386" font-family="monospace" font-size="8.5" fill="#eef0f4" opacity="0.6" text-anchor="middle" letter-spacing="2">COOLING — 永冬パネル調律中</text>
+<text x="170" y="452" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="17" font-weight="800" fill="#eef0f4" text-anchor="middle" letter-spacing="3">星軌 SEIKI</text>
+<text x="170" y="472" font-family="monospace" font-size="9" fill="#eef0f4" opacity="0.45" text-anchor="middle" letter-spacing="5">せいき</text>
+<g transform="rotate(-3 170 516)">
+  <rect x="74" y="494" width="192" height="44" rx="5" fill="rgba(216,180,92,0.08)" stroke="#d8b45c" stroke-width="1.5"/>
+  <path d="M224 494 v44" stroke="#d8b45c" stroke-width="1.1" stroke-dasharray="3 4"/>
+  <circle cx="244" cy="516" r="6.5" fill="none" stroke="#d8b45c" stroke-width="1.3"/>
+  <text x="148" y="512" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="13" font-weight="800" fill="#d8b45c" text-anchor="middle" letter-spacing="3">PROTOTYPE</text>
+  <text x="148" y="527" font-family="'Noto Sans JP',sans-serif" font-size="7.5" fill="#d8b45c" text-anchor="middle" letter-spacing="1.5">仮デザイン — 量産版と異なります</text>
+</g>
+<text x="170" y="566" font-family="monospace" font-size="7.5" fill="#eef0f4" opacity="0.4" text-anchor="middle" letter-spacing="2">PROTOTYPE — 仮デザイン ・ TRAILBLAZE DRAFT</text>
+</svg>

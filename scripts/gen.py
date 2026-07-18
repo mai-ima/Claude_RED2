@@ -3829,8 +3829,9 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。
     standalone=True で特設ページ(/collab/zzz/)の本文になる:
     hidden ステージ属性なし・見出しは実 h1・末尾にティザーアーカイブへの小ボタン。"""
-    # 本レンダリング(H-4-1)。仮デザインSVG(svg_prototype)はSVGギャラリーに保管
-    phone_art = svg_art.svg_kudo()
+    # 本レンダリング(H-4-1)。ファイル書き出し+<img>参照(H-5: 画像単体URLを持つ)。
+    # 仮デザインSVG(svg_prototype)はSVGギャラリーに保管
+    phone_art = f'<img src="{w2img("kudo")}" alt="空洞 KUDO(本レンダリング)" width="340" height="600">'
     stats = "".join(
         f'<div class="zz-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -3867,7 +3868,8 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
         f'<span class="zz-vsrow__b"><i>SUZAKU 4</i>{esc(b)}</span></div>'
         for k, a, b in _reveal_vs_rows(rv))
     acc_cards = "".join(
-        f'<div class="zz-acc"><div class="zz-acc__art">{svg_art.svg_wave2_acc(a["kind"], "zzz", a["name"])}</div>'
+        f'<div class="zz-acc"><div class="zz-acc__art">'
+        f'<img src="{w2img("kudo-acc-" + a["kind"])}" alt="{esc(a["name"])}(本レンダリング)" width="480" height="360" loading="lazy"></div>'
         f'<span class="zz-tag">{esc(a["type"])}</span>'
         f'<h3 class="zz-acc__n">{esc(a["name"])}</h3>'
         f'<p class="zz-acc__b">{esc(a["body"])}</p></div>'
@@ -4039,8 +4041,8 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     公式サイト(深紺の星空・金細線カード・セリフ体・ページ番号)と車内UI
     (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。
     standalone=True で特設ページ(/collab/hsr/)の本文になる。"""
-    # 本レンダリング(H-4-1)。仮デザインSVG(svg_prototype)はSVGギャラリーに保管
-    phone_art = svg_art.svg_seiki()
+    # 本レンダリング(H-4-1)。ファイル書き出し+<img>参照(H-5: 画像単体URLを持つ)
+    phone_art = f'<img src="{w2img("seiki")}" alt="星軌 SEIKI(本レンダリング)" width="340" height="600">'
     stats = "".join(
         f'<div class="sr-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -4077,7 +4079,8 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
         f'<span class="sr-vsrow__b"><i>SUZAKU 4</i>{esc(b)}</span></div>'
         for k, a, b in _reveal_vs_rows(rv))
     acc_cards = "".join(
-        f'<div class="sr-acc sr-frame"><div class="sr-acc__art">{svg_art.svg_wave2_acc(a["kind"], "srail", a["name"])}</div>'
+        f'<div class="sr-acc sr-frame"><div class="sr-acc__art">'
+        f'<img src="{w2img("seiki-acc-" + a["kind"])}" alt="{esc(a["name"])}(本レンダリング)" width="480" height="360" loading="lazy"></div>'
         f'<span class="sr-acc__t">{esc(a["type"])}</span>'
         f'<h3 class="sr-acc__n">{esc(a["name"])}</h3>'
         f'<p class="sr-acc__b">{esc(a["body"])}</p></div>'
@@ -5470,6 +5473,32 @@ def build_assets():
             front = svg_art.svg_tablet_front(p["id"], p["colors"][0]["hex"], glow, p["name"], p["line"], hz, design)
             (img / "products" / f"{p['id']}-front.svg").write_text(front, encoding="utf-8")
 
+    # 第2弾の本レンダリング/仮デザイン/アクセサリアート(H-5):
+    # 既存製品と同じく assets/img/products/ にファイルとして書き出し、
+    # ページからは <img src> で参照する(画像単体のURLを持たせる)。
+    wave2_arts = {
+        "kudo": svg_art.svg_kudo(),
+        "seiki": svg_art.svg_seiki(),
+        "proto-generic": svg_art.svg_prototype("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic"),
+        "proto-kudo": svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz"),
+        "proto-seiki": svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail"),
+    }
+    for c in COLLABS:
+        rv = c.get("reveal") or {}
+        if not rv.get("url_slug"):
+            continue
+        style = "zzz" if c["slug"] == "wave2" else "srail"
+        dev_id = "kudo" if style == "zzz" else "seiki"
+        for a in rv.get("accessories", []):
+            wave2_arts[f"{dev_id}-acc-{a['kind']}"] = svg_art.svg_wave2_acc(a["kind"], style, a["name"])
+    for name, svg in wave2_arts.items():
+        (img / "products" / f"{name}.svg").write_text(svg, encoding="utf-8")
+
+
+def w2img(name):
+    """第2弾アートの画像URL(キャッシュバスティング付き。build_assets が書き出す)。"""
+    return f"/assets/img/products/{name}.svg?v={ASSET_V}"
+
 
 def history_timeline_html():
     """沿革タイムラインを HISTORY(単一ソース)からサーバー描画で生成。
@@ -5676,39 +5705,38 @@ def build_svg_gallery():
             accs += (
                 f'<figure class="svgg-acc"><img src="{pimg(a["id"], i)}" alt="{esc(a["name"])} {esc(c["name"])}" loading="lazy" width="480" height="360">'
                 f'<figcaption>{esc(a["name"])} — {esc(c["name"])} <code>{a["id"]}-{i}</code></figcaption></figure>')
-    # 仮デザインSVG(svg_prototype): 汎用の使い回し版と、作品意匠の個別版を並べて点検
+    # 仮デザインSVG(svg_prototype): 汎用の使い回し版と、作品意匠の個別版を並べて点検。
+    # H-5: いずれも build_assets がファイル書き出し済みのため <img>(画像URL)で参照する
     protos = [
-        ("汎用プレースホルダ(使い回し可)", "generic",
-         svg_art.svg_prototype("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic")),
-        ("空洞 KUDO 仮デザイン(黒×ライム)", "zzz",
-         svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz")),
-        ("星軌 SEIKI 仮デザイン(深紺×金)", "srail",
-         svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail")),
+        ("汎用プレースホルダ(使い回し可)", "proto-generic"),
+        ("空洞 KUDO 仮デザイン(黒×ライム)", "proto-kudo"),
+        ("星軌 SEIKI 仮デザイン(深紺×金)", "proto-seiki"),
     ]
     proto_cells = "".join(
-        f'<figure class="svgg-proto"><div class="svgg-proto__art">{svg}</div>'
-        f'<figcaption>{esc(t)} <code>svg_prototype/{s}</code></figcaption></figure>'
-        for t, s, svg in protos)
+        f'<figure class="svgg-proto"><div class="svgg-proto__art">'
+        f'<img src="{w2img(name)}" alt="{esc(t)}" loading="lazy" width="340" height="600"></div>'
+        f'<figcaption>{esc(t)} <code>{name}.svg</code></figcaption></figure>'
+        for t, name in protos)
     # 第2弾の本レンダリング(H-4-1: LPヒーローで使用中)
-    reals = [
-        ("空洞 KUDO 本レンダリング", "svg_kudo", svg_art.svg_kudo()),
-        ("星軌 SEIKI 本レンダリング", "svg_seiki", svg_art.svg_seiki()),
-    ]
+    reals = [("空洞 KUDO 本レンダリング", "kudo"), ("星軌 SEIKI 本レンダリング", "seiki")]
     real_cells = "".join(
-        f'<figure class="svgg-proto"><div class="svgg-proto__art">{svg}</div>'
-        f'<figcaption>{esc(t)} <code>{fn}</code></figcaption></figure>'
-        for t, fn, svg in reals)
-    # 第2弾コラボアクセサリのデザイン先行公開アート(svg_wave2_acc)
+        f'<figure class="svgg-proto"><div class="svgg-proto__art">'
+        f'<img src="{w2img(name)}" alt="{esc(t)}" loading="lazy" width="340" height="600"></div>'
+        f'<figcaption>{esc(t)} <code>{name}.svg</code></figcaption></figure>'
+        for t, name in reals)
+    # 第2弾コラボアクセサリの本レンダリング(svg_wave2_acc)
     w2acc_cells = ""
     for c in COLLABS:
         rv = c.get("reveal") or {}
         if not rv.get("url_slug"):
             continue
-        style = "zzz" if c["slug"] == "wave2" else "srail"
+        dev_id = "kudo" if c["slug"] == "wave2" else "seiki"
         for a in rv.get("accessories", []):
+            name = f"{dev_id}-acc-{a['kind']}"
             w2acc_cells += (
-                f'<figure class="svgg-acc"><div class="svgg-proto__art">{svg_art.svg_wave2_acc(a["kind"], style, a["name"])}</div>'
-                f'<figcaption>{esc(a["name"])}({esc(a["type"])}) <code>svg_wave2_acc/{a["kind"]}/{style}</code></figcaption></figure>')
+                f'<figure class="svgg-acc"><div class="svgg-proto__art">'
+                f'<img src="{w2img(name)}" alt="{esc(a["name"])}({esc(a["type"])})" loading="lazy" width="480" height="360"></div>'
+                f'<figcaption>{esc(a["name"])}({esc(a["type"])}) <code>{name}.svg</code></figcaption></figure>')
     body = f"""
 <style>
 .svgg-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }}
@@ -5719,7 +5747,7 @@ def build_svg_gallery():
 .svgg-pair figcaption code, .svgg-acc figcaption code {{ color: var(--accent); }}
 .svgg-proto {{ margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px; }}
 .svgg-proto__art {{ background: #0e0e12; border-radius: var(--r-md); padding: 10px; }}
-.svgg-proto__art svg {{ width: 100%; height: auto; display: block; }}
+.svgg-proto__art svg, .svgg-proto__art img {{ width: 100%; height: auto; display: block; }}
 .svgg-proto figcaption {{ margin-top: 8px; text-align: center; font-size: 0.82rem; color: var(--text-soft); }}
 .svgg-proto figcaption code {{ color: var(--accent); }}
 </style>
