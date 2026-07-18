@@ -1468,117 +1468,435 @@ def svg_prototype(pid, glow, label, kana="", style="generic", note="PROTOTYPE �
 </svg>"""
 
 
+def svg_kudo(label="空洞 KUDO", kana="くうどう", hz="144Hz"):
+    """空洞 KUDO(ゼンレスゾーンゼロ)本レンダリング背面。
+    漆黒マット筐体×シグナルライム。ブラウン管型カメラ島・斜行ハザード帯・
+    シグナルLED・側面デュアルダクト(冷巷 REIKO)・テープ質感グリップ。"""
+    body_hex = "#141417"
+    acc = "#d4fa4c"
+    gid = "kudoreal"
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label}">
+<defs>
+<linearGradient id="body{gid}" x1="0" y1="0" x2="0.85" y2="1">
+  <stop offset="0" stop-color="{_shade(body_hex, 0.34)}"/>
+  <stop offset="0.3" stop-color="{_shade(body_hex, 0.1)}"/>
+  <stop offset="0.62" stop-color="{body_hex}"/>
+  <stop offset="1" stop-color="{_shade(body_hex, -0.4)}"/>
+</linearGradient>
+<linearGradient id="frame{gid}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="{_shade(body_hex, 0.5)}"/>
+  <stop offset="0.12" stop-color="{_shade(body_hex, -0.2)}"/>
+  <stop offset="0.5" stop-color="{_shade(body_hex, -0.62)}"/>
+  <stop offset="0.88" stop-color="{_shade(body_hex, -0.24)}"/>
+  <stop offset="1" stop-color="{_shade(body_hex, 0.36)}"/>
+</linearGradient>
+<radialGradient id="lens{gid}" cx="0.38" cy="0.32" r="0.95">
+  <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
+</radialGradient>
+<linearGradient id="plate{gid}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#232329"/><stop offset="0.5" stop-color="#101014"/><stop offset="1" stop-color="#1c1c22"/>
+</linearGradient>
+<linearGradient id="lime{gid}" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#eaff7a"/><stop offset="0.5" stop-color="{acc}"/><stop offset="1" stop-color="#9cc22e"/>
+</linearGradient>
+<pattern id="tape{gid}" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+  <path d="M0 0 V7" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1.6"/>
+</pattern>
+<pattern id="haz{gid}" width="26" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)">
+  <rect width="26" height="30" fill="{acc}"/>
+  <rect x="13" width="13" height="30" fill="#101013"/>
+</pattern>
+<clipPath id="clip{gid}"><rect x="49" y="36" width="242" height="528" rx="42"/></clipPath>
+<filter id="soft{gid}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<filter id="glow{gid}" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.42" filter="url(#soft{gid})"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#frame{gid})"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="{body_hex}"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#body{gid})"/>
+<g clip-path="url(#clip{gid})">
+  <rect x="20" y="492" width="320" height="26" fill="url(#haz{gid})" opacity="0.92" transform="rotate(-12 170 505)"/>
+  <rect x="20" y="492" width="320" height="26" fill="none" stroke="#000000" stroke-opacity="0.5" stroke-width="2" transform="rotate(-12 170 505)"/>
+  <rect x="49" y="330" width="26" height="150" fill="url(#tape{gid})"/>
+  <rect x="265" y="330" width="26" height="150" fill="url(#tape{gid})"/>
+</g>
+<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.4"/>
+<!-- カメラ島: ブラウン管型プレート -->
+<rect x="64" y="56" width="212" height="112" rx="18" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#soft{gid})"/>
+<rect x="64" y="56" width="212" height="112" rx="18" fill="url(#plate{gid})" stroke="{_shade(body_hex, 0.4)}" stroke-width="1.4"/>
+<rect x="66" y="58" width="208" height="108" rx="16" fill="none" stroke="{acc}" stroke-opacity="0.6" stroke-width="1.4"/>
+<path d="M236 56 l10 -13 M252 56 l4 -13" stroke="{_shade(body_hex, 0.5)}" stroke-width="3" stroke-linecap="round"/>
+<circle cx="118" cy="106" r="30" fill="#0b0d13" stroke="{_shade(body_hex, 0.42)}" stroke-width="1.8"/>
+<circle cx="118" cy="106" r="23" fill="none" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.6"/>
+<circle cx="118" cy="106" r="18" fill="url(#lens{gid})"/>
+<circle cx="118" cy="106" r="6.5" fill="#04040a"/>
+<circle cx="111" cy="98" r="4" fill="#ffffff" opacity="0.55"/>
+<circle cx="186" cy="106" r="24" fill="#0b0d13" stroke="{_shade(body_hex, 0.42)}" stroke-width="1.6"/>
+<circle cx="186" cy="106" r="18" fill="none" stroke="{acc}" stroke-opacity="0.5" stroke-width="1.3"/>
+<circle cx="186" cy="106" r="14" fill="url(#lens{gid})"/>
+<circle cx="186" cy="106" r="5" fill="#04040a"/>
+<circle cx="181" cy="100" r="3" fill="#ffffff" opacity="0.5"/>
+<rect x="228" y="84" width="30" height="18" rx="6" fill="#0b0d13" stroke="{_shade(body_hex, 0.36)}" stroke-width="1.2"/>
+<circle cx="236" cy="93" r="4" fill="#1a1e2a"/><circle cx="249" cy="93" r="4" fill="#f4efdf" opacity="0.8"/>
+<circle cx="243" cy="128" r="5" fill="#2a0d0d"/><circle cx="243" cy="128" r="2.4" fill="#ff4646"/>
+<circle cx="243" cy="128" r="6.5" fill="none" stroke="#ff4646" stroke-opacity="0.4" stroke-width="1"/>
+<text x="118" y="150" font-family="monospace" font-size="6.5" fill="#9a9aa6" text-anchor="middle" letter-spacing="1.5">KUDO VISION</text>
+<text x="243" y="147" font-family="monospace" font-size="6" fill="#9a9aa6" text-anchor="middle" letter-spacing="1">REC</text>
+<!-- シグナルLED(排熱表示・冷巷 REIKO) -->
+<g filter="url(#glow{gid})" opacity="0.85">
+  <path d="M78 196 h48 l-14 14 h-48 z" fill="{acc}"/>
+</g>
+<path d="M78 196 h48 l-14 14 h-48 z" fill="url(#lime{gid})"/>
+<path d="M144 196 h48 l-14 14 h-48 z" fill="{acc}" opacity="0.5"/>
+<path d="M210 196 h48 l-14 14 h-48 z" fill="{acc}" opacity="0.22"/>
+<text x="78" y="228" font-family="monospace" font-size="7" fill="#9a9aa6" letter-spacing="2">SIGNAL — THERMAL</text>
+<!-- 中央エンブレム: 空洞(ホロウ)リング -->
+<circle cx="170" cy="330" r="46" fill="{_shade(body_hex, -0.28)}"/>
+<circle cx="170" cy="330" r="46" fill="none" stroke="{_shade(body_hex, 0.34)}" stroke-width="1.4"/>
+<path d="M170 330 m -34 0 a34 34 0 1 1 14 27" fill="none" stroke="{acc}" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M170 330 m -22 0 a22 22 0 1 0 9 -19" fill="none" stroke="{acc}" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+<circle cx="170" cy="330" r="6" fill="{acc}"/>
+<circle cx="170" cy="330" r="10" fill="none" stroke="{acc}" stroke-opacity="0.35" stroke-width="1.2"/>
+<!-- 側面デュアルダクト -->
+<g>
+  <rect x="44" y="296" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="299" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.75"/>
+  <rect x="44" y="318" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="321" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.45"/>
+  <rect x="44" y="340" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="343" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.25"/>
+  <rect x="289" y="296" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="299" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.75"/>
+  <rect x="289" y="318" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="321" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.45"/>
+  <rect x="289" y="340" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="343" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.25"/>
+</g>
+<text x="170" y="398" font-family="monospace" font-size="7" fill="#9a9aa6" text-anchor="middle" letter-spacing="3">REIKO — SIDE DUAL DUCT</text>
+<!-- 刻印 -->
+<text x="170" y="446" font-family="'Noto Sans JP',sans-serif" font-size="19" font-weight="900" font-style="italic" fill="#f2f2f4" opacity="0.92" text-anchor="middle" letter-spacing="2">空洞 <tspan fill="{acc}">KUDO</tspan></text>
+<text x="170" y="466" font-family="monospace" font-size="8" fill="#9a9aa6" opacity="0.8" text-anchor="middle" letter-spacing="5">{kana}</text>
+<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#9a9aa6" opacity="0.7" text-anchor="middle" letter-spacing="2">SUZAKU × ZZZ ・ JOINT DESIGN ・ {hz}</text>
+<path d="M78 36 L206 36 L96 564 L49 564 L49 300 Z" fill="#ffffff" opacity="0.045"/>
+<path d="M232 36 L262 36 L150 564 L124 564 Z" fill="#ffffff" opacity="0.03"/>
+<rect x="292.5" y="112" width="5" height="44" rx="2.5" fill="{acc}"/>
+<rect x="292.5" y="172" width="5" height="44" rx="2.5" fill="{acc}"/>
+<rect x="42.5" y="146" width="5" height="62" rx="2.5" fill="{_shade(body_hex, -0.5)}"/>
+</svg>"""
+
+
+def svg_seiki(label="星軌 SEIKI", kana="せいき", hz="165Hz"):
+    """星軌 SEIKI(崩壊:スターレイル)本レンダリング背面。
+    深宇宙紺の光沢筐体×星屑の金。窓型カメラ島・星図の金細線・
+    放射冷却パネル(永冬 EITO)・ホログラム紫の認証アクセント。"""
+    body_hex = "#101830"
+    gold = "#d8b45c"
+    gold_d = "#9a7a2e"
+    holo = "#b48cff"
+    gid = "seikireal"
+    stars = "".join(
+        f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+        for x, y, r, o in [(88, 250, 1.1, .55), (128, 226, .8, .4), (216, 246, 1, .5),
+                           (250, 222, .8, .45), (100, 420, .9, .4), (238, 430, 1.1, .5),
+                           (150, 512, .8, .35), (200, 60, .9, .4), (86, 60, .7, .3),
+                           (262, 500, .8, .4), (170, 250, .7, .35)])
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label}">
+<defs>
+<linearGradient id="body{gid}" x1="0" y1="0" x2="0.85" y2="1">
+  <stop offset="0" stop-color="{_shade(body_hex, 0.55)}"/>
+  <stop offset="0.28" stop-color="{_shade(body_hex, 0.2)}"/>
+  <stop offset="0.62" stop-color="{body_hex}"/>
+  <stop offset="1" stop-color="{_shade(body_hex, -0.42)}"/>
+</linearGradient>
+<linearGradient id="frame{gid}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ecd9a0"/><stop offset="0.5" stop-color="{gold_d}"/><stop offset="1" stop-color="#e0c887"/>
+</linearGradient>
+<radialGradient id="lens{gid}" cx="0.38" cy="0.32" r="0.95">
+  <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
+</radialGradient>
+<radialGradient id="neb{gid}" cx="0.72" cy="0.2" r="0.7">
+  <stop offset="0" stop-color="{holo}" stop-opacity="0.2"/><stop offset="1" stop-color="{holo}" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="panel{gid}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="{_shade(body_hex, 0.42)}"/><stop offset="0.5" stop-color="{_shade(body_hex, -0.1)}"/><stop offset="1" stop-color="{_shade(body_hex, 0.22)}"/>
+</linearGradient>
+<clipPath id="clip{gid}"><rect x="49" y="36" width="242" height="528" rx="42"/></clipPath>
+<filter id="soft{gid}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.4" filter="url(#soft{gid})"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#frame{gid})"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="{body_hex}"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#body{gid})"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#neb{gid})"/>
+<g clip-path="url(#clip{gid})">
+  {stars}
+  <polyline points="88,250 128,226 170,250 216,246 250,222" fill="none" stroke="{gold}" stroke-width="0.9" opacity="0.55"/>
+  <polyline points="100,420 150,512 200,470 238,430" fill="none" stroke="{gold}" stroke-width="0.8" opacity="0.4"/>
+  <circle cx="200" cy="470" r="0.9" fill="#ffffff" opacity="0.45"/>
+  <path d="M250 222 C 280 260 268 320 238 430" fill="none" stroke="{gold}" stroke-width="0.7" opacity="0.35"/>
+  <path d="M262 88 l3.4 0 l1 -3.2 l1 3.2 l3.4 0 l-2.7 2 l1 3.2 l-2.7 -2 l-2.7 2 l1 -3.2 z" fill="{gold}" opacity="0.85"/>
+</g>
+<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="1.2"/>
+<!-- カメラ島: 車窓(金枠の窓型) -->
+<rect x="70" y="54" width="200" height="114" rx="20" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#soft{gid})"/>
+<rect x="70" y="54" width="200" height="114" rx="20" fill="url(#panel{gid})" stroke="{gold}" stroke-width="2"/>
+<rect x="76" y="60" width="188" height="102" rx="15" fill="{_shade(body_hex, -0.3)}" stroke="{gold}" stroke-opacity="0.55" stroke-width="1"/>
+<path d="M170 60 V162" stroke="{gold}" stroke-opacity="0.5" stroke-width="1.2"/>
+<circle cx="123" cy="104" r="29" fill="#0b0d13" stroke="{gold}" stroke-width="1.8"/>
+<circle cx="123" cy="104" r="22" fill="none" stroke="{holo}" stroke-opacity="0.6" stroke-width="1.4"/>
+<circle cx="123" cy="104" r="17" fill="url(#lens{gid})"/>
+<circle cx="123" cy="104" r="6" fill="#04040a"/>
+<circle cx="116" cy="96" r="3.8" fill="#ffffff" opacity="0.55"/>
+<circle cx="216" cy="96" r="23" fill="#0b0d13" stroke="{gold}" stroke-width="1.6"/>
+<circle cx="216" cy="96" r="17" fill="none" stroke="{holo}" stroke-opacity="0.5" stroke-width="1.2"/>
+<circle cx="216" cy="96" r="13" fill="url(#lens{gid})"/>
+<circle cx="216" cy="96" r="4.6" fill="#04040a"/>
+<circle cx="211" cy="90" r="3" fill="#ffffff" opacity="0.5"/>
+<rect x="196" y="128" width="40" height="18" rx="7" fill="#0b0d13" stroke="{gold}" stroke-opacity="0.7" stroke-width="1.1"/>
+<circle cx="207" cy="137" r="4" fill="#1a1e2a"/><circle cx="225" cy="137" r="4" fill="#f4efdf" opacity="0.8"/>
+<circle cx="95" cy="66" r="1" fill="#ffffff" opacity="0.7"/><circle cx="250" cy="70" r="0.8" fill="#ffffff" opacity="0.5"/>
+<text x="123" y="152" font-family="monospace" font-size="6.5" fill="#9aa0c8" text-anchor="middle" letter-spacing="1.5">STAR WINDOW</text>
+<!-- 乗車認証アクセント -->
+<g opacity="0.95">
+  <path d="M170 196 l7 10 l-7 10 l-7 -10 z" fill="none" stroke="{holo}" stroke-width="1.6"/>
+  <path d="M130 199 v-6 h6 M210 193 h-6 M210 193 v6 M130 209 v6 h6 M210 215 h-6 v-6" stroke="{holo}" stroke-width="1.2" fill="none" opacity="0.8"/>
+</g>
+<text x="170" y="232" font-family="monospace" font-size="6.5" fill="#9aa0c8" text-anchor="middle" letter-spacing="2">BOARDING PASS</text>
+<!-- 放射冷却パネル(永冬 EITO) -->
+<rect x="98" y="288" width="144" height="78" rx="14" fill="#000000" opacity="0.35" transform="translate(0 3)" filter="url(#soft{gid})"/>
+<rect x="98" y="288" width="144" height="78" rx="14" fill="url(#panel{gid})" stroke="{gold}" stroke-width="1.6"/>
+{"".join(f'<path d="M108 {y} H232" stroke="{gold}" stroke-opacity="0.35" stroke-width="1"/>' for y in range(298, 358, 7))}
+<path d="M170 316 l9 12 l-9 12 l-9 -12 z" fill="{_shade(body_hex, -0.2)}" stroke="{gold}" stroke-width="1.6"/>
+<circle cx="170" cy="328" r="2.2" fill="{gold}"/>
+<text x="170" y="384" font-family="monospace" font-size="7" fill="#9aa0c8" text-anchor="middle" letter-spacing="3">EITO — RADIATIVE PANEL</text>
+<!-- 刻印 -->
+<text x="170" y="446" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="19" font-weight="800" fill="#eef0ff" opacity="0.94" text-anchor="middle" letter-spacing="4">星軌 <tspan fill="{gold}">SEIKI</tspan></text>
+<text x="170" y="466" font-family="monospace" font-size="8" fill="#9aa0c8" opacity="0.85" text-anchor="middle" letter-spacing="6">{kana}</text>
+<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#9aa0c8" opacity="0.75" text-anchor="middle" letter-spacing="2">SUZAKU × HSR ・ JOINT DESIGN ・ {hz}</text>
+<path d="M84 36 L200 36 L100 564 L49 564 L49 320 Z" fill="#ffffff" opacity="0.1"/>
+<path d="M232 36 L260 36 L152 564 L128 564 Z" fill="#ffffff" opacity="0.05"/>
+<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="{gold_d}"/>
+<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="{gold_d}"/>
+<rect x="42.5" y="150" width="5" height="60" rx="2.5" fill="{_shade(body_hex, -0.5)}"/>
+</svg>"""
+
+
+def _acc_defs(u, base, acc):
+    """第2弾アクセサリ共通の材質定義(金属・ガラス・グロー・影)。"""
+    return f"""<defs>
+<linearGradient id="ab{u}" x1="0" y1="0" x2="0.7" y2="1">
+  <stop offset="0" stop-color="{_shade(base, 0.42)}"/>
+  <stop offset="0.45" stop-color="{base}"/>
+  <stop offset="1" stop-color="{_shade(base, -0.4)}"/>
+</linearGradient>
+<linearGradient id="am{u}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="{_shade(base, 0.6)}"/>
+  <stop offset="0.5" stop-color="{_shade(base, -0.3)}"/>
+  <stop offset="1" stop-color="{_shade(base, 0.3)}"/>
+</linearGradient>
+<radialGradient id="ag{u}" cx="0.5" cy="0.42" r="0.75">
+  <stop offset="0" stop-color="{acc}" stop-opacity="0.2"/>
+  <stop offset="1" stop-color="{acc}" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="alens{u}" cx="0.38" cy="0.32" r="0.95">
+  <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
+</radialGradient>
+<filter id="asoft{u}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
+<filter id="aglow{u}" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs>"""
+
+
 def svg_wave2_acc(kind, style, caption=""):
-    """第2弾コラボアクセサリの「デザイン先行公開」アート(480×360)。
+    """第2弾コラボアクセサリの本レンダリング(480×360)。
 
     kind: zzz = dock / grip / buds、srail = dock / stand / buds。
-    製品の仮SVGと同じ設計言語で、開発中の意匠をスケッチとして描く。"""
+    本体レンダリング(svg_kudo / svg_seiki)と同じ設計言語・材質感で描く。"""
     global _UID_SEQ
     _UID_SEQ += 1
-    u = f"w2acc{kind}{style}n{_UID_SEQ}"
+    u = f"w2{kind}{style}n{_UID_SEQ}"
     if style == "srail":
-        acc, bg, ink = "#d8b45c", "#0a0e24", "#eef0ff"
+        base, acc, holo, bgc = "#131b38", "#d8b45c", "#b48cff", "#0a0e24"
     else:
-        acc, bg, ink = "#d4fa4c", "#0b0b0d", "#f4f4ef"
-    head = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label="{caption or kind}(デザイン先行公開)">'
-            f'<defs><radialGradient id="ag{u}" cx="0.5" cy="0.4" r="0.8">'
-            f'<stop offset="0" stop-color="{acc}" stop-opacity="0.16"/>'
-            f'<stop offset="1" stop-color="{acc}" stop-opacity="0"/></radialGradient></defs>'
-            f'<rect width="480" height="360" fill="{bg}"/>'
-            f'<rect width="480" height="360" fill="url(#ag{u})"/>')
-    grid = "".join(f'<path d="M{x} 20 V340" stroke="{acc}" stroke-opacity="0.05"/>' for x in range(60, 460, 40))
-    foot = (f'<text x="240" y="344" font-family="monospace" font-size="9" fill="{ink}" opacity="0.45" '
-            f'text-anchor="middle" letter-spacing="3">PROTOTYPE ・ DESIGN PREVIEW</text>')
+        base, acc, holo, bgc = "#17171b", "#d4fa4c", "#d4fa4c", "#0b0b0d"
+    head = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label="{caption or kind}">'
+            f'<rect width="480" height="360" fill="{bgc}"/>'
+            + _acc_defs(u, base, acc)
+            + f'<rect width="480" height="360" fill="url(#ag{u})"/>')
 
     if style == "zzz" and kind == "dock":
-        stripes = "".join(f'<rect x="{110 + i * 24}" y="286" width="12" height="10" fill="{acc}" transform="skewX(-30)" opacity="0.8"/>' for i in range(10))
-        return head + grid + f"""
-<rect x="118" y="258" width="250" height="34" rx="10" fill="#141417" stroke="{acc}" stroke-width="1.6"/>
+        # 台座前面のハザード縞(平行四辺形パスで直接描画し、台座からはみ出さない)
+        stripes = "".join(
+            f'<path d="M{136 + i * 26} 294 h13 l7 -12 h-13 z" fill="{acc}" opacity="0.9"/>'
+            for i in range(9))
+        return head + f"""
+<ellipse cx="250" cy="308" rx="150" ry="16" fill="#000000" opacity="0.5" filter="url(#asoft{u})"/>
+<rect x="120" y="256" width="250" height="40" rx="12" fill="url(#am{u})"/>
+<rect x="120" y="256" width="250" height="40" rx="12" fill="none" stroke="{_shade(base, 0.5)}" stroke-opacity="0.5" stroke-width="1.2"/>
+<rect x="128" y="262" width="234" height="6" rx="3" fill="#ffffff" opacity="0.08"/>
 {stripes}
-<g transform="rotate(-8 268 172)">
-  <rect x="222" y="82" width="98" height="176" rx="16" fill="#101013" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2"/>
-  <rect x="230" y="92" width="82" height="140" rx="8" fill="#0c0c0e"/>
-  <path d="M276 128 l-12 26 h10 l-8 26 l24 -32 h-11 l10 -20 z" fill="{acc}"/>
+<path d="M156 256 v-64 q0 -14 14 -14 h16" fill="none" stroke="url(#am{u})" stroke-width="16" stroke-linecap="round"/>
+<g transform="rotate(-8 262 168)">
+  <rect x="212" y="76" width="100" height="184" rx="16" fill="#000000" opacity="0.4" transform="translate(5 6)" filter="url(#asoft{u})"/>
+  <rect x="212" y="76" width="100" height="184" rx="16" fill="url(#ab{u})" stroke="{_shade(base, 0.55)}" stroke-width="1.4"/>
+  <rect x="220" y="86" width="84" height="150" rx="9" fill="#08080c"/>
+  <rect x="220" y="86" width="84" height="150" rx="9" fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+  <g filter="url(#aglow{u})"><path d="M268 128 l-14 30 h11 l-9 30 l27 -37 h-12 l11 -23 z" fill="{acc}"/></g>
+  <path d="M268 128 l-14 30 h11 l-9 30 l27 -37 h-12 l11 -23 z" fill="#eaff9a"/>
+  <text x="262" y="226" font-family="monospace" font-size="8" fill="{acc}" text-anchor="middle" letter-spacing="2" opacity="0.85">CHARGING</text>
+  <path d="M224 90 L250 86 L232 232 L222 230 Z" fill="#ffffff" opacity="0.06"/>
 </g>
-<path d="M198 258 q-6 -46 24 -74" stroke="{acc}" stroke-width="2.4" fill="none" opacity="0.75"/>
-<circle cx="160" cy="236" r="17" fill="#0c0c0e" stroke="{acc}" stroke-width="2"/>
-<circle cx="160" cy="236" r="6" fill="{acc}"/>
-<path d="M368 292 q34 6 40 30" stroke="{acc}" stroke-width="2.2" fill="none" opacity="0.6"/>
-<text x="140" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">CHARGE DOCK — 充電試験中</text>
-<path d="M118 296 h-14 M368 296 h14" stroke="{acc}" stroke-width="2.4" opacity="0.6"/>
-""" + foot + "</svg>"
+<g filter="url(#aglow{u})"><circle cx="150" cy="238" r="8" fill="{acc}" opacity="0.8"/></g>
+<circle cx="150" cy="238" r="8" fill="{_shade(base, -0.5)}" stroke="{acc}" stroke-width="2"/>
+<circle cx="150" cy="238" r="3" fill="{acc}"/>
+<path d="M370 288 q40 4 48 26" stroke="{_shade(base, 0.4)}" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M370 288 q40 4 48 26" stroke="{_shade(base, 0.7)}" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.5"/>
+<text x="120" y="64" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">KYUDEN-GAIKU ・ CHARGE DOCK</text>
+</svg>"""
     if style == "zzz" and kind == "grip":
-        tex = "".join(f'<rect x="{150 + i * 34}" y="150" width="14" height="66" fill="{acc}" opacity="0.4" transform="skewX(-18)"/>' for i in range(6))
-        return head + grid + f"""
-<rect x="112" y="146" width="256" height="74" rx="37" fill="#141417" stroke="{acc}" stroke-width="1.8"/>
-<g clip-path="inset(0)">{tex}</g>
-<rect x="150" y="128" width="42" height="14" rx="6" fill="#0c0c0e" stroke="{acc}" stroke-width="1.4"/>
-<rect x="288" y="128" width="42" height="14" rx="6" fill="#0c0c0e" stroke="{acc}" stroke-width="1.4"/>
-<path d="M112 183 h-22 M368 183 h22" stroke="{acc}" stroke-width="3" opacity="0.6"/>
-<circle cx="240" cy="183" r="13" fill="#0c0c0e" stroke="{acc}" stroke-width="1.6"/>
-<path d="M240 176 v14 M233 183 h14" stroke="{acc}" stroke-width="1.6"/>
-<text x="128" y="94" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">GRIP — 滑り止めテープ質感 試作</text>
-<text x="240" y="266" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">冷巷 REIKO のダクトを塞がない開口設計</text>
-""" + foot + "</svg>"
-    if style == "zzz" and kind == "buds":
-        return head + grid + f"""
-<rect x="128" y="104" width="176" height="150" rx="26" fill="#141417" stroke="{acc}" stroke-width="1.8"/>
-<path d="M128 142 h176" stroke="{acc}" stroke-width="1.2" opacity="0.5" stroke-dasharray="6 5"/>
-<circle cx="180" cy="198" r="27" fill="#0c0c0e" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2"/>
-<circle cx="180" cy="198" r="27" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 8"/>
-<circle cx="252" cy="198" r="27" fill="#0c0c0e" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2"/>
-<circle cx="252" cy="198" r="27" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 8"/>
-<text x="180" y="203" font-family="monospace" font-size="12" font-weight="800" fill="{acc}" text-anchor="middle">L</text>
-<text x="252" y="203" font-family="monospace" font-size="12" font-weight="800" fill="{acc}" text-anchor="middle">R</text>
-<path d="M330 150 l14 -10 v20 z M350 132 q22 28 0 56" stroke="{acc}" stroke-width="2" fill="none" opacity="0.75"/>
-<path d="M358 120 q34 40 0 80" stroke="{acc}" stroke-width="2" fill="none" opacity="0.45"/>
-<text x="128" y="84" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">BUDS — ザッピング音 調整中</text>
-""" + foot + "</svg>"
-    if style == "srail" and kind == "dock":
-        return head + grid + f"""
-<circle cx="96" cy="70" r="1.2" fill="#ffffff" opacity="0.6"/><circle cx="410 " cy="96" r="1" fill="#ffffff" opacity="0.5"/>
-<circle cx="380" cy="60" r="1.4" fill="#ffffff" opacity="0.6"/><circle cx="130" cy="120" r="0.9" fill="#ffffff" opacity="0.45"/>
-<rect x="110" y="272" width="260" height="22" rx="6" fill="none" stroke="{acc}" stroke-width="1.8"/>
-<path d="M126 294 v22 M354 294 v22" stroke="{acc}" stroke-width="2.2" opacity="0.7"/>
-<path d="M150 272 V120" stroke="{acc}" stroke-width="2.2"/>
-<path d="M150 96 l20 24 l-20 24 l-20 -24 z" fill="#0a0e24" stroke="{acc}" stroke-width="2"/>
-<text x="150" y="125" font-family="'Shippori Mincho',serif" font-size="10" fill="{acc}" text-anchor="middle">駅</text>
-<g transform="rotate(-3 288 190)">
-  <rect x="240" y="98" width="96" height="174" rx="14" fill="#080c1e" stroke="{acc}" stroke-width="1.6"/>
-  <path d="M252 130 q36 -22 72 8 M252 200 q36 22 72 -8" stroke="{acc}" stroke-width="0.9" fill="none" opacity="0.6"/>
-  <circle cx="288" cy="166" r="2" fill="{acc}"/>
+        stripes = "".join(
+            f'<rect x="{124 + i * 40}" y="140" width="18" height="92" fill="#101013" transform="skewX(-20)" opacity="0.92"/>'
+            for i in range(7))
+        return head + f"""
+<ellipse cx="240" cy="266" rx="160" ry="15" fill="#000000" opacity="0.5" filter="url(#asoft{u})"/>
+<rect x="112" y="146" width="256" height="78" rx="39" fill="#000000" opacity="0.4" transform="translate(4 6)" filter="url(#asoft{u})"/>
+<clipPath id="gcl{u}"><rect x="112" y="146" width="256" height="78" rx="39"/></clipPath>
+<rect x="112" y="146" width="256" height="78" rx="39" fill="{acc}"/>
+<g clip-path="url(#gcl{u})">
+  {stripes}
+  <rect x="112" y="146" width="256" height="26" fill="#ffffff" opacity="0.22"/>
+  <rect x="112" y="204" width="256" height="20" fill="#000000" opacity="0.25"/>
 </g>
-<text x="120" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">SUPPLY DOCK — 停車試験中</text>
-<text x="240" y="322" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">満充電で「発車準備完了」を表示(デモ表記)</text>
-""" + foot + "</svg>"
+<rect x="112" y="146" width="256" height="78" rx="39" fill="none" stroke="{_shade(base, 0.6)}" stroke-width="1.6"/>
+<circle cx="151" cy="185" r="33" fill="url(#am{u})"/>
+<circle cx="151" cy="185" r="33" fill="none" stroke="{_shade(base, 0.6)}" stroke-width="1.4"/>
+<circle cx="151" cy="185" r="12" fill="{_shade(base, -0.5)}"/>
+<circle cx="151" cy="185" r="12" fill="none" stroke="{acc}" stroke-width="1.8"/>
+<circle cx="329" cy="185" r="33" fill="url(#am{u})"/>
+<circle cx="329" cy="185" r="33" fill="none" stroke="{_shade(base, 0.6)}" stroke-width="1.4"/>
+<g filter="url(#aglow{u})"><circle cx="329" cy="185" r="6" fill="{acc}"/></g>
+<circle cx="329" cy="185" r="6" fill="{acc}"/>
+<rect x="196" y="126" width="44" height="16" rx="7" fill="url(#am{u})" stroke="{_shade(base, 0.5)}" stroke-width="1.1"/>
+<rect x="252" y="126" width="44" height="16" rx="7" fill="url(#am{u})" stroke="{_shade(base, 0.5)}" stroke-width="1.1"/>
+<text x="240" y="196" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="900" font-style="italic" fill="#101013" text-anchor="middle" letter-spacing="4" opacity="0.8">KISEISEN</text>
+<text x="112" y="86" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">KISEISEN ・ TAPE GRIP</text>
+</svg>"""
+    if style == "zzz" and kind == "buds":
+        noise = "".join(
+            f'<circle cx="{x}" cy="{y}" r="0.9" fill="#ffffff" opacity="{o}"/>'
+            for x, y, o in [(198, 138, .5), (216, 150, .35), (240, 132, .45), (262, 156, .3),
+                            (208, 166, .4), (252, 172, .5), (228, 148, .3), (270, 140, .35)])
+        return head + f"""
+<ellipse cx="220" cy="292" rx="130" ry="14" fill="#000000" opacity="0.5" filter="url(#asoft{u})"/>
+<ellipse cx="382" cy="282" rx="52" ry="9" fill="#000000" opacity="0.45" filter="url(#asoft{u})"/>
+<rect x="146" y="104" width="180" height="156" rx="24" fill="#000000" opacity="0.4" transform="translate(5 7)" filter="url(#asoft{u})"/>
+<rect x="146" y="104" width="180" height="156" rx="24" fill="url(#ab{u})" stroke="{_shade(base, 0.5)}" stroke-width="1.4"/>
+<path d="M186 104 l-16 -22 M232 104 l10 -22" stroke="{_shade(base, 0.55)}" stroke-width="5" stroke-linecap="round"/>
+<circle cx="170" cy="82" r="4" fill="{_shade(base, 0.55)}"/><circle cx="242" cy="82" r="4" fill="{_shade(base, 0.55)}"/>
+<rect x="162" y="120" width="148" height="76" rx="10" fill="#08080c" stroke="{acc}" stroke-opacity="0.55" stroke-width="1.4"/>
+{noise}
+<path d="M166 132 H306 M166 148 H306 M166 164 H306 M166 180 H306" stroke="{acc}" stroke-opacity="0.12"/>
+<g filter="url(#aglow{u})"><circle cx="296" cy="186" r="4" fill="{acc}"/></g>
+<circle cx="296" cy="186" r="4" fill="{acc}"/>
+<rect x="162" y="212" width="148" height="30" rx="8" fill="{_shade(base, -0.35)}"/>
+<text x="236" y="232" font-family="monospace" font-size="9" fill="{acc}" text-anchor="middle" letter-spacing="3" opacity="0.9">KONSEN ・ CH 00</text>
+<path d="M152 112 L200 106 L172 254 L150 250 Z" fill="#ffffff" opacity="0.05"/>
+<circle cx="372" cy="196" r="30" fill="#000000" opacity="0.4" transform="translate(3 5)" filter="url(#asoft{u})"/>
+<circle cx="372" cy="196" r="30" fill="url(#ab{u})" stroke="{_shade(base, 0.55)}" stroke-width="1.3"/>
+<circle cx="372" cy="196" r="21" fill="none" stroke="{acc}" stroke-width="2.2"/>
+<circle cx="372" cy="196" r="12" fill="url(#alens{u})"/>
+<circle cx="364" cy="188" r="3.4" fill="#ffffff" opacity="0.5"/>
+<circle cx="414" cy="252" r="24" fill="#000000" opacity="0.4" transform="translate(3 4)" filter="url(#asoft{u})"/>
+<circle cx="414" cy="252" r="24" fill="url(#ab{u})" stroke="{_shade(base, 0.55)}" stroke-width="1.3"/>
+<circle cx="414" cy="252" r="16.5" fill="none" stroke="{acc}" stroke-width="2"/>
+<circle cx="414" cy="252" r="9" fill="url(#alens{u})"/>
+<circle cx="408" cy="246" r="2.6" fill="#ffffff" opacity="0.5"/>
+<text x="146" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">KONSEN ・ WIRELESS BUDS</text>
+</svg>"""
+    if style == "srail" and kind == "dock":
+        stars = "".join(
+            f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+            for x, y, r, o in [(96, 70, 1.1, .5), (392, 92, 1, .45), (368, 56, 1.3, .55),
+                               (130, 116, .8, .35), (430, 150, .9, .4)])
+        aodstars = "".join(
+            f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+            for x, y, r, o in [(262, 118, 1, .8), (282, 140, .8, .6), (296, 108, 1.1, .7),
+                               (270, 170, .8, .5), (292, 196, 1, .6), (258, 214, .7, .5)])
+        return head + stars + f"""
+<ellipse cx="248" cy="322" rx="170" ry="16" fill="#000000" opacity="0.5" filter="url(#asoft{u})"/>
+<rect x="118" y="286" width="260" height="28" rx="9" fill="url(#am{u})"/>
+<rect x="118" y="286" width="260" height="28" rx="9" fill="none" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.4"/>
+<rect x="124" y="290" width="248" height="4" rx="2" fill="{acc}" opacity="0.55"/>
+<path d="M134 314 v14 M362 314 v14" stroke="{_shade(base, -0.3)}" stroke-width="8" stroke-linecap="round"/>
+<path d="M158 286 V132" stroke="url(#am{u})" stroke-width="9"/>
+<path d="M158 286 V132" stroke="{acc}" stroke-opacity="0.35" stroke-width="1.4"/>
+<path d="M158 104 l22 26 l-22 26 l-22 -26 z" fill="{_shade(base, -0.25)}" stroke="{acc}" stroke-width="2.2"/>
+<path d="M158 112 l16 18 l-16 18 l-16 -18 z" fill="none" stroke="{acc}" stroke-opacity="0.5" stroke-width="1"/>
+<text x="158" y="136" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="12" font-weight="800" fill="{acc}" text-anchor="middle">駅</text>
+<g transform="rotate(-2 276 190)">
+  <rect x="230" y="92" width="96" height="176" rx="14" fill="#000000" opacity="0.4" transform="translate(4 6)" filter="url(#asoft{u})"/>
+  <rect x="230" y="92" width="96" height="176" rx="14" fill="url(#ab{u})" stroke="{acc}" stroke-opacity="0.8" stroke-width="1.6"/>
+  <rect x="238" y="100" width="80" height="146" rx="8" fill="#070b1c"/>
+  {aodstars}
+  <path d="M262 118 L296 108 L292 196" fill="none" stroke="{acc}" stroke-width="0.8" opacity="0.55"/>
+  <text x="278" y="236" font-family="monospace" font-size="7.5" fill="{acc}" text-anchor="middle" letter-spacing="1.5" opacity="0.9">停車中</text>
+  <path d="M242 104 L266 100 L250 244 L240 242 Z" fill="#ffffff" opacity="0.07"/>
+</g>
+<g filter="url(#aglow{u})"><ellipse cx="278" cy="286" rx="52" ry="6" fill="{holo}" opacity="0.5"/></g>
+<text x="118" y="66" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">HOKYU-EKI ・ SUPPLY DOCK</text>
+</svg>"""
     if style == "srail" and kind == "stand":
-        return head + grid + f"""
-<rect x="150" y="80" width="200" height="150" rx="16" fill="#080c1e" stroke="{acc}" stroke-width="1.8"/>
-<path d="M250 80 V230 M150 155 H350" stroke="{acc}" stroke-width="1" opacity="0.6"/>
-<circle cx="196" cy="116" r="1.3" fill="#ffffff" opacity="0.7"/><circle cx="308" cy="108" r="1" fill="#ffffff" opacity="0.55"/>
-<circle cx="214" cy="196" r="1" fill="#ffffff" opacity="0.5"/><circle cx="322" cy="204" r="1.2" fill="#ffffff" opacity="0.6"/>
-<path d="M284 130 l22 -12" stroke="#ffffff" stroke-width="0.9" opacity="0.55"/>
-<path d="M168 230 l-26 60 M332 230 l26 60 M132 290 h216" stroke="{acc}" stroke-width="2" opacity="0.8"/>
-<path d="M150 96 v-8 h8 M350 88 h-8 M350 88 v8 M150 222 v8 h8 M350 230 h-8 v-8" stroke="{acc}" stroke-width="1.6" fill="none"/>
-<text x="150" y="60" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">WINDOW STAND — 額装試験中</text>
-<text x="240" y="318" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">横置きで車窓AODが額縁に収まる寸法(調整中)</text>
-""" + foot + "</svg>"
-    # srail buds(既定)
-    return head + grid + f"""
-<circle cx="200" cy="182" r="72" fill="#080c1e" stroke="{acc}" stroke-width="1.8"/>
-<circle cx="200" cy="182" r="63" fill="none" stroke="{acc}" stroke-width="0.9" opacity="0.55"/>
-<path d="M200 102 l7 10 h-14 z" fill="{acc}"/>
-<circle cx="176" cy="176" r="1.2" fill="#ffffff" opacity="0.7"/><circle cx="222" cy="160" r="1" fill="#ffffff" opacity="0.55"/>
-<circle cx="212" cy="208" r="1.1" fill="#ffffff" opacity="0.6"/>
-<path d="M176 176 L222 160 L212 208" fill="none" stroke="{acc}" stroke-width="0.8" opacity="0.5"/>
-<circle cx="330" cy="150" r="24" fill="#080c1e" stroke="{acc}" stroke-width="1.6"/>
-<circle cx="330" cy="150" r="24" fill="none" stroke="#b48cff" stroke-width="1.2" stroke-dasharray="6 5"/>
-<circle cx="356" cy="216" r="24" fill="#080c1e" stroke="{acc}" stroke-width="1.6"/>
-<circle cx="356" cy="216" r="24" fill="none" stroke="#b48cff" stroke-width="1.2" stroke-dasharray="6 5"/>
-<circle cx="330" cy="150" r="5" fill="#b48cff"/><circle cx="356" cy="216" r="5" fill="#b48cff"/>
-<text x="126" y="70" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">BUDS — 車内放送 収録中</text>
-<text x="240" y="322" font-family="monospace" font-size="9" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="2">通知を車内アナウンス風に読み上げ(デモ表記)</text>
-""" + foot + "</svg>"
+        stars = "".join(
+            f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+            for x, y, r, o in [(196, 122, 1.2, .8), (232, 104, .9, .6), (286, 132, 1.1, .7),
+                               (316, 110, .8, .55), (214, 172, .9, .6), (296, 188, 1.2, .7),
+                               (256, 148, .7, .5), (330, 168, .9, .55)])
+        return head + f"""
+<ellipse cx="246" cy="316" rx="160" ry="15" fill="#000000" opacity="0.5" filter="url(#asoft{u})"/>
+<rect x="152" y="82" width="192" height="146" rx="16" fill="#000000" opacity="0.4" transform="translate(5 7)" filter="url(#asoft{u})"/>
+<rect x="152" y="82" width="192" height="146" rx="16" fill="url(#am{u})"/>
+<rect x="152" y="82" width="192" height="146" rx="16" fill="none" stroke="{acc}" stroke-width="2.2"/>
+<rect x="162" y="92" width="172" height="126" rx="10" fill="#070b1c" stroke="{acc}" stroke-opacity="0.6" stroke-width="1"/>
+{stars}
+<path d="M196 122 L232 104 L256 148 L296 188" fill="none" stroke="{acc}" stroke-width="0.8" opacity="0.5"/>
+<path d="M248 92 V218 M162 155 H334" stroke="{acc}" stroke-opacity="0.65" stroke-width="1.6"/>
+<path d="M300 96 l60 30 l-24 46" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="14" stroke-linecap="round"/>
+<path d="M178 228 l-30 66 M318 228 l30 66 M138 294 h220" stroke="url(#am{u})" stroke-width="9" stroke-linecap="round"/>
+<path d="M178 228 l-30 66 M318 228 l30 66" stroke="{acc}" stroke-opacity="0.4" stroke-width="1.4"/>
+<circle cx="178" cy="230" r="7" fill="url(#am{u})" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.2"/>
+<circle cx="318" cy="230" r="7" fill="url(#am{u})" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.2"/>
+<path d="M152 98 v-8 h10 M344 90 h-10 M344 90 v8 M152 212 v8 h10 M344 220 h-10 v-8" stroke="{acc}" stroke-width="1.8" fill="none"/>
+<text x="152" y="60" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">SHASO-WAKU ・ WINDOW STAND</text>
+</svg>"""
+    # srail buds(既定): 懐中時計型ケース+バッズ
+    return head + f"""
+<ellipse cx="206" cy="296" rx="120" ry="14" fill="#000000" opacity="0.5" filter="url(#asoft{u})"/>
+<ellipse cx="382" cy="280" rx="56" ry="9" fill="#000000" opacity="0.45" filter="url(#asoft{u})"/>
+<path d="M206 96 q-56 -30 -96 6" fill="none" stroke="{acc}" stroke-opacity="0.6" stroke-width="2.4" stroke-dasharray="1 7" stroke-linecap="round"/>
+<rect x="196" y="86" width="20" height="16" rx="5" fill="url(#am{u})" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.1"/>
+<circle cx="206" cy="78" r="7" fill="none" stroke="{acc}" stroke-width="2.4"/>
+<circle cx="206" cy="196" r="78" fill="#000000" opacity="0.4" transform="translate(5 7)" filter="url(#asoft{u})"/>
+<circle cx="206" cy="196" r="78" fill="url(#ab{u})"/>
+<circle cx="206" cy="196" r="78" fill="none" stroke="{acc}" stroke-width="2.6"/>
+<circle cx="206" cy="196" r="69" fill="none" stroke="{acc}" stroke-opacity="0.55" stroke-width="1.1"/>
+<circle cx="206" cy="196" r="58" fill="{_shade(base, -0.3)}"/>
+<g opacity="0.85">
+  <circle cx="184" cy="176" r="1.4" fill="#ffffff" opacity="0.8"/>
+  <circle cx="224" cy="164" r="1" fill="#ffffff" opacity="0.6"/>
+  <circle cx="236" cy="206" r="1.2" fill="#ffffff" opacity="0.7"/>
+  <circle cx="192" cy="222" r="1" fill="#ffffff" opacity="0.6"/>
+  <path d="M184 176 L224 164 L236 206 L192 222 Z" fill="none" stroke="{acc}" stroke-width="0.8" opacity="0.6"/>
+  <path d="M206 148 l4.4 0 l1.4 -4.2 l1.4 4.2 l4.4 0 l-3.6 2.6 l1.4 4.2 l-3.6 -2.6 l-3.6 2.6 l1.4 -4.2 z" fill="{acc}" opacity="0.9" transform="translate(-11 8)"/>
+</g>
+<path d="M156 142 a78 78 0 0 1 66 -24" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="7" stroke-linecap="round"/>
+<circle cx="352" cy="164" r="27" fill="#000000" opacity="0.4" transform="translate(3 5)" filter="url(#asoft{u})"/>
+<circle cx="352" cy="164" r="27" fill="url(#ab{u})" stroke="{acc}" stroke-width="1.8"/>
+<circle cx="352" cy="164" r="18" fill="none" stroke="{acc}" stroke-opacity="0.6" stroke-width="1.2"/>
+<g filter="url(#aglow{u})"><circle cx="352" cy="164" r="5" fill="{holo}"/></g>
+<circle cx="352" cy="164" r="5" fill="{holo}"/>
+<circle cx="344" cy="156" r="3.2" fill="#ffffff" opacity="0.5"/>
+<circle cx="396" cy="234" r="24" fill="#000000" opacity="0.4" transform="translate(3 4)" filter="url(#asoft{u})"/>
+<circle cx="396" cy="234" r="24" fill="url(#ab{u})" stroke="{acc}" stroke-width="1.7"/>
+<circle cx="396" cy="234" r="16" fill="none" stroke="{acc}" stroke-opacity="0.6" stroke-width="1.1"/>
+<g filter="url(#aglow{u})"><circle cx="396" cy="234" r="4.4" fill="{holo}"/></g>
+<circle cx="396" cy="234" r="4.4" fill="{holo}"/>
+<circle cx="389" cy="227" r="2.8" fill="#ffffff" opacity="0.5"/>
+<path d="M428 122 l3.4 0 l1 -3.2 l1 3.2 l3.4 0 l-2.7 2 l1 3.2 l-2.7 -2 l-2.7 2 l1 -3.2 z" fill="{acc}" opacity="0.8"/>
+<text x="128" y="56" font-family="monospace" font-size="10" fill="{acc}" letter-spacing="3">SEIREI ・ WIRELESS BUDS</text>
+</svg>"""
 
 
 def svg_art(kind, glow="#e8442e", body_hex="#181820", motif=None):

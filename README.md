@@ -164,7 +164,7 @@ URLが変わるため、CDN・ブラウザの古いキャッシュを確実に�
   `nx--{slug}` フックで **作品ごとに意匠を一部だけ変える**(相手名は一切出さない)。
   発表日時(`reveal_at`)を実時間が過ぎると、相手を伏せたまま「発表準備中」へ自動遷移する
   **グレース状態**(`collab-core.js` / ハブ・兄弟リンクは `main.js` の `data-reveal`/`data-soon`)
-- **第2弾の発表済み枠(H-2)**: 発表フルLPは製品専用URL `/collab/kudo/`・`/collab/seiki/`
+- **第2弾の発表済み枠(H-2)**: 発表フルLPは作品名スラッグの特設URL `/collab/zzz/`・`/collab/hsr/`(第1弾と同方式)
   (noindex・検索/サイトマップ非掲載)にも単独ページを持つ。発表後は
   ①ティザーURLへの再訪を専用URLへ自動転送(`data-reveal-url` / 視聴中のゼロ到達は
   その場の切替演出を優先)、②ハブ・兄弟リンクの href を `data-reveal-href` で自動差替

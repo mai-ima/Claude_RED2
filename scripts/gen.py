@@ -3827,10 +3827,10 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     """空洞 KUDO × ゼンレスゾーンゼロ — 正式発表フルLP。
     公式サイトの設計言語(黒×ライムイエロー・平行四辺形タグ・大番号セクション・
     フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。
-    standalone=True で製品専用ページ(/collab/kudo/)の本文になる:
+    standalone=True で特設ページ(/collab/zzz/)の本文になる:
     hidden ステージ属性なし・見出しは実 h1・末尾にティザーアーカイブへの小ボタン。"""
-    # 量産版レンダリング完成までは仮デザインSVG(PROTOTYPE表記入り)を掲出する
-    phone_art = svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz")
+    # 本レンダリング(H-4-1)。仮デザインSVG(svg_prototype)はSVGギャラリーに保管
+    phone_art = svg_art.svg_kudo()
     stats = "".join(
         f'<div class="zz-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -4038,9 +4038,9 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     """星軌 SEIKI × 崩壊:スターレイル — 正式発表フルLP。
     公式サイト(深紺の星空・金細線カード・セリフ体・ページ番号)と車内UI
     (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。
-    standalone=True で製品専用ページ(/collab/seiki/)の本文になる。"""
-    # 量産版レンダリング完成までは仮デザインSVG(PROTOTYPE表記入り)を掲出する
-    phone_art = svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail")
+    standalone=True で特設ページ(/collab/hsr/)の本文になる。"""
+    # 本レンダリング(H-4-1)。仮デザインSVG(svg_prototype)はSVGギャラリーに保管
+    phone_art = svg_art.svg_seiki()
     stats = "".join(
         f'<div class="sr-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -5147,9 +5147,11 @@ def build_collab_pages():
     build_collab_redirects()
 
 
-# 旧スラッグ → 新スラッグ(H-2-0 で next 系を wave2 系へ改名。"next" は次回コラボ用に空ける)
+# 旧スラッグ → 新スラッグ(H-2-0 で next 系を wave2 系へ改名。"next" は次回コラボ用に空ける。
+# H-4-0 で発表済み枠の特設URLを機体名(kudo/seiki)から作品名(zzz/hsr)へ変更)
 _COLLAB_SLUG_REDIRECTS = {
     "next": "wave2", "next-2": "wave2-2", "next-3": "wave2-3", "next-4": "wave2-4",
+    "kudo": "zzz", "seiki": "hsr",
 }
 
 
@@ -5687,6 +5689,15 @@ def build_svg_gallery():
         f'<figure class="svgg-proto"><div class="svgg-proto__art">{svg}</div>'
         f'<figcaption>{esc(t)} <code>svg_prototype/{s}</code></figcaption></figure>'
         for t, s, svg in protos)
+    # 第2弾の本レンダリング(H-4-1: LPヒーローで使用中)
+    reals = [
+        ("空洞 KUDO 本レンダリング", "svg_kudo", svg_art.svg_kudo()),
+        ("星軌 SEIKI 本レンダリング", "svg_seiki", svg_art.svg_seiki()),
+    ]
+    real_cells = "".join(
+        f'<figure class="svgg-proto"><div class="svgg-proto__art">{svg}</div>'
+        f'<figcaption>{esc(t)} <code>{fn}</code></figcaption></figure>'
+        for t, fn, svg in reals)
     # 第2弾コラボアクセサリのデザイン先行公開アート(svg_wave2_acc)
     w2acc_cells = ""
     for c in COLLABS:
@@ -5720,10 +5731,13 @@ def build_svg_gallery():
     <div class="svgg-grid">{pairs}</div>
     <h2 class="t-h3" style="margin:32px 0 16px">アクセサリ — 全バリエーション</h2>
     <div class="svgg-grid">{accs}</div>
-    <h2 class="t-h3" style="margin:32px 0 6px">仮デザインSVG(svg_prototype)</h2>
-    <p class="t-small t-soft" style="margin-bottom:16px">発表直後の繋ぎに使うプレースホルダ。汎用版はどの製品でも使い回し可、個別版は各コラボ先の設計言語で描き分ける。</p>
+    <h2 class="t-h3" style="margin:32px 0 6px">第2弾 製品 本レンダリング</h2>
+    <p class="t-small t-soft" style="margin-bottom:16px">正式発表ページのヒーローで使用中。各コラボ先の設計言語で個別に作画(svg_kudo / svg_seiki)。</p>
+    <div class="svgg-grid">{real_cells}</div>
+    <h2 class="t-h3" style="margin:32px 0 6px">仮デザインSVG(svg_prototype)— アーカイブ</h2>
+    <p class="t-small t-soft" style="margin-bottom:16px">発表直後の繋ぎに使ったプレースホルダの保管。汎用版はどの製品でも使い回し可、個別版は各コラボ先の設計言語で描き分ける。</p>
     <div class="svgg-grid">{proto_cells}</div>
-    <h2 class="t-h3" style="margin:32px 0 6px">第2弾コラボアクセサリ — デザイン先行公開アート</h2>
+    <h2 class="t-h3" style="margin:32px 0 6px">第2弾コラボアクセサリ — 本レンダリング</h2>
     <p class="t-small t-soft" style="margin-bottom:16px">正式発表ページのアクセサリ節で使用中(svg_wave2_acc)。価格・発売日は第2報。</p>
     <div class="svgg-grid">{w2acc_cells}</div>
   </div>

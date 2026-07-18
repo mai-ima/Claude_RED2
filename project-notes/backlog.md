@@ -42,12 +42,12 @@
 
 - **slug改名**: `next` 系は次回コラボのために空け、第2弾は `wave2{,-2,-3,-4}` へ改名済み。
   旧URLには meta refresh + noindex の転送ページを生成(`gen.py build_collab_redirects`)。
-- **製品専用URL**: 発表済み枠は `reveal["url_slug"]`(kudo / seiki)を持ち、
+- **製品専用URL**: 発表済み枠は `reveal["url_slug"]`(zzz / hsr。第1弾と同じ作品名スラッグ)を持ち、
   `/collab/{url_slug}/` に発表フルLPの単独ページを生成(noindex・PAGES非登録)。
   ハブ/兄弟リンクは `data-reveal`+`data-reveal-href` で発表後に href 自動差替(main.js)。
   ティザーURLは発表後の再訪時に location.replace で専用URLへ転送(collab-core.js。
   視聴中にゼロ到達した場合はその場の切替演出を優先)。
-  ※ href/転送先の属性値に kudo/seiki が発表前HTMLに含まれるのは「コード内記載OK」の
+  ※ href/転送先の属性値に zzz/hsr が発表前HTMLに含まれるのは「コード内記載OK」の
   承認範囲。表示テキスト・title/description には出さないことを漏れ検査で担保する。
 - **ティザーアーカイブ**: `/collab/wave2{,-2}/teaser/`(noindex)。相手名は載せない。
   製品専用ページ末尾の小ボタン(.cl-minibtn)から導線。
