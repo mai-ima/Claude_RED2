@@ -3829,9 +3829,6 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     フィルム穴ボーダー・極太タイポ・背景の巨大薄文字)を写す。
     standalone=True で特設ページ(/collab/zzz/)の本文になる:
     hidden ステージ属性なし・見出しは実 h1・末尾にティザーアーカイブへの小ボタン。"""
-    # 本レンダリング(H-4-1)。ファイル書き出し+<img>参照(H-5: 画像単体URLを持つ)。
-    # 仮デザインSVG(svg_prototype)はSVGギャラリーに保管
-    phone_art = f'<img src="{w2img("kudo-0")}" alt="空洞 KUDO(本レンダリング)" width="340" height="600">'
     stats = "".join(
         f'<div class="zz-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -4051,8 +4048,6 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     公式サイト(深紺の星空・金細線カード・セリフ体・ページ番号)と車内UI
     (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。
     standalone=True で特設ページ(/collab/hsr/)の本文になる。"""
-    # 本レンダリング(H-4-1)。ファイル書き出し+<img>参照(H-5: 画像単体URLを持つ)
-    phone_art = f'<img src="{w2img("seiki-0")}" alt="星軌 SEIKI(本レンダリング)" width="340" height="600">'
     stats = "".join(
         f'<div class="sr-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
