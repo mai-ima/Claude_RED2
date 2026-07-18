@@ -40,15 +40,28 @@
     badge.classList.toggle("is-on", n > 0);
   };
 
-  /* ---------- カラーテーマ(ライト/ダーク/G/朱雀) ---------- */
-  var THEMES = ["auto", "light", "dark", "g", "suzaku"];
+  /* ---------- カラーテーマ ----------
+     有効テーマ一覧は head の早期スクリプト(gen.py が data_themes.py から生成)の
+     window.SZ_THEMES が単一ソース。ここでの再定義はフォールバックのみ。
+     "auto"=ページ既定 / "system"=OS設定(prefers-color-scheme)連動。 */
+  var THEME_RT = window.SZ_THEMES || {
+    ids: ["auto", "light", "dark", "g", "suzaku"],
+    meta: { light: "#fafafc", dark: "#0b0b10" }
+  };
+  var THEMES = THEME_RT.ids;
+  var sysLightMq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: light)") : null;
+  function resolveTheme(name) {
+    if (name === "auto") return document.documentElement.getAttribute("data-page-theme") || "dark";
+    if (name === "system") return sysLightMq && sysLightMq.matches ? "light" : "dark";
+    return name;
+  }
   function applyTheme(name) {
     var html = document.documentElement;
-    if (name === "auto") {
-      html.setAttribute("data-theme", html.getAttribute("data-page-theme") || "dark");
-    } else {
-      html.setAttribute("data-theme", name);
-    }
+    var resolved = resolveTheme(name);
+    html.setAttribute("data-theme", resolved);
+    // ブラウザUI(アドレスバー等)の色も実テーマへ同期する
+    var metaEl = document.querySelector('meta[name="theme-color"]');
+    if (metaEl && THEME_RT.meta[resolved]) metaEl.setAttribute("content", THEME_RT.meta[resolved]);
     $$("[data-theme-opt]").forEach(function (b) {
       var on = b.getAttribute("data-theme-opt") === name;
       b.classList.toggle("is-active", on);
@@ -63,6 +76,12 @@
     var saved = lsGet("sz_theme", "auto");
     if (THEMES.indexOf(saved) === -1) saved = "auto";
     applyTheme(saved);
+    // OS連動選択中は、端末側のライト/ダーク切替にリアルタイム追従する
+    if (sysLightMq && sysLightMq.addEventListener) {
+      sysLightMq.addEventListener("change", function () {
+        if (lsGet("sz_theme", "auto") === "system") applyTheme("system");
+      });
+    }
     var btn = $("#themeBtn");
     var menu = $("#themeMenu");
     function closeMenu() {

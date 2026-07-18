@@ -40,15 +40,10 @@
       <div class="setting-row">
         <div class="setting-row__label">
           <p class="setting-row__title">カラーテーマ</p>
-          <p class="t-micro t-faint">「ページ既定」はページごとに用意された配色に従います。ヘッダーやドロワーからも変更できます。</p>
+          <p class="t-micro t-faint">「ページ既定」はページごとに用意された配色に、「OS連動」は端末のライト/ダーク設定に従います。ヘッダーやドロワーからも変更できます。</p>
         </div>
-        <div class="opt-group opt-group--theme" role="group" aria-label="カラーテーマ">
-          <button type="button" data-theme-opt="auto" data-theme-label="ページ既定"><i style="background:linear-gradient(90deg,#fafafc 50%,#0b0b10 50%)"></i>既定</button>
-          <button type="button" data-theme-opt="light" data-theme-label="ライト"><i style="background:#fafafc"></i>ライト</button>
-          <button type="button" data-theme-opt="dark" data-theme-label="ダーク"><i style="background:#0b0b10"></i>ダーク</button>
-          <button type="button" data-theme-opt="g" data-theme-label="Gモード"><i style="background:linear-gradient(135deg,#00e68a,#00c2ff)"></i>Gモード</button>
-          <button type="button" data-theme-opt="suzaku" data-theme-label="朱雀モード"><i style="background:linear-gradient(135deg,#e8442e,#d9a441)"></i>朱雀</button>
-        </div>
+        <!-- ボタン列はビルド時に scripts/data_themes.py(単一ソース)から生成される -->
+        <div class="opt-group opt-group--theme" role="group" aria-label="カラーテーマ"><!--THEME_SEG--></div>
       </div>
     </div>
 

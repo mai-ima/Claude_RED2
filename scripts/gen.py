@@ -25,6 +25,7 @@ from data_collab import (COLLABS, COLLAB_SILICON, COLLAB_COOLING, COLLAB_SOC_CLO
 from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
 from data_docs import DOCS  # noqa: E402
+from data_themes import THEMES, THEME_VAR_KEYS  # noqa: E402
 import svg_art  # noqa: E402
 from lib import esc, yen, num, slugify  # noqa: E402,F401
 from validate import validate_all  # noqa: E402
@@ -57,7 +58,62 @@ def _asset_version():
     return h.hexdigest()[:10]
 
 
+def _themes_css():
+    """data_themes.THEMES から themes.css の中身を組み立てる。
+    live かつ concrete のテーマのみ出力(planned はどこにも出さない)。
+    既定テーマは ':root, [data-theme=...]' として必ず先頭に置く
+    (同特異性の属性セレクタに後勝ちで潰されないためのカスケード順)。"""
+    blocks = []
+    ordered = sorted(
+        (t for t in THEMES if t.get("status") == "live" and t.get("kind") == "concrete"),
+        key=lambda t: 0 if t.get("default") else 1)
+    for t in ordered:
+        sel = f':root,\n[data-theme="{t["id"]}"]' if t.get("default") else f'[data-theme="{t["id"]}"]'
+        lines = [f"/* --- {t['label']}({t['id']}) --- */", sel + " {"]
+        for k in THEME_VAR_KEYS:
+            lines.append(f"  --{k}: {t['vars'][k]};")
+        for k, v in t.get("extra_vars", {}).items():
+            lines.append(f"  --{k}: {v};")
+        lines.append(f"  color-scheme: {t['color_scheme']};")
+        lines.append("}")
+        blocks.append("\n".join(lines))
+    head = ("/* 自動生成: scripts/gen.py ← scripts/data_themes.py — 編集しないでください\n"
+            "   テーマの追加・変更は data_themes.py を編集して再生成する。 */\n\n")
+    return head + "\n\n".join(blocks) + "\n"
+
+
+def write_themes_css():
+    """themes.css を assets/css へ書き出す(内容同一なら書かない=再生成差分ゼロ)。
+    ASSET_V のハッシュ対象に含まれるため、必ず _asset_version() より先に呼ぶこと。"""
+    p = ROOT / "assets" / "css" / "themes.css"
+    css = _themes_css()
+    if not p.exists() or p.read_text(encoding="utf-8") != css:
+        p.write_text(css, encoding="utf-8")
+
+
+write_themes_css()
 ASSET_V = _asset_version()
+
+# 早期テーマ適用(FOUC対策): <head> 内で localStorage の選択を読み、auto=ページ既定 /
+# system=OS設定 を解決して data-theme と meta theme-color を描画前に確定させる。
+# main.js はこの window.SZ_THEMES を有効テーマ一覧としても利用する(単一ソース)。
+_THEME_RUNTIME = {
+    "ids": [t["id"] for t in THEMES if t.get("status") == "live"],
+    "meta": {t["id"]: t["meta"] for t in THEMES
+             if t.get("status") == "live" and t.get("kind") == "concrete"},
+}
+_META_BY_THEME = dict(_THEME_RUNTIME["meta"])
+EARLY_THEME_SCRIPT = (
+    "<script>window.SZ_THEMES=" + json.dumps(_THEME_RUNTIME, ensure_ascii=False)
+    + ';(function(){try{var d=document.documentElement;var v=null;'
+    + 'try{v=JSON.parse(localStorage.getItem("sz_theme"))}catch(e){}'
+    + 'if(window.SZ_THEMES.ids.indexOf(v)<0)v="auto";'
+    + 'var r=v==="auto"?(d.getAttribute("data-page-theme")||"dark")'
+    + ':v==="system"?(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):v;'
+    + 'd.setAttribute("data-theme",r);'
+    + "var m=document.querySelector('meta[name=\"theme-color\"]');"
+    + 'if(m&&window.SZ_THEMES.meta[r])m.setAttribute("content",window.SZ_THEMES.meta[r]);'
+    + '}catch(e){}})();</script>')
 
 
 def pimg(pid, i=0):
@@ -579,28 +635,23 @@ def mega_company():
 # カラーテーマの選択肢(単一ソース)。テーマを追加・変更する場合はここだけを編集すれば、
 # ヘッダーのドロップダウンとドロワーのセグメント切替の両方に反映される。
 # 各要素: (value, スウォッチのCSS, 正式名称(aria/トースト), 短縮名(ドロワー用))
-THEME_OPTS = [
-    ("auto", "linear-gradient(90deg,#fafafc 50%,#0b0b10 50%)", "ページ既定", "既定"),
-    ("light", "#fafafc", "ライト", "ライト"),
-    ("dark", "#0b0b10", "ダーク", "ダーク"),
-    ("g", "linear-gradient(135deg,#00e68a,#00c2ff)", "Gモード", "G"),
-    ("suzaku", "linear-gradient(135deg,#e8442e,#d9a441)", "朱雀モード", "朱雀"),
-]
+# テーマ一覧の単一ソースは scripts/data_themes.py(planned はUIに出さない)
+_LIVE_THEMES = [t for t in THEMES if t.get("status") == "live"]
 
 
 def theme_menu_buttons():
     """ヘッダーのテーマドロップダウン用ボタン列。"""
     return "".join(
-        f'<button type="button" data-theme-opt="{v}" role="menuitemradio"><i style="background:{sw}"></i>{full}</button>'
-        for v, sw, full, short in THEME_OPTS
+        f'<button type="button" data-theme-opt="{t["id"]}" role="menuitemradio"><i style="background:{t["swatch"]}"></i>{t["label"]}</button>'
+        for t in _LIVE_THEMES
     )
 
 
 def theme_seg_buttons():
-    """ドロワー(モバイル)のテーマセグメント用ボタン列。"""
+    """ドロワー(モバイル)/設定ページのテーマセグメント用ボタン列。"""
     return "".join(
-        f'<button type="button" data-theme-opt="{v}" data-theme-label="{full}"><i style="background:{sw}"></i>{short}</button>'
-        for v, sw, full, short in THEME_OPTS
+        f'<button type="button" data-theme-opt="{t["id"]}" data-theme-label="{t["label"]}"><i style="background:{t["swatch"]}"></i>{t["short"]}</button>'
+        for t in _LIVE_THEMES
     )
 
 
@@ -935,7 +986,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
         for s in structured)
 
     html = f"""<!DOCTYPE html>
-<html lang="ja" data-theme="{theme}">
+<html lang="ja" data-theme="{theme}" data-page-theme="{theme}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -951,10 +1002,12 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(full_title)}">
 <meta name="twitter:description" content="{esc(desc)}">
-<meta name="theme-color" content="{'#0b0b10' if theme == 'dark' else '#fafafc'}">
+<meta name="theme-color" content="{_META_BY_THEME.get(theme, '#0b0b10')}">
+{EARLY_THEME_SCRIPT}
 <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
 {HEAD_FONTS}
 <link rel="stylesheet" href="/assets/css/tokens.css?v={ASSET_V}">
+<link rel="stylesheet" href="/assets/css/themes.css?v={ASSET_V}">
 <link rel="stylesheet" href="/assets/css/base.css?v={ASSET_V}">
 <link rel="stylesheet" href="/assets/css/components.css?v={ASSET_V}">
 <link rel="stylesheet" href="/assets/css/animations.css?v={ASSET_V}">
@@ -5615,6 +5668,8 @@ def build_fragments():
             body = body.replace("<!--NEWS_LIST-->", news_list_html())
         if "<!--NEWS_LATEST3-->" in body:
             body = body.replace("<!--NEWS_LATEST3-->", news_latest3_html())
+        if "<!--THEME_SEG-->" in body:
+            body = body.replace("<!--THEME_SEG-->", theme_seg_buttons())
         if "<!--GLOSSARY_LIST-->" in body:
             body = body.replace("<!--GLOSSARY_LIST-->", glossary_list_html())
         # 図版プレースホルダ <!--ART:kind:glow--> → svg_art 生成(手書き旧図版の一掃用)

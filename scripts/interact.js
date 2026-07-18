@@ -76,6 +76,25 @@ const BASE = process.env.AUDIT_BASE || 'http://localhost:8930';
   ok('発表ステージに価格が表示される', priceShown);
   await page.unroute('**/collab/genshin/tablet/');
 
+  // 6) テーマ切替(H-9-1: 単一ソース化・meta同期・早期適用・planned非公開)
+  await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+  await page.click('#themeBtn');
+  await page.click('#themeMenu [data-theme-opt="g"]');
+  await page.waitForTimeout(200);
+  const themeApplied = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+  const themeSaved = await page.evaluate(() => JSON.parse(localStorage.getItem('sz_theme')));
+  const metaColor = await page.getAttribute('meta[name="theme-color"]', 'content');
+  ok('テーマ切替: data-theme/保存/metaが同期', themeApplied === 'g' && themeSaved === 'g' && metaColor === '#04070a',
+    themeApplied + '/' + themeSaved + '/' + metaColor);
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  const themeEarly = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+  ok('テーマ切替: リロード後も早期スクリプトで維持', themeEarly === 'g');
+  const plannedBtn = await page.$('[data-theme-opt="endfield"]');
+  ok('planned テーマ(endfield)はUIに出ない', plannedBtn === null);
+  const sysBtn = await page.$('#themeMenu [data-theme-opt="system"]');
+  ok('OS連動テーマがメニューに存在する', sysBtn !== null);
+  await page.evaluate(() => localStorage.removeItem('sz_theme'));
+
   console.log(results.join('\n'));
   const failed = results.filter(r => r.startsWith('FAIL'));
   await browser.close();

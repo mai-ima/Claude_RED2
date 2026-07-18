@@ -158,7 +158,7 @@ def check_tech(errs):
 def check_emoji(errs):
     """データファイルに未承認の絵文字が無いか。承認記号は除外する。"""
     for fn in ("data_products.py", "data_collab.py", "data_misc.py",
-               "data_tech.py", "data_docs.py"):
+               "data_tech.py", "data_docs.py", "data_themes.py", "data_consent.py"):
         path = HERE / fn
         if not path.exists():
             continue
@@ -169,6 +169,88 @@ def check_emoji(errs):
                     continue
                 name = unicodedata.name(ch, "UNKNOWN")
                 _err(errs, f"{fn}:{i}", f"未承認の絵文字/記号 {ch!r}({name})")
+
+
+_CSS_VALUE_RE = re.compile(
+    r"^(#[0-9a-fA-F]{3,8}|rgba?\([^)]*\)|linear-gradient\(.+\)|var\(--[a-z0-9-]+\)|"
+    r"0(\s|$).*|[0-9].*)$")
+
+
+def check_themes(errs):
+    """カラーテーマ定義(data_themes.py)の不変条件。
+    planned(予約枠)に vars 等の実装があれば NG = 「事前準備のみ」の機械担保。"""
+    try:
+        from data_themes import THEMES, THEME_VAR_KEYS
+    except Exception as e:  # pragma: no cover
+        _err(errs, "data_themes", f"読み込み失敗: {e}")
+        return
+    seen = set()
+    defaults = 0
+    for t in THEMES:
+        tid = t.get("id", "?")
+        where = f"theme:{tid}"
+        if tid in seen:
+            _err(errs, where, "id が重複しています")
+        seen.add(tid)
+        if t.get("status") not in ("live", "planned"):
+            _err(errs, where, f"status が不正です: {t.get('status')!r}")
+        if t.get("kind") not in ("concrete", "virtual"):
+            _err(errs, where, f"kind が不正です: {t.get('kind')!r}")
+        if t.get("status") == "planned":
+            # 予約枠は定義を持ってはいけない(実装時に status を live へ変える)
+            for forbidden in ("vars", "extra_vars", "swatch", "meta", "color_scheme"):
+                if t.get(forbidden):
+                    _err(errs, where, f"planned テーマに {forbidden} が定義されています(事前準備のみの方針違反)")
+            continue
+        # ---- live ----
+        for key in ("label", "short", "swatch"):
+            if not t.get(key):
+                _err(errs, where, f"必須キー '{key}' がありません")
+        if t.get("default"):
+            defaults += 1
+        if t.get("kind") == "concrete":
+            for key in ("meta", "color_scheme"):
+                if not t.get(key):
+                    _err(errs, where, f"concrete テーマに '{key}' がありません")
+            varmap = t.get("vars") or {}
+            for k in THEME_VAR_KEYS:
+                if k not in varmap:
+                    _err(errs, where, f"vars に必須変数 '--{k}' がありません")
+            for k, v in {**varmap, **(t.get("extra_vars") or {})}.items():
+                if not isinstance(v, str) or not _CSS_VALUE_RE.match(v.strip()):
+                    _err(errs, where, f"変数 --{k} の値が不正な形式です: {v!r}")
+    if defaults != 1:
+        _err(errs, "themes", f"default テーマはちょうど1つ必要です(現在 {defaults}件)")
+
+
+def check_consent(errs):
+    """Cookie同意カテゴリ定義(data_consent.py)の不変条件。ファイル未作成の間はスキップ。"""
+    if not (HERE / "data_consent.py").exists():
+        return
+    try:
+        from data_consent import CONSENT_VERSION, CONSENT_CATEGORIES
+    except Exception as e:  # pragma: no cover
+        _err(errs, "data_consent", f"読み込み失敗: {e}")
+        return
+    if not (isinstance(CONSENT_VERSION, int) and CONSENT_VERSION >= 1):
+        _err(errs, "consent", f"CONSENT_VERSION が正の整数ではありません: {CONSENT_VERSION!r}")
+    seen = set()
+    for c in CONSENT_CATEGORIES:
+        cid = c.get("id", "?")
+        where = f"consent:{cid}"
+        if cid in seen:
+            _err(errs, where, "id が重複しています")
+        seen.add(cid)
+        for key in ("id", "label", "desc", "legal_desc"):
+            if not c.get(key):
+                _err(errs, where, f"必須キー '{key}' がありません")
+        for key in ("required", "default"):
+            if not isinstance(c.get(key), bool):
+                _err(errs, where, f"'{key}' は bool が必要です")
+        if c.get("required") and cid != "necessary":
+            _err(errs, where, "required を許すのは necessary のみです")
+    if "necessary" not in seen:
+        _err(errs, "consent", "necessary カテゴリがありません")
 
 
 def check_blocklist(errs):
@@ -215,6 +297,8 @@ def validate_all(strict=True):
     check_collab(errs)
     check_news(errs)
     check_tech(errs)
+    check_themes(errs)
+    check_consent(errs)
     check_emoji(errs)
     check_blocklist(errs)
     if errs:

@@ -29,6 +29,7 @@ REQUIRED_FILES = [
     "business/kaname-b1/index.html",
     "sitemap.xml",
     "data/products.js",
+    "assets/css/themes.css",
 ]
 MIN_PAGES = 220
 
@@ -52,6 +53,18 @@ def main():
     for rel in REQUIRED_FILES:
         if not (ROOT / rel).exists():
             fails.append(f"必須ファイルが無い: {rel}")
+
+    # 1b) テーマ機構(H-9-1): 早期適用に必要なマーカーが index.html に揃っていること
+    idx = (ROOT / "index.html")
+    if idx.exists():
+        html = idx.read_text(encoding="utf-8")
+        for marker, label in (
+            ('data-page-theme="', "data-page-theme(ページ既定テーマのサーバー出力)"),
+            ("/assets/css/themes.css?v=", "themes.css の読み込み"),
+            ("window.SZ_THEMES=", "テーマ早期適用スクリプト"),
+        ):
+            if marker not in html:
+                fails.append(f"index.html に {label} がありません")
 
     # 2) ビルドレポートのページ数
     rep = ROOT / ".build" / "report.json"

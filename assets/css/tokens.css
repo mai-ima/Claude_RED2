@@ -1,7 +1,9 @@
 /* ==========================================================================
    SUZAKU Design Tokens
-   単一ソースのデザイン変数。ダーク(製品/技術)とライト(企業/サポート/法務)の
-   2テーマを同一トークンから派生させる。
+   単一ソースの基礎デザイン変数(ブランド色・階調・タイポ・スペーシング・形状)。
+   カラーテーマ([data-theme="..."] の意味変数ブロック)は scripts/data_themes.py を
+   単一ソースとして assets/css/themes.css に自動生成される(手編集禁止)。
+   読み込み順: tokens.css → themes.css → base.css …
    ========================================================================== */
 
 :root {
@@ -115,109 +117,4 @@
     --sp-section-sm: 2.4rem;
     --gutter: 1.1rem;
   }
-}
-
-/* --------------------------------------------------------------------------
-   ダークテーマ(既定): 製品・技術・OS・ストア
-   -------------------------------------------------------------------------- */
-:root,
-[data-theme="dark"] {
-  --bg: var(--n-1);
-  --bg-deep: var(--n-0);
-  --surface: var(--n-3);
-  --surface-2: var(--n-4);
-  --surface-3: var(--n-5);
-  --line: rgba(255, 255, 255, 0.09);
-  --line-strong: rgba(255, 255, 255, 0.18);
-  --text: var(--n-10);
-  --text-strong: #ffffff;
-  --text-soft: var(--n-8);
-  --text-faint: var(--n-7);
-  --accent: var(--su-vermilion);
-  --accent-hover: var(--su-vermilion-bright);
-  --accent-contrast: #ffffff;
-  --header-bg: rgba(11, 11, 16, 0.72);
-  --card-hover-line: rgba(232, 68, 46, 0.45);
-}
-
-/* --------------------------------------------------------------------------
-   ライトテーマ: 企業・サポート・法務・環境
-   -------------------------------------------------------------------------- */
-/* --------------------------------------------------------------------------
-   Gモード(ゲーミング): 漆黒×ネオングリーン/シアン
-   -------------------------------------------------------------------------- */
-[data-theme="g"] {
-  --bg: #04070a;
-  --bg-deep: #020405;
-  --surface: #0a1116;
-  --surface-2: #101a21;
-  --surface-3: #17242d;
-  --line: rgba(0, 230, 170, 0.13);
-  --line-strong: rgba(0, 230, 170, 0.3);
-  --text: #e2f0ea;
-  --text-strong: #ffffff;
-  --text-soft: #9fb8ad;
-  --text-faint: #6d857c;
-  --accent: #00e68a;
-  --accent-hover: #2dffab;
-  --accent-contrast: #032117;
-  --header-bg: rgba(4, 7, 10, 0.74);
-  --card-hover-line: rgba(0, 230, 138, 0.5);
-  --grad-flame: linear-gradient(135deg, #00c76f 0%, #00e68a 55%, #00c2ff 100%);
-  --grad-flame-v: linear-gradient(180deg, #00e68a 0%, #00c2ff 100%);
-  --glow-vermilion: 0 0 24px rgba(0, 230, 138, 0.3), 0 0 80px rgba(0, 194, 255, 0.1);
-  --glow-strong: 0 0 30px rgba(0, 230, 138, 0.5), 0 0 110px rgba(0, 194, 255, 0.22);
-  color-scheme: dark;
-}
-
-/* --------------------------------------------------------------------------
-   朱雀モード: 深紅×金 — ブランドを最も濃く浴びるテーマ
-   -------------------------------------------------------------------------- */
-[data-theme="suzaku"] {
-  --bg: #170609;
-  --bg-deep: #0e0305;
-  --surface: #230a10;
-  --surface-2: #2d0e16;
-  --surface-3: #3a141d;
-  --line: rgba(255, 170, 130, 0.14);
-  --line-strong: rgba(255, 170, 130, 0.3);
-  --text: #f4e7e2;
-  --text-strong: #ffffff;
-  --text-soft: #cfa89c;
-  --text-faint: #9c7468;
-  --accent: #ff6a3c;
-  --accent-hover: #ff8a5c;
-  --accent-contrast: #ffffff;
-  --header-bg: rgba(17, 4, 7, 0.76);
-  --card-hover-line: rgba(217, 164, 65, 0.55);
-  --grad-flame: linear-gradient(135deg, #e8442e 0%, #ff7a3c 45%, #d9a441 100%);
-  --grad-flame-v: linear-gradient(180deg, #ff7a3c 0%, #d9a441 100%);
-  --glow-vermilion: 0 0 26px rgba(232, 68, 46, 0.4), 0 0 90px rgba(217, 164, 65, 0.14);
-  --glow-strong: 0 0 32px rgba(255, 122, 60, 0.55), 0 0 120px rgba(217, 164, 65, 0.28);
-  color-scheme: dark;
-}
-
-[data-theme="light"] {
-  --bg: #fafafc;
-  --bg-deep: #f0f0f4;
-  --surface: #ffffff;
-  --surface-2: #f4f4f8;
-  --surface-3: #ebebf1;
-  --line: rgba(10, 10, 20, 0.1);
-  --line-strong: rgba(10, 10, 20, 0.22);
-  --text: #2c2c38;
-  --text-strong: #101018;
-  --text-soft: #5c5c6e;
-  --text-faint: #85859a;
-  --accent: #d43a24;
-  --accent-hover: #e8442e;
-  --accent-contrast: #ffffff;
-  --header-bg: rgba(250, 250, 252, 0.8);
-  --card-hover-line: rgba(212, 58, 36, 0.4);
-  --shadow-sm: 0 2px 8px rgba(20, 20, 40, 0.07);
-  --shadow-md: 0 8px 30px rgba(20, 20, 40, 0.1);
-  --shadow-lg: 0 24px 70px rgba(20, 20, 40, 0.14);
-  --glow-vermilion: 0 8px 30px rgba(212, 58, 36, 0.18);
-  --glow-strong: 0 10px 36px rgba(212, 58, 36, 0.28);
-  color-scheme: light;
 }
