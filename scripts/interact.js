@@ -76,7 +76,7 @@ const BASE = process.env.AUDIT_BASE || 'http://localhost:8930';
   ok('発表ステージに価格が表示される', priceShown);
   await page.unroute('**/collab/genshin/tablet/');
 
-  // 6) テーマ切替(H-9-1: 単一ソース化・meta同期・早期適用・planned非公開)
+  // 6) テーマ切替(H-9-1: 単一ソース化・meta同期・早期適用 / H-9-6: 前線=endfield live化)
   await page.goto(BASE + '/', { waitUntil: 'networkidle' });
   await page.click('#themeBtn');
   await page.click('#themeMenu [data-theme-opt="g"]');
@@ -89,10 +89,22 @@ const BASE = process.env.AUDIT_BASE || 'http://localhost:8930';
   await page.reload({ waitUntil: 'domcontentloaded' });
   const themeEarly = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
   ok('テーマ切替: リロード後も早期スクリプトで維持', themeEarly === 'g');
-  const plannedBtn = await page.$('[data-theme-opt="endfield"]');
-  ok('planned テーマ(endfield)はUIに出ない', plannedBtn === null);
   const sysBtn = await page.$('#themeMenu [data-theme-opt="system"]');
   ok('OS連動テーマがメニューに存在する', sysBtn !== null);
+  // 前線(endfield)テーマが公開済みで、切替・meta同期・早期適用が効くこと
+  await page.click('#themeBtn');
+  await page.click('#themeMenu [data-theme-opt="endfield"]');
+  await page.waitForTimeout(200);
+  const efApplied = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+  const efMeta = await page.getAttribute('meta[name="theme-color"]', 'content');
+  const efAccent = await page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--accent').trim());
+  ok('前線テーマ切替: data-theme=endfield / meta同期 / 黄アクセント適用',
+    efApplied === 'endfield' && efMeta === '#0e0e11' && efAccent.toLowerCase() === '#f4df00',
+    efApplied + '/' + efMeta + '/' + efAccent);
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  const efEarly = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+  ok('前線テーマ: リロード後も早期スクリプトで維持', efEarly === 'endfield');
   await page.evaluate(() => localStorage.removeItem('sz_theme'));
 
   // 7) Cookie再同意(H-9-3: 旧v2保存 → バナー再表示 → v3で保存 → 撤回)

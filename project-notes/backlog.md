@@ -80,3 +80,19 @@
   (theme v3 / consent v3 / prefs v2 / search v2 / compare v2 / reveal v1 / store v1 / auth v1)。
   /dev/ の一覧表と `window.SZ.features` に反映。consent の版だけは
   CONSENT_VERSION が原本(二重管理しない)。README に「拡張ポイント」章を追加。
+
+## H-9-6 の設計メモ(2026-07-18)— 前線テーマ(endfield)を live 化
+
+- ユーザーからエンドフィールドのゲーム内UI参考資料を6バッチ受領(静止画25枚+動画5本)。
+  動画は imageio-ffmpeg で毎秒フレーム抽出→コンタクトシート化して確認。観察の全記録は
+  `project-notes/theme-endfield-plan.md` の 0-A〜0-E に集約。
+- 確定意匠: 極暗チャコール地(#0e0e11)×鮮烈イエロー(#f4df00。黄の上の文字は黒)。
+  副光に橙(#ff7a1c)。作品UIは「黄=主アクセント/黄ピル+黒文字ボタン/白黒ブロック反転/
+  coral警告/シアン環境光」が一貫。基調はダーク/ライト二系統あるが、既存テーマが全て
+  ダーク運用のため endfield=ダークを採用(ライト版は将来別テーマに分離)。
+- 実装: `data_themes.py` の endfield を `status:"planned"→"live"` に。16変数+extra_vars を
+  実装しただけで、themes.css・切替UI(ヘッダ/ドロワー/設定)・早期適用・meta同期へ全自動反映。
+  → 単一ソース化(H-9-1)の設計が想定通り機能。コントラストは WCAG AA を Python 実測。
+- 付随更新: ニュース記事を「準備中」→「前線モードを公開」に、README テーマ章に endfield 追記、
+  interact のテーマテストを「planned で非存在」→「live で切替・meta・早期適用」へ書換え。
+- collab-endfield.css(LP専用 `--cl-*`)は流用せず、基礎トークンを独立実装(手順書の方針通り)。

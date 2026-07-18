@@ -134,10 +134,16 @@ WAI-ARIA Tabsパターン(自動アクティベーション・roving tabindex・
 
 をすべて生成する。`kind: "virtual"` の `auto`(ページ既定)/`system`(OS連動。
 `prefers-color-scheme` に追従)はJSが実テーマへ解決し、`kind: "concrete"` の
-light / dark / g / suzaku がCSS変数を持つ。`status: "planned"` の予約枠
-(現在: `endfield`)は **CSS・UI・JSのどこにも出力されない**(`validate.py` の
-`check_themes()` が機械検査)。基礎トークンは `assets/css/tokens.css` に残り、
+light / dark / g / suzaku / **endfield(前線モード)** がCSS変数を持つ。
+`status: "planned"` の予約枠は **CSS・UI・JSのどこにも出力されない**(`validate.py`
+の `check_themes()` が機械検査)。基礎トークンは `assets/css/tokens.css` に残り、
 テーマ差分だけが `themes.css` に載る。
+
+`endfield`(前線モード)は『アークナイツ: エンドフィールド』コラボの一環として
+追加したダーク系テーマ(極暗チャコール+鮮烈イエロー)。配色は作品公式のゲーム内UI
+参考資料に基づき、コントラストを WCAG AA で実測して確定した。設計経緯・観察メモは
+`project-notes/theme-endfield-plan.md` を参照。コラボ特設 `collab-endfield.css`
+(LP専用スコープ)とは責務が別で、流用せず基礎トークンを独立実装している。
 
 ### 拡張ポイント(整備の手引き)
 

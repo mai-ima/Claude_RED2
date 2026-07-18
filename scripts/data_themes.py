@@ -130,10 +130,32 @@ THEMES = [
         },
     },
 
-    # ---- 予約枠(H-9-4: エンドフィールドコラボの一環のサイトテーマ「前線」) ----
-    # 事前準備のみ。CSS変数・スウォッチ・meta 色は作品側の参考資料が届くまで実装しない。
-    # 実装時は project-notes/theme-endfield-plan.md の手順書に従い、この dict に
-    # vars 等を実装して status を "live" に変えるだけでサイト全体へ自動反映される。
-    # 注意: コラボ特設 collab-endfield.css(特設LP専用スコープ)の流用は禁止。
-    {"id": "endfield", "status": "planned", "kind": "concrete", "label": "前線", "short": "前線"},
+    # ---- エンドフィールドコラボの一環のサイトテーマ「前線」(H-9-4→実装済み) ----
+    # 配色は作品公式のゲーム内UI参考資料(2026-07-18受領・全6バッチ)に基づき、
+    # project-notes/theme-endfield-plan.md の観察メモから確定。コントラストは WCAG AA 実測済み。
+    # 意匠: 極暗チャコール地 × 鮮烈イエロー(#f4df00。黄の上の文字は黒)+ 橙の副光。
+    # 注意: コラボ特設 collab-endfield.css(特設LP専用スコープ・--cl-* 系)の流用はしない。
+    #        本テーマは基礎トークン(--bg/--surface/--text/--accent…)を独立実装したもの。
+    {
+        "id": "endfield", "status": "live", "kind": "concrete",
+        "label": "前線モード", "short": "前線",
+        "swatch": "linear-gradient(135deg,#f4df00,#ff7a1c)", "meta": "#0e0e11", "color_scheme": "dark",
+        "desc": "エンドフィールド工業の設計言語。極暗チャコールに鮮烈イエローの標識色を差した配色です。",
+        "vars": {
+            "bg": "#0e0e11", "bg-deep": "#060607",
+            "surface": "#1b1b1e", "surface-2": "#232326", "surface-3": "#2e2e32",
+            "line": "rgba(255, 255, 255, 0.09)", "line-strong": "rgba(255, 255, 255, 0.2)",
+            "text": "#ececee", "text-strong": "#ffffff",
+            "text-soft": "#a9a9ae", "text-faint": "#7c7c84",
+            "accent": "#f4df00", "accent-hover": "#ffe92e", "accent-contrast": "#141414",
+            "header-bg": "rgba(14, 14, 17, 0.74)",
+            "card-hover-line": "rgba(244, 223, 0, 0.55)",
+        },
+        "extra_vars": {
+            "grad-flame": "linear-gradient(135deg, #f4df00 0%, #ffce00 50%, #ff7a1c 100%)",
+            "grad-flame-v": "linear-gradient(180deg, #f4df00 0%, #ff7a1c 100%)",
+            "glow-vermilion": "0 0 24px rgba(244, 223, 0, 0.32), 0 0 80px rgba(255, 122, 28, 0.12)",
+            "glow-strong": "0 0 30px rgba(244, 223, 0, 0.5), 0 0 110px rgba(255, 122, 28, 0.22)",
+        },
+    },
 ]

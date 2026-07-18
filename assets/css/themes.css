@@ -98,3 +98,28 @@
   --glow-strong: 0 0 32px rgba(255, 122, 60, 0.55), 0 0 120px rgba(217, 164, 65, 0.28);
   color-scheme: dark;
 }
+
+/* --- 前線モード(endfield) --- */
+[data-theme="endfield"] {
+  --bg: #0e0e11;
+  --bg-deep: #060607;
+  --surface: #1b1b1e;
+  --surface-2: #232326;
+  --surface-3: #2e2e32;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --text: #ececee;
+  --text-strong: #ffffff;
+  --text-soft: #a9a9ae;
+  --text-faint: #7c7c84;
+  --accent: #f4df00;
+  --accent-hover: #ffe92e;
+  --accent-contrast: #141414;
+  --header-bg: rgba(14, 14, 17, 0.74);
+  --card-hover-line: rgba(244, 223, 0, 0.55);
+  --grad-flame: linear-gradient(135deg, #f4df00 0%, #ffce00 50%, #ff7a1c 100%);
+  --grad-flame-v: linear-gradient(180deg, #f4df00 0%, #ff7a1c 100%);
+  --glow-vermilion: 0 0 24px rgba(244, 223, 0, 0.32), 0 0 80px rgba(255, 122, 28, 0.12);
+  --glow-strong: 0 0 30px rgba(244, 223, 0, 0.5), 0 0 110px rgba(255, 122, 28, 0.22);
+  color-scheme: dark;
+}
