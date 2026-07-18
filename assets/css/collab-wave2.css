@@ -563,3 +563,22 @@
 .sr-front { max-width: 280px; margin: 30px auto 34px; }
 .sr-front img { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 34px rgba(216, 180, 92, 0.25)); }
 .sr-front .sr-note { margin-top: 12px; }
+
+/* ==== H-6: 第1弾同型の構成要素(ヒーロー両面ペア・タグ・用語・カラバリ実写) ==== */
+.zz-hero__tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0 6px; }
+.zz-hero__art--pair { display: flex; gap: 18px; justify-content: center; max-width: 460px; margin: 30px auto 0; }
+.zz-hero__art--pair img { width: calc(50% - 9px); min-width: 0; height: auto; }
+.zz-terms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0; }
+.zz-term { border: 1px solid #26262b; background: #101013; padding: 18px 20px; border-top: 3px solid var(--zz, #d4fa4c); }
+.zz-term h3 { font-size: 1rem; font-weight: 900; font-style: italic; color: #f4f4ef; }
+.zz-term p { margin-top: 8px; font-size: .8rem; line-height: 1.95; color: #9a9a92; }
+.zz-color__img { margin: -6px -6px 12px; }
+.zz-color__img img { width: 100%; height: auto; display: block; }
+.sr-hero__tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0 6px; }
+.sr-hero__art--pair { display: flex; gap: 18px; justify-content: center; max-width: 480px; }
+.sr-hero__art--pair img { width: calc(50% - 9px); min-width: 0; height: auto; }
+.sr-color__img { margin: -4px -4px 12px; }
+.sr-color__img img { width: 100%; height: auto; display: block; }
+@media (max-width: 760px) {
+  .zz-terms { grid-template-columns: 1fr; }
+}

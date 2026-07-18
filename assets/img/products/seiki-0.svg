@@ -1,32 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="星軌 SEIKI">
 <defs>
-<linearGradient id="bodyseikireal" x1="0" y1="0" x2="0.85" y2="1">
+<linearGradient id="bodyseikireal0" x1="0" y1="0" x2="0.85" y2="1">
   <stop offset="0" stop-color="#9397a2"/>
   <stop offset="0.28" stop-color="#404659"/>
   <stop offset="0.62" stop-color="#101830"/>
   <stop offset="1" stop-color="#090e1c"/>
 </linearGradient>
-<linearGradient id="frameseikireal" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ecd9a0"/><stop offset="0.5" stop-color="#9a7a2e"/><stop offset="1" stop-color="#e0c887"/>
+<linearGradient id="frameseikireal0" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ecdaae"/><stop offset="0.5" stop-color="#977e40"/><stop offset="1" stop-color="#e7d09a"/>
 </linearGradient>
-<radialGradient id="lensseikireal" cx="0.38" cy="0.32" r="0.95">
+<radialGradient id="lensseikireal0" cx="0.38" cy="0.32" r="0.95">
   <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
 </radialGradient>
-<radialGradient id="nebseikireal" cx="0.72" cy="0.2" r="0.7">
+<radialGradient id="nebseikireal0" cx="0.72" cy="0.2" r="0.7">
   <stop offset="0" stop-color="#b48cff" stop-opacity="0.2"/><stop offset="1" stop-color="#b48cff" stop-opacity="0"/>
 </radialGradient>
-<linearGradient id="panelseikireal" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="panelseikireal0" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#747987"/><stop offset="0.5" stop-color="#0e162b"/><stop offset="1" stop-color="#454b5e"/>
 </linearGradient>
-<clipPath id="clipseikireal"><rect x="49" y="36" width="242" height="528" rx="42"/></clipPath>
-<filter id="softseikireal" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<clipPath id="clipseikireal0"><rect x="49" y="36" width="242" height="528" rx="42"/></clipPath>
+<filter id="softseikireal0" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
 </defs>
-<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.4" filter="url(#softseikireal)"/>
-<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#frameseikireal)"/>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.4" filter="url(#softseikireal0)"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#frameseikireal0)"/>
 <rect x="49" y="36" width="242" height="528" rx="42" fill="#101830"/>
-<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#bodyseikireal)"/>
-<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#nebseikireal)"/>
-<g clip-path="url(#clipseikireal)">
+<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#bodyseikireal0)"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#nebseikireal0)"/>
+<g clip-path="url(#clipseikireal0)">
   <circle cx="88" cy="250" r="1.1" fill="#ffffff" opacity="0.55"/><circle cx="128" cy="226" r="0.8" fill="#ffffff" opacity="0.4"/><circle cx="216" cy="246" r="1" fill="#ffffff" opacity="0.5"/><circle cx="250" cy="222" r="0.8" fill="#ffffff" opacity="0.45"/><circle cx="100" cy="420" r="0.9" fill="#ffffff" opacity="0.4"/><circle cx="238" cy="430" r="1.1" fill="#ffffff" opacity="0.5"/><circle cx="150" cy="512" r="0.8" fill="#ffffff" opacity="0.35"/><circle cx="200" cy="60" r="0.9" fill="#ffffff" opacity="0.4"/><circle cx="86" cy="60" r="0.7" fill="#ffffff" opacity="0.3"/><circle cx="262" cy="500" r="0.8" fill="#ffffff" opacity="0.4"/><circle cx="170" cy="250" r="0.7" fill="#ffffff" opacity="0.35"/>
   <polyline points="88,250 128,226 170,250 216,246 250,222" fill="none" stroke="#d8b45c" stroke-width="0.9" opacity="0.55"/>
   <polyline points="100,420 150,512 200,470 238,430" fill="none" stroke="#d8b45c" stroke-width="0.8" opacity="0.4"/>
@@ -35,45 +35,40 @@
   <path d="M262 88 l3.4 0 l1 -3.2 l1 3.2 l3.4 0 l-2.7 2 l1 3.2 l-2.7 -2 l-2.7 2 l1 -3.2 z" fill="#d8b45c" opacity="0.85"/>
 </g>
 <rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="1.2"/>
-<!-- カメラ島: 車窓(金枠の窓型) -->
-<rect x="70" y="54" width="200" height="114" rx="20" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#softseikireal)"/>
-<rect x="70" y="54" width="200" height="114" rx="20" fill="url(#panelseikireal)" stroke="#d8b45c" stroke-width="2"/>
+<rect x="70" y="54" width="200" height="114" rx="20" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#softseikireal0)"/>
+<rect x="70" y="54" width="200" height="114" rx="20" fill="url(#panelseikireal0)" stroke="#d8b45c" stroke-width="2"/>
 <rect x="76" y="60" width="188" height="102" rx="15" fill="#0b1122" stroke="#d8b45c" stroke-opacity="0.55" stroke-width="1"/>
 <path d="M170 60 V162" stroke="#d8b45c" stroke-opacity="0.5" stroke-width="1.2"/>
 <circle cx="123" cy="104" r="29" fill="#0b0d13" stroke="#d8b45c" stroke-width="1.8"/>
 <circle cx="123" cy="104" r="22" fill="none" stroke="#b48cff" stroke-opacity="0.6" stroke-width="1.4"/>
-<circle cx="123" cy="104" r="17" fill="url(#lensseikireal)"/>
+<circle cx="123" cy="104" r="17" fill="url(#lensseikireal0)"/>
 <circle cx="123" cy="104" r="6" fill="#04040a"/>
 <circle cx="116" cy="96" r="3.8" fill="#ffffff" opacity="0.55"/>
 <circle cx="216" cy="96" r="23" fill="#0b0d13" stroke="#d8b45c" stroke-width="1.6"/>
 <circle cx="216" cy="96" r="17" fill="none" stroke="#b48cff" stroke-opacity="0.5" stroke-width="1.2"/>
-<circle cx="216" cy="96" r="13" fill="url(#lensseikireal)"/>
+<circle cx="216" cy="96" r="13" fill="url(#lensseikireal0)"/>
 <circle cx="216" cy="96" r="4.6" fill="#04040a"/>
 <circle cx="211" cy="90" r="3" fill="#ffffff" opacity="0.5"/>
 <rect x="196" y="128" width="40" height="18" rx="7" fill="#0b0d13" stroke="#d8b45c" stroke-opacity="0.7" stroke-width="1.1"/>
 <circle cx="207" cy="137" r="4" fill="#1a1e2a"/><circle cx="225" cy="137" r="4" fill="#f4efdf" opacity="0.8"/>
-<circle cx="95" cy="66" r="1" fill="#ffffff" opacity="0.7"/><circle cx="250" cy="70" r="0.8" fill="#ffffff" opacity="0.5"/>
 <text x="123" y="152" font-family="monospace" font-size="6.5" fill="#9aa0c8" text-anchor="middle" letter-spacing="1.5">STAR WINDOW</text>
-<!-- 乗車認証アクセント -->
 <g opacity="0.95">
   <path d="M170 196 l7 10 l-7 10 l-7 -10 z" fill="none" stroke="#b48cff" stroke-width="1.6"/>
   <path d="M130 199 v-6 h6 M210 193 h-6 M210 193 v6 M130 209 v6 h6 M210 215 h-6 v-6" stroke="#b48cff" stroke-width="1.2" fill="none" opacity="0.8"/>
 </g>
 <text x="170" y="232" font-family="monospace" font-size="6.5" fill="#9aa0c8" text-anchor="middle" letter-spacing="2">BOARDING PASS</text>
-<!-- 放射冷却パネル(永冬 EITO) -->
-<rect x="98" y="288" width="144" height="78" rx="14" fill="#000000" opacity="0.35" transform="translate(0 3)" filter="url(#softseikireal)"/>
-<rect x="98" y="288" width="144" height="78" rx="14" fill="url(#panelseikireal)" stroke="#d8b45c" stroke-width="1.6"/>
+<rect x="98" y="288" width="144" height="78" rx="14" fill="#000000" opacity="0.35" transform="translate(0 3)" filter="url(#softseikireal0)"/>
+<rect x="98" y="288" width="144" height="78" rx="14" fill="url(#panelseikireal0)" stroke="#d8b45c" stroke-width="1.6"/>
 <path d="M108 298 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 305 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 312 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 319 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 326 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 333 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 340 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 347 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/><path d="M108 354 H232" stroke="#d8b45c" stroke-opacity="0.35" stroke-width="1"/>
 <path d="M170 316 l9 12 l-9 12 l-9 -12 z" fill="#0d1326" stroke="#d8b45c" stroke-width="1.6"/>
 <circle cx="170" cy="328" r="2.2" fill="#d8b45c"/>
 <text x="170" y="384" font-family="monospace" font-size="7" fill="#9aa0c8" text-anchor="middle" letter-spacing="3">EITO — RADIATIVE PANEL</text>
-<!-- 刻印 -->
 <text x="170" y="446" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="19" font-weight="800" fill="#eef0ff" opacity="0.94" text-anchor="middle" letter-spacing="4">星軌 <tspan fill="#d8b45c">SEIKI</tspan></text>
-<text x="170" y="466" font-family="monospace" font-size="8" fill="#9aa0c8" opacity="0.85" text-anchor="middle" letter-spacing="6">せいき</text>
-<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#9aa0c8" opacity="0.75" text-anchor="middle" letter-spacing="2">SUZAKU × HSR ・ JOINT DESIGN ・ 165Hz</text>
+<text x="170" y="466" font-family="monospace" font-size="8" fill="#9aa0c8" opacity="0.95" text-anchor="middle" letter-spacing="6">せいき</text>
+<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#9aa0c8" opacity="0.9" text-anchor="middle" letter-spacing="2">SUZAKU × HSR ・ JOINT DESIGN ・ 165Hz</text>
 <path d="M84 36 L200 36 L100 564 L49 564 L49 320 Z" fill="#ffffff" opacity="0.1"/>
 <path d="M232 36 L260 36 L152 564 L128 564 Z" fill="#ffffff" opacity="0.05"/>
-<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="#9a7a2e"/>
-<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="#9a7a2e"/>
+<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="#a28745"/>
+<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="#a28745"/>
 <rect x="42.5" y="150" width="5" height="60" rx="2.5" fill="#080c18"/>
 </svg>

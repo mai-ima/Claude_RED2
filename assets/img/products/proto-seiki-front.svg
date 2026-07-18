@@ -2,6 +2,7 @@
 <defs><radialGradient id="pgfprotofseikin38" cx="0.5" cy="0.35" r="0.85">
 <stop offset="0" stop-color="#d8b45c" stop-opacity="0.13"/><stop offset="1" stop-color="#d8b45c" stop-opacity="0"/>
 </radialGradient></defs>
+<rect width="340" height="600" fill="#0e0e12"/>
 <rect width="340" height="600" fill="url(#pgfprotofseikin38)"/>
 <path d="M316 85 L317.5 88.5 L321 90 L317.5 91.5 L316 95 L314.5 91.5 L311 90 L314.5 88.5 Z" fill="#d8b45c" opacity="0.6"/><path d="M26 398 L27.2 400.8 L30 402 L27.2 403.2 L26 406 L24.8 403.2 L22 402 L24.8 400.8 Z" fill="#d8b45c" opacity="0.6"/><path d="M314 465.6 L315.32 468.68 L318.4 470 L315.32 471.32 L314 474.4 L312.68 471.32 L309.6 470 L312.68 468.68 Z" fill="#d8b45c" opacity="0.6"/>
 <path d="M12 30 v-16 h16 M328 30 v-16 h-16 M12 570 v16 h16 M328 570 v16 h-16" stroke="#d8b45c" stroke-width="1.4" fill="none" opacity="0.8"/>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="空洞 KUDO">
+<defs>
+<linearGradient id="bodykudoreal2" x1="0" y1="0" x2="0.85" y2="1">
+  <stop offset="0" stop-color="#f5f5f2"/>
+  <stop offset="0.3" stop-color="#f2f2ee"/>
+  <stop offset="0.62" stop-color="#f0f0ec"/>
+  <stop offset="1" stop-color="#90908e"/>
+</linearGradient>
+<linearGradient id="framekudoreal2" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#f8f8f6"/>
+  <stop offset="0.12" stop-color="#c0c0bd"/>
+  <stop offset="0.5" stop-color="#5b5b5a"/>
+  <stop offset="0.88" stop-color="#b6b6b3"/>
+  <stop offset="1" stop-color="#f5f5f3"/>
+</linearGradient>
+<radialGradient id="lenskudoreal2" cx="0.38" cy="0.32" r="0.95">
+  <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
+</radialGradient>
+<linearGradient id="platekudoreal2" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#232329"/><stop offset="0.5" stop-color="#101014"/><stop offset="1" stop-color="#1c1c22"/>
+</linearGradient>
+<pattern id="tapekudoreal2" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+  <path d="M0 0 V7" stroke="#000000" stroke-opacity="0.07" stroke-width="1.6"/>
+</pattern>
+<pattern id="hazkudoreal2" width="26" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)">
+  <rect width="26" height="30" fill="#96b41c"/>
+  <rect x="13" width="13" height="30" fill="#d3d3d0"/>
+</pattern>
+<clipPath id="clipkudoreal2"><rect x="49" y="36" width="242" height="528" rx="42"/></clipPath>
+<filter id="softkudoreal2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<filter id="glowkudoreal2" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.42" filter="url(#softkudoreal2)"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#framekudoreal2)"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="#f0f0ec"/>
+<rect x="49" y="36" width="242" height="528" rx="42" fill="url(#bodykudoreal2)"/>
+<g clip-path="url(#clipkudoreal2)">
+  <rect x="20" y="492" width="320" height="26" fill="url(#hazkudoreal2)" opacity="0.92" transform="rotate(-12 170 505)"/>
+  <rect x="20" y="492" width="320" height="26" fill="none" stroke="#000000" stroke-opacity="0.5" stroke-width="2" transform="rotate(-12 170 505)"/>
+  <rect x="49" y="330" width="26" height="150" fill="url(#tapekudoreal2)"/>
+  <rect x="265" y="330" width="26" height="150" fill="url(#tapekudoreal2)"/>
+</g>
+<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="#000000" stroke-opacity="0.14" stroke-width="1.4"/>
+<rect x="64" y="56" width="212" height="112" rx="18" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#softkudoreal2)"/>
+<rect x="64" y="56" width="212" height="112" rx="18" fill="url(#platekudoreal2)" stroke="#a8a8a5" stroke-width="1.4"/>
+<rect x="66" y="58" width="208" height="108" rx="16" fill="none" stroke="#96b41c" stroke-opacity="0.6" stroke-width="1.4"/>
+<path d="M236 56 l10 -13 M252 56 l4 -13" stroke="#9c9c99" stroke-width="3" stroke-linecap="round"/>
+<circle cx="118" cy="106" r="30" fill="#0b0d13" stroke="#3a3a44" stroke-width="1.8"/>
+<circle cx="118" cy="106" r="23" fill="none" stroke="#d4fa4c" stroke-opacity="0.7" stroke-width="1.6"/>
+<circle cx="118" cy="106" r="18" fill="url(#lenskudoreal2)"/>
+<circle cx="118" cy="106" r="6.5" fill="#04040a"/>
+<circle cx="111" cy="98" r="4" fill="#ffffff" opacity="0.55"/>
+<circle cx="186" cy="106" r="24" fill="#0b0d13" stroke="#3a3a44" stroke-width="1.6"/>
+<circle cx="186" cy="106" r="18" fill="none" stroke="#d4fa4c" stroke-opacity="0.5" stroke-width="1.3"/>
+<circle cx="186" cy="106" r="14" fill="url(#lenskudoreal2)"/>
+<circle cx="186" cy="106" r="5" fill="#04040a"/>
+<circle cx="181" cy="100" r="3" fill="#ffffff" opacity="0.5"/>
+<rect x="228" y="84" width="30" height="18" rx="6" fill="#0b0d13" stroke="#3a3a44" stroke-width="1.2"/>
+<circle cx="236" cy="93" r="4" fill="#1a1e2a"/><circle cx="249" cy="93" r="4" fill="#f4efdf" opacity="0.8"/>
+<circle cx="243" cy="128" r="5" fill="#2a0d0d"/><circle cx="243" cy="128" r="2.4" fill="#ff4646"/>
+<circle cx="243" cy="128" r="6.5" fill="none" stroke="#ff4646" stroke-opacity="0.4" stroke-width="1"/>
+<text x="118" y="150" font-family="monospace" font-size="6.5" fill="#9a9aa6" text-anchor="middle" letter-spacing="1.5">KUDO VISION</text>
+<text x="243" y="147" font-family="monospace" font-size="6" fill="#9a9aa6" text-anchor="middle" letter-spacing="1">REC</text>
+<g filter="url(#glowkudoreal2)" opacity="0.85"><path d="M78 196 h48 l-14 14 h-48 z" fill="#96b41c"/></g>
+<path d="M78 196 h48 l-14 14 h-48 z" fill="#96b41c"/>
+<path d="M144 196 h48 l-14 14 h-48 z" fill="#96b41c" opacity="0.5"/>
+<path d="M210 196 h48 l-14 14 h-48 z" fill="#96b41c" opacity="0.22"/>
+<text x="78" y="228" font-family="monospace" font-size="7" fill="#55554e" letter-spacing="2">SIGNAL — THERMAL</text>
+<circle cx="170" cy="330" r="46" fill="#adadaa"/>
+<circle cx="170" cy="330" r="46" fill="none" stroke="#848482" stroke-width="1.4"/>
+<path d="M170 330 m -34 0 a34 34 0 1 1 14 27" fill="none" stroke="#96b41c" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M170 330 m -22 0 a22 22 0 1 0 9 -19" fill="none" stroke="#96b41c" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+<circle cx="170" cy="330" r="6" fill="#96b41c"/>
+<circle cx="170" cy="330" r="10" fill="none" stroke="#96b41c" stroke-opacity="0.35" stroke-width="1.2"/>
+<g>
+  <rect x="44" y="296" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="299" width="3.6" height="10" rx="1.8" fill="#96b41c" opacity="0.75"/>
+  <rect x="44" y="318" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="321" width="3.6" height="10" rx="1.8" fill="#96b41c" opacity="0.45"/>
+  <rect x="44" y="340" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="343" width="3.6" height="10" rx="1.8" fill="#96b41c" opacity="0.25"/>
+  <rect x="289" y="296" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="299" width="3.6" height="10" rx="1.8" fill="#96b41c" opacity="0.75"/>
+  <rect x="289" y="318" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="321" width="3.6" height="10" rx="1.8" fill="#96b41c" opacity="0.45"/>
+  <rect x="289" y="340" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="343" width="3.6" height="10" rx="1.8" fill="#96b41c" opacity="0.25"/>
+</g>
+<text x="170" y="398" font-family="monospace" font-size="7" fill="#55554e" text-anchor="middle" letter-spacing="3">REIKO — SIDE DUAL DUCT</text>
+<text x="170" y="446" font-family="'Noto Sans JP',sans-serif" font-size="19" font-weight="900" font-style="italic" fill="#16161a" opacity="0.92" text-anchor="middle" letter-spacing="2">空洞 <tspan fill="#96b41c">KUDO</tspan></text>
+<text x="170" y="466" font-family="monospace" font-size="8" fill="#55554e" opacity="0.9" text-anchor="middle" letter-spacing="5">くうどう</text>
+<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#55554e" opacity="0.85" text-anchor="middle" letter-spacing="2">SUZAKU × ZZZ ・ JOINT DESIGN ・ 144Hz</text>
+<path d="M78 36 L206 36 L96 564 L49 564 L49 300 Z" fill="#ffffff" opacity="0.16"/>
+<path d="M232 36 L262 36 L150 564 L124 564 Z" fill="#ffffff" opacity="0.09"/>
+<rect x="292.5" y="112" width="5" height="44" rx="2.5" fill="#96b41c"/>
+<rect x="292.5" y="172" width="5" height="44" rx="2.5" fill="#96b41c"/>
+<rect x="42.5" y="146" width="5" height="62" rx="2.5" fill="#787876"/>
+</svg>

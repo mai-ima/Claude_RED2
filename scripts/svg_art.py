@@ -1335,6 +1335,7 @@ def svg_prototype(pid, glow, label, kana="", style="generic", note="PROTOTYPE �
             f'<stop offset="0" stop-color="{acc}" stop-opacity="0.15"/>'
             f'<stop offset="1" stop-color="{acc}" stop-opacity="0"/>'
             f'</radialGradient></defs>'
+            f'<rect width="340" height="600" fill="#0e0e12"/>'
             f'<rect width="340" height="600" fill="url(#pg{u})"/>')
 
     if style == "zzz":
@@ -1468,13 +1469,20 @@ def svg_prototype(pid, glow, label, kana="", style="generic", note="PROTOTYPE �
 </svg>"""
 
 
-def svg_kudo(label="空洞 KUDO", kana="くうどう", hz="144Hz"):
+# 第2弾のカラーバリエーション(reveal["colors"] の並びと一致させる)
+KUDO_COLORS = [("#141417", "#d4fa4c"), ("#d4fa4c", "#141417"), ("#f0f0ec", "#96b41c")]
+SEIKI_COLORS = [("#101830", "#d8b45c"), ("#d8b45c", "#101830"), ("#eef0f8", "#b8933c")]
+
+
+def svg_kudo(ci=0, label="空洞 KUDO", kana="くうどう", hz="144Hz"):
     """空洞 KUDO(ゼンレスゾーンゼロ)本レンダリング背面。
-    漆黒マット筐体×シグナルライム。ブラウン管型カメラ島・斜行ハザード帯・
-    シグナルLED・側面デュアルダクト(冷巷 REIKO)・テープ質感グリップ。"""
-    body_hex = "#141417"
-    acc = "#d4fa4c"
-    gid = "kudoreal"
+    ci=カラーインデックス(0=新エリー・ブラック / 1=ハザード・ライム / 2=プロキシ・ホワイト。
+    reveal["colors"] と同順)。既存製品の {id}-{i}.svg 命名規則に合わせて色違いを生成する。"""
+    body_hex, acc = KUDO_COLORS[ci % len(KUDO_COLORS)]
+    light = _is_light(body_hex)
+    ink = "#16161a" if light else "#f2f2f4"
+    soft = "#55554e" if light else "#9a9aa6"
+    gid = f"kudoreal{ci}"
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label}">
 <defs>
 <linearGradient id="body{gid}" x1="0" y1="0" x2="0.85" y2="1">
@@ -1496,15 +1504,12 @@ def svg_kudo(label="空洞 KUDO", kana="くうどう", hz="144Hz"):
 <linearGradient id="plate{gid}" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#232329"/><stop offset="0.5" stop-color="#101014"/><stop offset="1" stop-color="#1c1c22"/>
 </linearGradient>
-<linearGradient id="lime{gid}" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#eaff7a"/><stop offset="0.5" stop-color="{acc}"/><stop offset="1" stop-color="#9cc22e"/>
-</linearGradient>
 <pattern id="tape{gid}" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-  <path d="M0 0 V7" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1.6"/>
+  <path d="M0 0 V7" stroke="{'#000000' if light else '#ffffff'}" stroke-opacity="0.07" stroke-width="1.6"/>
 </pattern>
 <pattern id="haz{gid}" width="26" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)">
   <rect width="26" height="30" fill="{acc}"/>
-  <rect x="13" width="13" height="30" fill="#101013"/>
+  <rect x="13" width="13" height="30" fill="{_shade(body_hex, -0.12) if light else _shade(body_hex, 0.06)}"/>
 </pattern>
 <clipPath id="clip{gid}"><rect x="49" y="36" width="242" height="528" rx="42"/></clipPath>
 <filter id="soft{gid}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
@@ -1520,44 +1525,38 @@ def svg_kudo(label="空洞 KUDO", kana="くうどう", hz="144Hz"):
   <rect x="49" y="330" width="26" height="150" fill="url(#tape{gid})"/>
   <rect x="265" y="330" width="26" height="150" fill="url(#tape{gid})"/>
 </g>
-<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.4"/>
-<!-- カメラ島: ブラウン管型プレート -->
+<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="{'#000000' if light else '#ffffff'}" stroke-opacity="0.14" stroke-width="1.4"/>
 <rect x="64" y="56" width="212" height="112" rx="18" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#soft{gid})"/>
-<rect x="64" y="56" width="212" height="112" rx="18" fill="url(#plate{gid})" stroke="{_shade(body_hex, 0.4)}" stroke-width="1.4"/>
+<rect x="64" y="56" width="212" height="112" rx="18" fill="url(#plate{gid})" stroke="{_shade(body_hex, -0.3) if light else _shade(body_hex, 0.4)}" stroke-width="1.4"/>
 <rect x="66" y="58" width="208" height="108" rx="16" fill="none" stroke="{acc}" stroke-opacity="0.6" stroke-width="1.4"/>
-<path d="M236 56 l10 -13 M252 56 l4 -13" stroke="{_shade(body_hex, 0.5)}" stroke-width="3" stroke-linecap="round"/>
-<circle cx="118" cy="106" r="30" fill="#0b0d13" stroke="{_shade(body_hex, 0.42)}" stroke-width="1.8"/>
-<circle cx="118" cy="106" r="23" fill="none" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.6"/>
+<path d="M236 56 l10 -13 M252 56 l4 -13" stroke="{_shade(body_hex, -0.35) if light else _shade(body_hex, 0.5)}" stroke-width="3" stroke-linecap="round"/>
+<circle cx="118" cy="106" r="30" fill="#0b0d13" stroke="#3a3a44" stroke-width="1.8"/>
+<circle cx="118" cy="106" r="23" fill="none" stroke="{acc if not light else '#d4fa4c'}" stroke-opacity="0.7" stroke-width="1.6"/>
 <circle cx="118" cy="106" r="18" fill="url(#lens{gid})"/>
 <circle cx="118" cy="106" r="6.5" fill="#04040a"/>
 <circle cx="111" cy="98" r="4" fill="#ffffff" opacity="0.55"/>
-<circle cx="186" cy="106" r="24" fill="#0b0d13" stroke="{_shade(body_hex, 0.42)}" stroke-width="1.6"/>
-<circle cx="186" cy="106" r="18" fill="none" stroke="{acc}" stroke-opacity="0.5" stroke-width="1.3"/>
+<circle cx="186" cy="106" r="24" fill="#0b0d13" stroke="#3a3a44" stroke-width="1.6"/>
+<circle cx="186" cy="106" r="18" fill="none" stroke="{acc if not light else '#d4fa4c'}" stroke-opacity="0.5" stroke-width="1.3"/>
 <circle cx="186" cy="106" r="14" fill="url(#lens{gid})"/>
 <circle cx="186" cy="106" r="5" fill="#04040a"/>
 <circle cx="181" cy="100" r="3" fill="#ffffff" opacity="0.5"/>
-<rect x="228" y="84" width="30" height="18" rx="6" fill="#0b0d13" stroke="{_shade(body_hex, 0.36)}" stroke-width="1.2"/>
+<rect x="228" y="84" width="30" height="18" rx="6" fill="#0b0d13" stroke="#3a3a44" stroke-width="1.2"/>
 <circle cx="236" cy="93" r="4" fill="#1a1e2a"/><circle cx="249" cy="93" r="4" fill="#f4efdf" opacity="0.8"/>
 <circle cx="243" cy="128" r="5" fill="#2a0d0d"/><circle cx="243" cy="128" r="2.4" fill="#ff4646"/>
 <circle cx="243" cy="128" r="6.5" fill="none" stroke="#ff4646" stroke-opacity="0.4" stroke-width="1"/>
 <text x="118" y="150" font-family="monospace" font-size="6.5" fill="#9a9aa6" text-anchor="middle" letter-spacing="1.5">KUDO VISION</text>
 <text x="243" y="147" font-family="monospace" font-size="6" fill="#9a9aa6" text-anchor="middle" letter-spacing="1">REC</text>
-<!-- シグナルLED(排熱表示・冷巷 REIKO) -->
-<g filter="url(#glow{gid})" opacity="0.85">
-  <path d="M78 196 h48 l-14 14 h-48 z" fill="{acc}"/>
-</g>
-<path d="M78 196 h48 l-14 14 h-48 z" fill="url(#lime{gid})"/>
+<g filter="url(#glow{gid})" opacity="0.85"><path d="M78 196 h48 l-14 14 h-48 z" fill="{acc}"/></g>
+<path d="M78 196 h48 l-14 14 h-48 z" fill="{acc}"/>
 <path d="M144 196 h48 l-14 14 h-48 z" fill="{acc}" opacity="0.5"/>
 <path d="M210 196 h48 l-14 14 h-48 z" fill="{acc}" opacity="0.22"/>
-<text x="78" y="228" font-family="monospace" font-size="7" fill="#9a9aa6" letter-spacing="2">SIGNAL — THERMAL</text>
-<!-- 中央エンブレム: 空洞(ホロウ)リング -->
+<text x="78" y="228" font-family="monospace" font-size="7" fill="{soft}" letter-spacing="2">SIGNAL — THERMAL</text>
 <circle cx="170" cy="330" r="46" fill="{_shade(body_hex, -0.28)}"/>
-<circle cx="170" cy="330" r="46" fill="none" stroke="{_shade(body_hex, 0.34)}" stroke-width="1.4"/>
+<circle cx="170" cy="330" r="46" fill="none" stroke="{_shade(body_hex, -0.45) if light else _shade(body_hex, 0.34)}" stroke-width="1.4"/>
 <path d="M170 330 m -34 0 a34 34 0 1 1 14 27" fill="none" stroke="{acc}" stroke-width="3.4" stroke-linecap="round"/>
 <path d="M170 330 m -22 0 a22 22 0 1 0 9 -19" fill="none" stroke="{acc}" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
 <circle cx="170" cy="330" r="6" fill="{acc}"/>
 <circle cx="170" cy="330" r="10" fill="none" stroke="{acc}" stroke-opacity="0.35" stroke-width="1.2"/>
-<!-- 側面デュアルダクト -->
 <g>
   <rect x="44" y="296" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="299" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.75"/>
   <rect x="44" y="318" width="7" height="16" rx="3" fill="#08080c"/><rect x="45.6" y="321" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.45"/>
@@ -1566,30 +1565,30 @@ def svg_kudo(label="空洞 KUDO", kana="くうどう", hz="144Hz"):
   <rect x="289" y="318" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="321" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.45"/>
   <rect x="289" y="340" width="7" height="16" rx="3" fill="#08080c"/><rect x="290.6" y="343" width="3.6" height="10" rx="1.8" fill="{acc}" opacity="0.25"/>
 </g>
-<text x="170" y="398" font-family="monospace" font-size="7" fill="#9a9aa6" text-anchor="middle" letter-spacing="3">REIKO — SIDE DUAL DUCT</text>
-<!-- 刻印 -->
-<text x="170" y="446" font-family="'Noto Sans JP',sans-serif" font-size="19" font-weight="900" font-style="italic" fill="#f2f2f4" opacity="0.92" text-anchor="middle" letter-spacing="2">空洞 <tspan fill="{acc}">KUDO</tspan></text>
-<text x="170" y="466" font-family="monospace" font-size="8" fill="#9a9aa6" opacity="0.8" text-anchor="middle" letter-spacing="5">{kana}</text>
-<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#9a9aa6" opacity="0.7" text-anchor="middle" letter-spacing="2">SUZAKU × ZZZ ・ JOINT DESIGN ・ {hz}</text>
-<path d="M78 36 L206 36 L96 564 L49 564 L49 300 Z" fill="#ffffff" opacity="0.045"/>
-<path d="M232 36 L262 36 L150 564 L124 564 Z" fill="#ffffff" opacity="0.03"/>
+<text x="170" y="398" font-family="monospace" font-size="7" fill="{soft}" text-anchor="middle" letter-spacing="3">REIKO — SIDE DUAL DUCT</text>
+<text x="170" y="446" font-family="'Noto Sans JP',sans-serif" font-size="19" font-weight="900" font-style="italic" fill="{ink}" opacity="0.92" text-anchor="middle" letter-spacing="2">空洞 <tspan fill="{acc}">KUDO</tspan></text>
+<text x="170" y="466" font-family="monospace" font-size="8" fill="{soft}" opacity="0.9" text-anchor="middle" letter-spacing="5">{kana}</text>
+<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="{soft}" opacity="0.85" text-anchor="middle" letter-spacing="2">SUZAKU × ZZZ ・ JOINT DESIGN ・ {hz}</text>
+<path d="M78 36 L206 36 L96 564 L49 564 L49 300 Z" fill="#ffffff" opacity="{'0.16' if light else '0.045'}"/>
+<path d="M232 36 L262 36 L150 564 L124 564 Z" fill="#ffffff" opacity="{'0.09' if light else '0.03'}"/>
 <rect x="292.5" y="112" width="5" height="44" rx="2.5" fill="{acc}"/>
 <rect x="292.5" y="172" width="5" height="44" rx="2.5" fill="{acc}"/>
 <rect x="42.5" y="146" width="5" height="62" rx="2.5" fill="{_shade(body_hex, -0.5)}"/>
 </svg>"""
 
 
-def svg_seiki(label="星軌 SEIKI", kana="せいき", hz="165Hz"):
+def svg_seiki(ci=0, label="星軌 SEIKI", kana="せいき", hz="165Hz"):
     """星軌 SEIKI(崩壊:スターレイル)本レンダリング背面。
-    深宇宙紺の光沢筐体×星屑の金。窓型カメラ島・星図の金細線・
-    放射冷却パネル(永冬 EITO)・ホログラム紫の認証アクセント。"""
-    body_hex = "#101830"
-    gold = "#d8b45c"
-    gold_d = "#9a7a2e"
+    ci=カラーインデックス(0=深宇宙の紺 / 1=星屑の金 / 2=永冬ホワイト。reveal["colors"] と同順)。"""
+    body_hex, deco = SEIKI_COLORS[ci % len(SEIKI_COLORS)]
+    light = _is_light(body_hex)
+    ink = "#1a1c2e" if light else "#eef0ff"
+    soft = "#5a5e78" if light else "#9aa0c8"
+    star = _shade(deco, -0.1) if light else "#ffffff"
     holo = "#b48cff"
-    gid = "seikireal"
+    gid = f"seikireal{ci}"
     stars = "".join(
-        f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+        f'<circle cx="{x}" cy="{y}" r="{r}" fill="{star}" opacity="{o}"/>'
         for x, y, r, o in [(88, 250, 1.1, .55), (128, 226, .8, .4), (216, 246, 1, .5),
                            (250, 222, .8, .45), (100, 420, .9, .4), (238, 430, 1.1, .5),
                            (150, 512, .8, .35), (200, 60, .9, .4), (86, 60, .7, .3),
@@ -1603,13 +1602,13 @@ def svg_seiki(label="星軌 SEIKI", kana="せいき", hz="165Hz"):
   <stop offset="1" stop-color="{_shade(body_hex, -0.42)}"/>
 </linearGradient>
 <linearGradient id="frame{gid}" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ecd9a0"/><stop offset="0.5" stop-color="{gold_d}"/><stop offset="1" stop-color="#e0c887"/>
+  <stop offset="0" stop-color="{_shade(deco, 0.5)}"/><stop offset="0.5" stop-color="{_shade(deco, -0.3)}"/><stop offset="1" stop-color="{_shade(deco, 0.38)}"/>
 </linearGradient>
 <radialGradient id="lens{gid}" cx="0.38" cy="0.32" r="0.95">
   <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
 </radialGradient>
 <radialGradient id="neb{gid}" cx="0.72" cy="0.2" r="0.7">
-  <stop offset="0" stop-color="{holo}" stop-opacity="0.2"/><stop offset="1" stop-color="{holo}" stop-opacity="0"/>
+  <stop offset="0" stop-color="{holo}" stop-opacity="{'0.12' if light else '0.2'}"/><stop offset="1" stop-color="{holo}" stop-opacity="0"/>
 </radialGradient>
 <linearGradient id="panel{gid}" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="{_shade(body_hex, 0.42)}"/><stop offset="0.5" stop-color="{_shade(body_hex, -0.1)}"/><stop offset="1" stop-color="{_shade(body_hex, 0.22)}"/>
@@ -1624,53 +1623,48 @@ def svg_seiki(label="星軌 SEIKI", kana="せいき", hz="165Hz"):
 <rect x="49" y="36" width="242" height="528" rx="42" fill="url(#neb{gid})"/>
 <g clip-path="url(#clip{gid})">
   {stars}
-  <polyline points="88,250 128,226 170,250 216,246 250,222" fill="none" stroke="{gold}" stroke-width="0.9" opacity="0.55"/>
-  <polyline points="100,420 150,512 200,470 238,430" fill="none" stroke="{gold}" stroke-width="0.8" opacity="0.4"/>
-  <circle cx="200" cy="470" r="0.9" fill="#ffffff" opacity="0.45"/>
-  <path d="M250 222 C 280 260 268 320 238 430" fill="none" stroke="{gold}" stroke-width="0.7" opacity="0.35"/>
-  <path d="M262 88 l3.4 0 l1 -3.2 l1 3.2 l3.4 0 l-2.7 2 l1 3.2 l-2.7 -2 l-2.7 2 l1 -3.2 z" fill="{gold}" opacity="0.85"/>
+  <polyline points="88,250 128,226 170,250 216,246 250,222" fill="none" stroke="{deco}" stroke-width="0.9" opacity="0.55"/>
+  <polyline points="100,420 150,512 200,470 238,430" fill="none" stroke="{deco}" stroke-width="0.8" opacity="0.4"/>
+  <circle cx="200" cy="470" r="0.9" fill="{star}" opacity="0.45"/>
+  <path d="M250 222 C 280 260 268 320 238 430" fill="none" stroke="{deco}" stroke-width="0.7" opacity="0.35"/>
+  <path d="M262 88 l3.4 0 l1 -3.2 l1 3.2 l3.4 0 l-2.7 2 l1 3.2 l-2.7 -2 l-2.7 2 l1 -3.2 z" fill="{deco}" opacity="0.85"/>
 </g>
-<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="1.2"/>
-<!-- カメラ島: 車窓(金枠の窓型) -->
+<rect x="50.2" y="37.2" width="239.6" height="525.6" rx="40.8" fill="none" stroke="{'#000000' if light else '#ffffff'}" stroke-opacity="{'0.1' if light else '0.28'}" stroke-width="1.2"/>
 <rect x="70" y="54" width="200" height="114" rx="20" fill="#000000" opacity="0.4" transform="translate(0 4)" filter="url(#soft{gid})"/>
-<rect x="70" y="54" width="200" height="114" rx="20" fill="url(#panel{gid})" stroke="{gold}" stroke-width="2"/>
-<rect x="76" y="60" width="188" height="102" rx="15" fill="{_shade(body_hex, -0.3)}" stroke="{gold}" stroke-opacity="0.55" stroke-width="1"/>
-<path d="M170 60 V162" stroke="{gold}" stroke-opacity="0.5" stroke-width="1.2"/>
-<circle cx="123" cy="104" r="29" fill="#0b0d13" stroke="{gold}" stroke-width="1.8"/>
+<rect x="70" y="54" width="200" height="114" rx="20" fill="url(#panel{gid})" stroke="{deco}" stroke-width="2"/>
+<rect x="76" y="60" width="188" height="102" rx="15" fill="{_shade(body_hex, -0.3)}" stroke="{deco}" stroke-opacity="0.55" stroke-width="1"/>
+<path d="M170 60 V162" stroke="{deco}" stroke-opacity="0.5" stroke-width="1.2"/>
+<circle cx="123" cy="104" r="29" fill="#0b0d13" stroke="{deco}" stroke-width="1.8"/>
 <circle cx="123" cy="104" r="22" fill="none" stroke="{holo}" stroke-opacity="0.6" stroke-width="1.4"/>
 <circle cx="123" cy="104" r="17" fill="url(#lens{gid})"/>
 <circle cx="123" cy="104" r="6" fill="#04040a"/>
 <circle cx="116" cy="96" r="3.8" fill="#ffffff" opacity="0.55"/>
-<circle cx="216" cy="96" r="23" fill="#0b0d13" stroke="{gold}" stroke-width="1.6"/>
+<circle cx="216" cy="96" r="23" fill="#0b0d13" stroke="{deco}" stroke-width="1.6"/>
 <circle cx="216" cy="96" r="17" fill="none" stroke="{holo}" stroke-opacity="0.5" stroke-width="1.2"/>
 <circle cx="216" cy="96" r="13" fill="url(#lens{gid})"/>
 <circle cx="216" cy="96" r="4.6" fill="#04040a"/>
 <circle cx="211" cy="90" r="3" fill="#ffffff" opacity="0.5"/>
-<rect x="196" y="128" width="40" height="18" rx="7" fill="#0b0d13" stroke="{gold}" stroke-opacity="0.7" stroke-width="1.1"/>
+<rect x="196" y="128" width="40" height="18" rx="7" fill="#0b0d13" stroke="{deco}" stroke-opacity="0.7" stroke-width="1.1"/>
 <circle cx="207" cy="137" r="4" fill="#1a1e2a"/><circle cx="225" cy="137" r="4" fill="#f4efdf" opacity="0.8"/>
-<circle cx="95" cy="66" r="1" fill="#ffffff" opacity="0.7"/><circle cx="250" cy="70" r="0.8" fill="#ffffff" opacity="0.5"/>
 <text x="123" y="152" font-family="monospace" font-size="6.5" fill="#9aa0c8" text-anchor="middle" letter-spacing="1.5">STAR WINDOW</text>
-<!-- 乗車認証アクセント -->
 <g opacity="0.95">
   <path d="M170 196 l7 10 l-7 10 l-7 -10 z" fill="none" stroke="{holo}" stroke-width="1.6"/>
   <path d="M130 199 v-6 h6 M210 193 h-6 M210 193 v6 M130 209 v6 h6 M210 215 h-6 v-6" stroke="{holo}" stroke-width="1.2" fill="none" opacity="0.8"/>
 </g>
-<text x="170" y="232" font-family="monospace" font-size="6.5" fill="#9aa0c8" text-anchor="middle" letter-spacing="2">BOARDING PASS</text>
-<!-- 放射冷却パネル(永冬 EITO) -->
+<text x="170" y="232" font-family="monospace" font-size="6.5" fill="{soft}" text-anchor="middle" letter-spacing="2">BOARDING PASS</text>
 <rect x="98" y="288" width="144" height="78" rx="14" fill="#000000" opacity="0.35" transform="translate(0 3)" filter="url(#soft{gid})"/>
-<rect x="98" y="288" width="144" height="78" rx="14" fill="url(#panel{gid})" stroke="{gold}" stroke-width="1.6"/>
-{"".join(f'<path d="M108 {y} H232" stroke="{gold}" stroke-opacity="0.35" stroke-width="1"/>' for y in range(298, 358, 7))}
-<path d="M170 316 l9 12 l-9 12 l-9 -12 z" fill="{_shade(body_hex, -0.2)}" stroke="{gold}" stroke-width="1.6"/>
-<circle cx="170" cy="328" r="2.2" fill="{gold}"/>
-<text x="170" y="384" font-family="monospace" font-size="7" fill="#9aa0c8" text-anchor="middle" letter-spacing="3">EITO — RADIATIVE PANEL</text>
-<!-- 刻印 -->
-<text x="170" y="446" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="19" font-weight="800" fill="#eef0ff" opacity="0.94" text-anchor="middle" letter-spacing="4">星軌 <tspan fill="{gold}">SEIKI</tspan></text>
-<text x="170" y="466" font-family="monospace" font-size="8" fill="#9aa0c8" opacity="0.85" text-anchor="middle" letter-spacing="6">{kana}</text>
-<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#9aa0c8" opacity="0.75" text-anchor="middle" letter-spacing="2">SUZAKU × HSR ・ JOINT DESIGN ・ {hz}</text>
-<path d="M84 36 L200 36 L100 564 L49 564 L49 320 Z" fill="#ffffff" opacity="0.1"/>
-<path d="M232 36 L260 36 L152 564 L128 564 Z" fill="#ffffff" opacity="0.05"/>
-<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="{gold_d}"/>
-<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="{gold_d}"/>
+<rect x="98" y="288" width="144" height="78" rx="14" fill="url(#panel{gid})" stroke="{deco}" stroke-width="1.6"/>
+{"".join(f'<path d="M108 {y} H232" stroke="{deco}" stroke-opacity="0.35" stroke-width="1"/>' for y in range(298, 358, 7))}
+<path d="M170 316 l9 12 l-9 12 l-9 -12 z" fill="{_shade(body_hex, -0.2)}" stroke="{deco}" stroke-width="1.6"/>
+<circle cx="170" cy="328" r="2.2" fill="{deco}"/>
+<text x="170" y="384" font-family="monospace" font-size="7" fill="{soft}" text-anchor="middle" letter-spacing="3">EITO — RADIATIVE PANEL</text>
+<text x="170" y="446" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="19" font-weight="800" fill="{ink}" opacity="0.94" text-anchor="middle" letter-spacing="4">星軌 <tspan fill="{deco}">SEIKI</tspan></text>
+<text x="170" y="466" font-family="monospace" font-size="8" fill="{soft}" opacity="0.95" text-anchor="middle" letter-spacing="6">{kana}</text>
+<text x="170" y="546" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="{soft}" opacity="0.9" text-anchor="middle" letter-spacing="2">SUZAKU × HSR ・ JOINT DESIGN ・ {hz}</text>
+<path d="M84 36 L200 36 L100 564 L49 564 L49 320 Z" fill="#ffffff" opacity="{'0.22' if light else '0.1'}"/>
+<path d="M232 36 L260 36 L152 564 L128 564 Z" fill="#ffffff" opacity="{'0.1' if light else '0.05'}"/>
+<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="{_shade(deco, -0.25)}"/>
+<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="{_shade(deco, -0.25)}"/>
 <rect x="42.5" y="150" width="5" height="60" rx="2.5" fill="{_shade(body_hex, -0.5)}"/>
 </svg>"""
 
@@ -1828,6 +1822,7 @@ def svg_prototype_front(pid, glow, label, kana="", style="generic"):
 <defs><radialGradient id="pgf{u}" cx="0.5" cy="0.35" r="0.85">
 <stop offset="0" stop-color="{acc}" stop-opacity="0.13"/><stop offset="1" stop-color="{acc}" stop-opacity="0"/>
 </radialGradient></defs>
+<rect width="340" height="600" fill="#0e0e12"/>
 <rect width="340" height="600" fill="url(#pgf{u})"/>
 {deco}
 <rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 7" opacity="0.9"/>

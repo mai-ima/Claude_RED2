@@ -3831,7 +3831,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     hidden ステージ属性なし・見出しは実 h1・末尾にティザーアーカイブへの小ボタン。"""
     # 本レンダリング(H-4-1)。ファイル書き出し+<img>参照(H-5: 画像単体URLを持つ)。
     # 仮デザインSVG(svg_prototype)はSVGギャラリーに保管
-    phone_art = f'<img src="{w2img("kudo")}" alt="空洞 KUDO(本レンダリング)" width="340" height="600">'
+    phone_art = f'<img src="{w2img("kudo-0")}" alt="空洞 KUDO(本レンダリング)" width="340" height="600">'
     stats = "".join(
         f'<div class="zz-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -3845,10 +3845,13 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
         f'<div class="zz-sched"><span class="zz-sched__no">{no}</span><b>{esc(d)}</b><span>{esc(t)}</span></div>'
         for no, (d, t) in enumerate([(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")], 1))
     colors = "".join(
-        f'<div class="zz-color"><span class="zz-color__chip" style="--chip:{c["hex"]}" aria-hidden="true"></span>'
+        f'<div class="zz-color"><div class="zz-color__img"><img src="{w2img(f"kudo-{i}")}" alt="空洞 KUDO {esc(c["name"])}" width="340" height="600" loading="lazy"></div>'
         f'<b class="zz-color__n">{esc(c["name"])}</b><span class="zz-color__en">{esc(c["en"])}</span>'
         f'<p class="zz-color__b">{esc(c["note"])}</p></div>'
-        for c in rv.get("colors", []))
+        for i, c in enumerate(rv.get("colors", [])))
+    terms = "".join(
+        f'<div class="zz-term"><h3>{esc(t)}</h3><p>{esc(b)}</p></div>'
+        for t, b in rv.get("terms", []))
     bundle = "".join(
         f'<div class="zz-boxitem"><span class="zz-boxitem__no">{i:02d}</span>'
         f'<b>{esc(t)}</b><p>{esc(b)}</p></div>'
@@ -3869,7 +3872,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
         for k, a, b in _reveal_vs_rows(rv))
     acc_cards = "".join(
         f'<div class="zz-acc"><div class="zz-acc__art">'
-        f'<img src="{w2img("kudo-acc-" + a["kind"])}" alt="{esc(a["name"])}(本レンダリング)" width="480" height="360" loading="lazy"></div>'
+        f'<img src="{w2img("kudo-acc-" + a["kind"] + "-0")}" alt="{esc(a["name"])}(本レンダリング)" width="480" height="360" loading="lazy"></div>'
         f'<span class="zz-tag">{esc(a["type"])}</span>'
         f'<h3 class="zz-acc__n">{esc(a["name"])}</h3>'
         f'<p class="zz-acc__b">{esc(a["body"])}</p></div>'
@@ -3889,7 +3892,11 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
   <p class="zz-plate"><span class="zz-plate__no">00</span>OFFICIALLY ANNOUNCED</p>
   {title_html}
   <p class="zz-hero__sub">SUZAKU × {esc(rv['game'])} — 共同設計、正式発表。</p>
-  <div class="zz-hero__art">{phone_art}</div>
+  <div class="zz-hero__tags"><span class="cl-tag">数量限定 {rv['qty']:,}台</span><span class="cl-tag">期間限定</span><span class="cl-tag">完全専用設計</span></div>
+  <div class="zz-hero__art zz-hero__art--pair">
+    <img src="{w2img("kudo-front")}" alt="空洞 KUDO 正面" width="340" height="600">
+    <img src="{w2img("kudo-0")}" alt="空洞 KUDO 背面(新エリー・ブラック)" width="340" height="600">
+  </div>
   <p class="zz-hero__lead">{esc(rv['copy'])}</p>
 </section>
 <div class="zz-film" aria-hidden="true"></div>
@@ -3898,14 +3905,24 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <p class="zz-plate"><span class="zz-plate__no">01</span>設定ファイル — THE CITY</p>
     <h2 class="zz-h2">新エリー都には、<br>数多くのホロウが存在します。</h2>
     <p class="zz-lead">{esc(rv['world'])}</p>
-    <p class="zz-lead">配色は {esc(rv.get('accent_note', ''))}。看板の光、路地の影、警告テープ — 街を構成する3つの明度を、そのまま筐体の3層に割り当てました。派手なのに、あの街では風景に溶ける。それがこの配色の狙いです。</p>
+    <div class="zz-terms">{terms}</div>
     <div class="zz-stats">{stats}</div>
   </div>
 </section>
 <div class="zz-film" aria-hidden="true"></div>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">02</span>頭脳 — DEDICATED SOC</p>
+    <p class="zz-plate"><span class="zz-plate__no">02</span>意匠 — CRAFT &amp; COLORWAYS</p>
+    <h2 class="zz-h2">色替えではなく、<br>街ごと写した。</h2>
+    <p class="zz-lead">配色は {esc(rv.get('accent_note', ''))}。看板の光、路地の影、警告テープ — 街を構成する3つの明度を、そのまま筐体の3層に割り当てました。派手なのに、あの街では風景に溶ける。それがこの配色の狙いです。</p>
+    <div class="zz-colors">{colors}</div>
+    <p class="zz-note">{esc(rv.get("colors_note", ""))}</p>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">03</span>頭脳 — DEDICATED SOC</p>
     <h2 class="zz-h2">{esc(rv['soc']['name'])}</h2>
     <p class="zz-kick">{esc(rv['soc']['kicker'])}</p>
     <p class="zz-lead">{esc(rv['soc']['body'])}</p>
@@ -3914,7 +3931,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
 </section>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">03</span>冷却 — DEDICATED COOLING</p>
+    <p class="zz-plate"><span class="zz-plate__no">04</span>冷却 — DEDICATED COOLING</p>
     <h2 class="zz-h2">{esc(rv['cooling']['name'])}</h2>
     <p class="zz-kick">{esc(rv['cooling']['kicker'])}</p>
     <p class="zz-lead">{esc(rv['cooling']['body'])}</p>
@@ -3923,7 +3940,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
 <div class="zz-film" aria-hidden="true"></div>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">04</span>ゲームの特徴 — FEATURES</p>
+    <p class="zz-plate"><span class="zz-plate__no">05</span>ゲームの特徴 — FEATURES</p>
     <div class="zz-cards">{feats}</div>
     <h2 class="zz-h2" style="margin-top:46px">TVモード・テーマパックの中身。</h2>
     <p class="zz-lead">同梱テーマパックは「置き換え」ではなく「改装」です。OSの標準機能はそのまま、見た目と音だけがあのブラウン管に変わります(すべてデモ表記)。</p>
@@ -3939,43 +3956,9 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     </div>
   </div>
 </section>
-<div class="zz-film" aria-hidden="true"></div>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">05</span>カラー — COLORWAYS</p>
-    <h2 class="zz-h2">3色、すべて開発中。</h2>
-    <div class="zz-colors">{colors}</div>
-    <p class="zz-note">{esc(rv.get("colors_note", ""))}</p>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">06</span>同梱物 — COLLECTOR'S BOX</p>
-    <h2 class="zz-h2">箱から、もう新エリー都。</h2>
-    <div class="zz-boxlist">{bundle}</div>
-  </div>
-</section>
-<div class="zz-film" aria-hidden="true"></div>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">07</span>開発ログ — DEV LOG</p>
-    <h2 class="zz-h2">発表までの、5か月。</h2>
-    <div class="zz-logs">{devlog}</div>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">08</span>主要仕様 — SPECS(第一報)</p>
-    <div class="zz-tables">{spec_tables}</div>
-    <p class="zz-note">{esc(rv.get("specs_note", ""))}</p>
-    <h2 class="zz-h2" style="margin-top:42px">vs SUZAKU 4。</h2>
-    <p class="zz-lead">旗艦は万能に、空洞は一点に。どちらが勝ちかは、あなたの遊び方が決めます。</p>
-    <div class="zz-vs">{vs_rows}</div>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">09</span>音と振動 — SOUND &amp; HAPTICS</p>
+    <p class="zz-plate"><span class="zz-plate__no">06</span>音と振動 — SOUND &amp; HAPTICS</p>
     <h2 class="zz-h2">耳と手のひらにも、あの街を。</h2>
     <p class="zz-lead">音響は作品側の監修のもと、通知・充電・警告のすべてを新エリー都の音で作り直しました。うるさくはしない — けれど、聞けば一発で分かる音に。</p>
     <div class="zz-cards">
@@ -3987,7 +3970,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
 </section>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">10</span>開発の声 — VOICES</p>
+    <p class="zz-plate"><span class="zz-plate__no">07</span>開発の声 — VOICES</p>
     <h2 class="zz-h2">作った側の、言い分。</h2>
     <div class="zz-cards">
       <div class="zz-card"><span class="zz-tag">SUZAKU — プロダクトデザイン統括</span><p class="zz-card__b">「いちばん難しかったのは、警告色を上品にしないことです。整えると、あの街じゃなくなる。ストライプの角度も、テープの毛羽立ちも、わざと少し乱してあります。乱し方の精度には自信があります。」</p></div>
@@ -3998,13 +3981,39 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
 <div class="zz-film" aria-hidden="true"></div>
 <section class="cl-section">
   <div class="cl-wrap">
-    <p class="zz-plate"><span class="zz-plate__no">11</span>アクセサリ — FIRST LOOK</p>
+    <p class="zz-plate"><span class="zz-plate__no">08</span>開発ログ — DEV LOG</p>
+    <h2 class="zz-h2">発表までの、5か月。</h2>
+    <div class="zz-logs">{devlog}</div>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">09</span>主要仕様 — SPECS(第一報)</p>
+    <div class="zz-tables">{spec_tables}</div>
+    <p class="zz-note">{esc(rv.get("specs_note", ""))}</p>
+    <h2 class="zz-h2" style="margin-top:42px">vs SUZAKU 4。</h2>
+    <p class="zz-lead">旗艦は万能に、空洞は一点に。どちらが勝ちかは、あなたの遊び方が決めます。</p>
+    <div class="zz-vs">{vs_rows}</div>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">10</span>アクセサリ — FIRST LOOK</p>
     <h2 class="zz-h2">相棒の、相棒たち。</h2>
     <p class="zz-lead">空洞 KUDO専用のコラボアクセサリも同時開発中です。名称とデザインスケッチを、ここで先行公開します。</p>
     <div class="zz-accs">{acc_cards}</div>
     <p class="zz-note">{esc(rv.get("acc_note", ""))}</p>
   </div>
 </section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <p class="zz-plate"><span class="zz-plate__no">11</span>同梱物 — COLLECTOR'S BOX</p>
+    <h2 class="zz-h2">箱から、もう新エリー都。</h2>
+    <div class="zz-boxlist">{bundle}</div>
+  </div>
+</section>
+<div class="zz-film" aria-hidden="true"></div>
 <section class="cl-section">
   <div class="cl-wrap">
     <p class="zz-plate"><span class="zz-plate__no">12</span>予約の流れ — HOW TO ORDER</p>
@@ -4043,7 +4052,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     (ホログラム紫パネル・コーナーマーカー・菱形)の設計言語を写す。
     standalone=True で特設ページ(/collab/hsr/)の本文になる。"""
     # 本レンダリング(H-4-1)。ファイル書き出し+<img>参照(H-5: 画像単体URLを持つ)
-    phone_art = f'<img src="{w2img("seiki")}" alt="星軌 SEIKI(本レンダリング)" width="340" height="600">'
+    phone_art = f'<img src="{w2img("seiki-0")}" alt="星軌 SEIKI(本レンダリング)" width="340" height="600">'
     stats = "".join(
         f'<div class="sr-stat"><b>{esc(s["v"])}<i>{esc(s["u"])}</i></b><span>{esc(s["l"])}</span></div>'
         for s in rv["stats"])
@@ -4057,10 +4066,14 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
         f'<div class="sr-sched"><b>{esc(d)}</b><span>{esc(t)}</span></div>'
         for d, t in [(rv["reserve"], "予約受付開始 20:00〜"), (rv["release"], "発売"), (rv["until"], "受付終了")])
     colors = "".join(
-        f'<div class="sr-color sr-frame"><span class="sr-color__chip" style="--chip:{c["hex"]}" aria-hidden="true"></span>'
+        f'<div class="sr-color sr-frame"><div class="sr-color__img"><img src="{w2img(f"seiki-{i}")}" alt="星軌 SEIKI {esc(c["name"])}" width="340" height="600" loading="lazy"></div>'
         f'<b class="sr-color__n">{esc(c["name"])}</b><span class="sr-color__en">{esc(c["en"])}</span>'
         f'<p class="sr-color__b">{esc(c["note"])}</p></div>'
-        for c in rv.get("colors", []))
+        for i, c in enumerate(rv.get("colors", [])))
+    terms = "".join(
+        f'<div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span>'
+        f'<b>{esc(t)}</b><p>{esc(b)}</p></div>'
+        for t, b in rv.get("terms", []))
     bundle = "".join(
         f'<div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span>'
         f'<b>{esc(t)}</b><p>{esc(b)}</p></div>'
@@ -4081,7 +4094,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
         for k, a, b in _reveal_vs_rows(rv))
     acc_cards = "".join(
         f'<div class="sr-acc sr-frame"><div class="sr-acc__art">'
-        f'<img src="{w2img("seiki-acc-" + a["kind"])}" alt="{esc(a["name"])}(本レンダリング)" width="480" height="360" loading="lazy"></div>'
+        f'<img src="{w2img("seiki-acc-" + a["kind"] + "-0")}" alt="{esc(a["name"])}(本レンダリング)" width="480" height="360" loading="lazy"></div>'
         f'<span class="sr-acc__t">{esc(a["type"])}</span>'
         f'<h3 class="sr-acc__n">{esc(a["name"])}</h3>'
         f'<p class="sr-acc__b">{esc(a["body"])}</p></div>'
@@ -4099,7 +4112,11 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
   <p class="sr-eyebrow">OFFICIALLY ANNOUNCED — SUZAKU × {esc(rv['game'])}</p>
   {title_html}
   <p class="sr-hero__sub">共同設計、正式発表。次の停車駅は、あなたの手のひら。</p>
-  <div class="sr-hero__art sr-frame">{phone_art}</div>
+  <div class="sr-hero__tags"><span class="cl-tag">数量限定 {rv['qty']:,}台</span><span class="cl-tag">期間限定</span><span class="cl-tag">完全専用設計</span></div>
+  <div class="sr-hero__art sr-hero__art--pair sr-frame">
+    <img src="{w2img("seiki-front")}" alt="星軌 SEIKI 正面" width="340" height="600">
+    <img src="{w2img("seiki-0")}" alt="星軌 SEIKI 背面(深宇宙の紺)" width="340" height="600">
+  </div>
   <p class="sr-hero__lead">{esc(rv['copy'])}</p>
   <p class="sr-pageno">01 <small>/ 14</small></p>
 </section>
@@ -4117,8 +4134,18 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <div class="sr-head"><p class="sr-eyebrow">WORLD</p><h2 class="sr-h2">銀河を巡る、星穹列車。</h2></div>
     <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['world'])}</p>
     <p class="sr-lead" style="margin-top:14px">意匠は {esc(rv.get('accent_note', ''))}。紺は夜空、金は星図、紫は認証のホログラム — 役割のない色をひとつも置いていません。画面を消しているときの背面が、いちばん雄弁であるように。</p></div>
+    <div class="sr-frame sr-pad" style="margin-top:16px"><div class="sr-boxlist">{terms}</div></div>
     <div class="sr-stats">{stats}</div>
     <p class="sr-pageno">02 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">COLORWAYS</p><h2 class="sr-h2">3つの車体色。</h2>
+    <p class="sr-kick">いずれも開発中 — 最終色は予約開始までに。</p></div>
+    <div class="sr-colors">{colors}</div>
+    <p class="sr-note">{esc(rv.get("colors_note", ""))}</p>
+    <p class="sr-pageno">03 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -4127,7 +4154,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <p class="sr-kick">{esc(rv['soc']['kicker'])}</p></div>
     <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['soc']['body'])}</p>
     <div class="sr-specrow"><span>3nm</span><span>最大 {esc(rv['soc']['clock'])}</span><span>AnTuTu {esc(rv['soc']['antutu'])}</span></div></div>
-    <p class="sr-pageno">03 <small>/ 14</small></p>
+    <p class="sr-pageno">04 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -4135,7 +4162,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <div class="sr-head"><p class="sr-eyebrow">DEDICATED COOLING</p><h2 class="sr-h2">{esc(rv['cooling']['name'])}</h2>
     <p class="sr-kick">{esc(rv['cooling']['kicker'])}</p></div>
     <div class="sr-frame sr-pad"><p class="sr-lead">{esc(rv['cooling']['body'])}</p></div>
-    <p class="sr-pageno">04 <small>/ 14</small></p>
+    <p class="sr-pageno">05 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -4150,43 +4177,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
       <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>雪の都</b><p>永冬 EITOと連動する車窓。端末温度が低いほど雪が静かに降り、負荷が上がると吹雪きます。温度計としても読める画面です。</p></div>
       <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>デッキの窓</b><p>連結部のデッキから見た、少し斜めの車窓。バッテリー残量が「次の停車駅までの距離」として表示されます。長旅の夜に。</p></div>
     </div></div>
-    <p class="sr-pageno">05 <small>/ 14</small></p>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <div class="sr-head"><p class="sr-eyebrow">COLORWAYS</p><h2 class="sr-h2">3つの車体色。</h2>
-    <p class="sr-kick">いずれも開発中 — 最終色は予約開始までに。</p></div>
-    <div class="sr-colors">{colors}</div>
-    <p class="sr-note">{esc(rv.get("colors_note", ""))}</p>
     <p class="sr-pageno">06 <small>/ 14</small></p>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <div class="sr-head"><p class="sr-eyebrow">COLLECTOR'S BOX</p><h2 class="sr-h2">手荷物一式。</h2>
-    <p class="sr-kick">箱を開けたときから、乗車は始まっている。</p></div>
-    <div class="sr-frame sr-pad"><div class="sr-boxlist">{bundle}</div></div>
-    <p class="sr-pageno">07 <small>/ 14</small></p>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <div class="sr-head"><p class="sr-eyebrow">DEV LOG</p><h2 class="sr-h2">これまでの旅程。</h2>
-    <p class="sr-kick">キックオフから発表まで、5つの停車駅。</p></div>
-    <div class="sr-logs">{devlog}</div>
-    <p class="sr-pageno">08 <small>/ 14</small></p>
-  </div>
-</section>
-<section class="cl-section">
-  <div class="cl-wrap">
-    <div class="sr-head"><p class="sr-eyebrow">SPECS — 第一報</p><h2 class="sr-h2">主要仕様。</h2></div>
-    <div class="sr-tables">{spec_tables}</div>
-    <p class="sr-note">{esc(rv.get("specs_note", ""))}</p>
-    <div class="sr-head" style="margin-top:46px"><p class="sr-eyebrow">COMPARISON</p><h2 class="sr-h2">vs SUZAKU 4。</h2>
-    <p class="sr-kick">旗艦は万能に、星軌は静けさと一瞬の全力に。</p></div>
-    <div class="sr-frame sr-pad"><div class="sr-vs">{vs_rows}</div></div>
-    <p class="sr-pageno">09 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -4198,7 +4189,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
       <div class="sr-card"><span class="sr-card__no">S2</span><h3 class="sr-card__t">星の流れる無音</h3><p class="sr-card__b">車窓AODは意図的に無音です。星が流れる常時表示に音を付けない — 永冬 EITOの静音設計と合わせて、「鳴らさない」ことをいちばん贅沢な仕様にしました。</p></div>
       <div class="sr-card"><span class="sr-card__no">S3</span><h3 class="sr-card__t">発車の合図</h3><p class="sr-card__b">ゲーム起動時のハプティクスは、列車がゆっくり動き出すときの床の震えを再現した長い立ち上がり。必殺技の瞬間だけ、連結器の「ガチン」という短い衝撃に変わります。</p></div>
     </div>
-    <p class="sr-pageno">10 <small>/ 14</small></p>
+    <p class="sr-pageno">07 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -4209,7 +4200,26 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
       <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>作品側アートチーム(コメント・デモ表記)</b><p>「お願いしたのは『旅の道具であること』。画面を消しているときの佇まいまで含めて、長い旅に持っていきたくなる一台になっているか — 最終試作の車窓AODを見て、答えは出ました。」</p></div>
       <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>SUZAKU — サウンドデザイン</b><p>「録ったのは音ではなく、静けさです。深夜の車両基地で無音を収録して、その『しん』とした質感を通知音の余白に敷きました。鳴った瞬間より、鳴り終わったあとが本体です。」</p></div>
     </div></div>
-    <p class="sr-pageno">11 <small>/ 14</small></p>
+    <p class="sr-pageno">08 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">DEV LOG</p><h2 class="sr-h2">これまでの旅程。</h2>
+    <p class="sr-kick">キックオフから発表まで、5つの停車駅。</p></div>
+    <div class="sr-logs">{devlog}</div>
+    <p class="sr-pageno">09 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">SPECS — 第一報</p><h2 class="sr-h2">主要仕様。</h2></div>
+    <div class="sr-tables">{spec_tables}</div>
+    <p class="sr-note">{esc(rv.get("specs_note", ""))}</p>
+    <div class="sr-head" style="margin-top:46px"><p class="sr-eyebrow">COMPARISON</p><h2 class="sr-h2">vs SUZAKU 4。</h2>
+    <p class="sr-kick">旗艦は万能に、星軌は静けさと一瞬の全力に。</p></div>
+    <div class="sr-frame sr-pad"><div class="sr-vs">{vs_rows}</div></div>
+    <p class="sr-pageno">10 <small>/ 14</small></p>
   </div>
 </section>
 <section class="cl-section">
@@ -4218,6 +4228,14 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <p class="sr-kick">星軌 SEIKI専用のコラボアクセサリも同時開発中。名称とデザインスケッチを先行公開します。</p></div>
     <div class="sr-accs">{acc_cards}</div>
     <p class="sr-note">{esc(rv.get("acc_note", ""))}</p>
+    <p class="sr-pageno">11 <small>/ 14</small></p>
+  </div>
+</section>
+<section class="cl-section">
+  <div class="cl-wrap">
+    <div class="sr-head"><p class="sr-eyebrow">COLLECTOR'S BOX</p><h2 class="sr-h2">手荷物一式。</h2>
+    <p class="sr-kick">箱を開けたときから、乗車は始まっている。</p></div>
+    <div class="sr-frame sr-pad"><div class="sr-boxlist">{bundle}</div></div>
     <p class="sr-pageno">12 <small>/ 14</small></p>
   </div>
 </section>
@@ -5478,10 +5496,12 @@ def build_assets():
     # 第2弾の本レンダリング/仮デザイン/アクセサリアート(H-5):
     # 既存製品と同じく assets/img/products/ にファイルとして書き出し、
     # ページからは <img src> で参照する(画像単体のURLを持たせる)。
+    # 既存製品の命名規則({id}-{i}.svg = カラーインデックス / {id}-front.svg)に合わせる。
+    # カラバリは reveal["colors"] と同順(svg_art.KUDO_COLORS / SEIKI_COLORS)。
     wave2_arts = {
-        "kudo": svg_art.svg_kudo(),
+        "kudo-0": svg_art.svg_kudo(0), "kudo-1": svg_art.svg_kudo(1), "kudo-2": svg_art.svg_kudo(2),
         "kudo-front": svg_art.svg_kudo_front(),
-        "seiki": svg_art.svg_seiki(),
+        "seiki-0": svg_art.svg_seiki(0), "seiki-1": svg_art.svg_seiki(1), "seiki-2": svg_art.svg_seiki(2),
         "seiki-front": svg_art.svg_seiki_front(),
         "proto-generic": svg_art.svg_prototype("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic"),
         "proto-generic-front": svg_art.svg_prototype_front("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic"),
@@ -5497,9 +5517,13 @@ def build_assets():
         style = "zzz" if c["slug"] == "wave2" else "srail"
         dev_id = "kudo" if style == "zzz" else "seiki"
         for a in rv.get("accessories", []):
-            wave2_arts[f"{dev_id}-acc-{a['kind']}"] = svg_art.svg_wave2_acc(a["kind"], style, a["name"])
+            wave2_arts[f"{dev_id}-acc-{a['kind']}-0"] = svg_art.svg_wave2_acc(a["kind"], style, a["name"])
     for name, svg in wave2_arts.items():
         (img / "products" / f"{name}.svg").write_text(svg, encoding="utf-8")
+    # 旧名(kudo.svg 等)の残骸を削除(H-6-5 で {id}-{i} 規則へ統一)
+    for stale in ("kudo.svg", "seiki.svg", "kudo-acc-dock.svg", "kudo-acc-grip.svg", "kudo-acc-buds.svg",
+                  "seiki-acc-dock.svg", "seiki-acc-stand.svg", "seiki-acc-buds.svg"):
+        (img / "products" / stale).unlink(missing_ok=True)
 
 
 def w2img(name):
@@ -5719,21 +5743,28 @@ def build_svg_gallery():
         ("空洞 KUDO 仮デザイン(黒×ライム)", "proto-kudo"),
         ("星軌 SEIKI 仮デザイン(深紺×金)", "proto-seiki"),
     ]
+    # 既存デバイスと同じ「背面+正面ペア」マークアップ(svgg-pair)で寸法を揃える
     proto_cells = "".join(
-        f'<figure class="svgg-proto"><div class="svgg-proto__art svgg-proto__art--pair">'
-        f'<img src="{w2img(name)}" alt="{esc(t)} 背面" loading="lazy" width="340" height="600">'
-        f'<img src="{w2img(name + "-front")}" alt="{esc(t)} 正面" loading="lazy" width="340" height="600"></div>'
-        f'<figcaption>{esc(t)} — 背面+正面 <code>{name}.svg</code></figcaption></figure>'
+        f'<figure class="svgg-pair"><div class="svgg-pair__imgs">'
+        f'<img src="{w2img(name)}" alt="{esc(t)} 背面" loading="lazy" width="250" height="441">'
+        f'<img src="{w2img(name + "-front")}" alt="{esc(t)} 正面" loading="lazy" width="250" height="441">'
+        f'</div><figcaption>{esc(t)} <code>{name}</code></figcaption></figure>'
         for t, name in protos)
-    # 第2弾の本レンダリング(H-4-1: LPヒーローで使用中。背面+正面ペア)
-    reals = [("空洞 KUDO 本レンダリング", "kudo"), ("星軌 SEIKI 本レンダリング", "seiki")]
+    # 第2弾の本レンダリング(LPヒーローで使用中)。ペア=第1色+正面、
+    # カラーバリエーションは既存アクセサリと同じ全色列挙で並べる
+    reals = [("空洞 KUDO", "kudo", ["新エリー・ブラック", "ハザード・ライム", "プロキシ・ホワイト"]),
+             ("星軌 SEIKI", "seiki", ["深宇宙の紺", "星屑の金", "永冬ホワイト"])]
     real_cells = "".join(
-        f'<figure class="svgg-proto"><div class="svgg-proto__art svgg-proto__art--pair">'
-        f'<img src="{w2img(name)}" alt="{esc(t)} 背面" loading="lazy" width="340" height="600">'
-        f'<img src="{w2img(name + "-front")}" alt="{esc(t)} 正面" loading="lazy" width="340" height="600"></div>'
-        f'<figcaption>{esc(t)} — 背面+正面 <code>{name}.svg</code></figcaption></figure>'
-        for t, name in reals)
-    # 第2弾コラボアクセサリの本レンダリング(svg_wave2_acc)
+        f'<figure class="svgg-pair"><div class="svgg-pair__imgs">'
+        f'<img src="{w2img(name + "-0")}" alt="{esc(t)} 背面" loading="lazy" width="250" height="441">'
+        f'<img src="{w2img(name + "-front")}" alt="{esc(t)} 正面" loading="lazy" width="250" height="441">'
+        f'</div><figcaption>{esc(t)}(本レンダリング) <code>{name}</code></figcaption></figure>'
+        for t, name, _ in reals)
+    real_colors = "".join(
+        f'<figure class="svgg-acc"><img src="{w2img(f"{name}-{i}")}" alt="{esc(t)} {esc(cn)}" loading="lazy" width="340" height="600">'
+        f'<figcaption>{esc(t)} — {esc(cn)} <code>{name}-{i}</code></figcaption></figure>'
+        for t, name, colors in reals for i, cn in enumerate(colors))
+    # 第2弾コラボアクセサリの本レンダリング(既存アクセサリと同じ svgg-acc 図版)
     w2acc_cells = ""
     for c in COLLABS:
         rv = c.get("reveal") or {}
@@ -5741,11 +5772,10 @@ def build_svg_gallery():
             continue
         dev_id = "kudo" if c["slug"] == "wave2" else "seiki"
         for a in rv.get("accessories", []):
-            name = f"{dev_id}-acc-{a['kind']}"
+            name = f"{dev_id}-acc-{a['kind']}-0"
             w2acc_cells += (
-                f'<figure class="svgg-acc"><div class="svgg-proto__art">'
-                f'<img src="{w2img(name)}" alt="{esc(a["name"])}({esc(a["type"])})" loading="lazy" width="480" height="360"></div>'
-                f'<figcaption>{esc(a["name"])}({esc(a["type"])}) <code>{name}.svg</code></figcaption></figure>')
+                f'<figure class="svgg-acc"><img src="{w2img(name)}" alt="{esc(a["name"])}({esc(a["type"])})" loading="lazy" width="480" height="360">'
+                f'<figcaption>{esc(a["name"])}({esc(a["type"])}) <code>{name}</code></figcaption></figure>')
     body = f"""
 <style>
 .svgg-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }}
@@ -5754,13 +5784,6 @@ def build_svg_gallery():
 .svgg-pair__imgs img, .svgg-acc img {{ width: 100%; height: auto; min-width: 0; }}
 .svgg-pair figcaption, .svgg-acc figcaption {{ margin-top: 8px; text-align: center; font-size: 0.82rem; color: var(--text-soft); }}
 .svgg-pair figcaption code, .svgg-acc figcaption code {{ color: var(--accent); }}
-.svgg-proto {{ margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px; }}
-.svgg-proto__art {{ background: #0e0e12; border-radius: var(--r-md); padding: 10px; }}
-.svgg-proto__art svg, .svgg-proto__art img {{ width: 100%; height: auto; display: block; }}
-.svgg-proto__art--pair {{ display: flex; gap: 8px; }}
-.svgg-proto__art--pair img {{ width: 50%; min-width: 0; }}
-.svgg-proto figcaption {{ margin-top: 8px; text-align: center; font-size: 0.82rem; color: var(--text-soft); }}
-.svgg-proto figcaption code {{ color: var(--accent); }}
 </style>
 <section class="section">
   <div class="container">
@@ -5773,6 +5796,9 @@ def build_svg_gallery():
     <h2 class="t-h3" style="margin:32px 0 6px">第2弾 製品 本レンダリング</h2>
     <p class="t-small t-soft" style="margin-bottom:16px">正式発表ページのヒーローで使用中。各コラボ先の設計言語で個別に作画(svg_kudo / svg_seiki)。</p>
     <div class="svgg-grid">{real_cells}</div>
+    <h2 class="t-h3" style="margin:32px 0 6px">第2弾 カラーバリエーション</h2>
+    <p class="t-small t-soft" style="margin-bottom:16px">reveal["colors"] と同順の {{id}}-{{i}}.svg 規則(既存製品と同じ)。</p>
+    <div class="svgg-grid">{real_colors}</div>
     <h2 class="t-h3" style="margin:32px 0 6px">仮デザインSVG(svg_prototype)— アーカイブ</h2>
     <p class="t-small t-soft" style="margin-bottom:16px">発表直後の繋ぎに使ったプレースホルダの保管。汎用版はどの製品でも使い回し可、個別版は各コラボ先の設計言語で描き分ける。</p>
     <div class="svgg-grid">{proto_cells}</div>
