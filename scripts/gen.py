@@ -116,6 +116,41 @@ EARLY_THEME_SCRIPT = (
     + 'if(m&&window.SZ_THEMES.meta[r])m.setAttribute("content",window.SZ_THEMES.meta[r]);'
     + '}catch(e){}})();</script>')
 
+# ==========================================================================
+# サイト機能のバージョン台帳(H-9-5)
+#
+# 主要機能の「現行版」をここで明示する(実装の作り直しはしない。台帳のみ)。
+# 機能に実質的な変更を入れたら version を上げ、note を書き換えること。
+# /dev/ の機能バージョン一覧表と、data/products.js の window.SZ.features に反映される。
+# Cookie同意の版だけは data_consent.CONSENT_VERSION が原本(二重管理しない)。
+# ==========================================================================
+SITE_FEATURES = [
+    {"id": "theme", "label": "テーマシステム", "version": 3,
+     "source": "scripts/data_themes.py",
+     "note": "v3: 単一ソース化+themes.css自動生成+OS連動(system)+早期適用。v2: 5テーマべた書き。v1: ライト/ダーク2値"},
+    {"id": "consent", "label": "Cookie同意", "version": CONSENT_VERSION,
+     "source": "scripts/data_consent.py",
+     "note": "v3: 4カテゴリ+版管理(不一致で再同意)+撤回。v2: 3カテゴリ・版は記録のみ。v1: バナーのみ"},
+    {"id": "prefs", "label": "表示設定", "version": 2,
+     "source": "assets/js/main.js(sz_prefs)",
+     "note": "v2: 文字サイズ/フッター/アニメーション低減+機能Cookie連動(拒否時は適用のみ)。v1: テーマのみ"},
+    {"id": "search", "label": "サイト内検索", "version": 2,
+     "source": "assets/js/pages.js",
+     "note": "v2: もしかしてサジェスト+グループ別表示。v1: 単純部分一致"},
+    {"id": "compare", "label": "製品比較", "version": 2,
+     "source": "assets/js/store.js",
+     "note": "v2: プリセット+実測ダッシュボード+最良値ハイライト。v1: 静的スペック表"},
+    {"id": "reveal", "label": "二状態ページ自動切替", "version": 1,
+     "source": "assets/js/collab-core.js",
+     "note": "v1: data-until 期限で予告→発表LPへ自動切替(コラボ・ティザー)"},
+    {"id": "store", "label": "ストア(デモ)", "version": 1,
+     "source": "assets/js/store.js",
+     "note": "v1: カート/在庫演出/送料計算のフロントデモ"},
+    {"id": "auth", "label": "アカウント(デモ)", "version": 1,
+     "source": "assets/js/account.js",
+     "note": "v1: 登録/ログイン状態のフロントデモ"},
+]
+
 
 def pimg(pid, i=0):
     """製品画像URL(キャッシュバスティング付き)。vercelの/assets/*は
@@ -5515,6 +5550,8 @@ def build_client_data():
                             "required": c["required"], "default": c["default"]}
                            for c in CONSENT_CATEGORIES],
         },
+        # 機能バージョン台帳(単一ソース: gen.py の SITE_FEATURES)。診断・点検用
+        "features": {f["id"]: f["version"] for f in SITE_FEATURES},
         "assetV": ASSET_V,
         "tax": 0.10,
         "freeShipping": 5000,
@@ -5759,6 +5796,17 @@ def build_dev_hub():
         f'<h3 class="t-h4">{esc(t)}</h3><p class="t-small t-soft">{esc(d)}</p>'
         f'<p class="link-arrow">開く</p></a>'
         for t, href, d in wave2_pages)
+    # 機能バージョン一覧(単一ソース: SITE_FEATURES)。window.SZ.features と同期
+    feature_rows = "".join(
+        f'<tr><td><code>{f["id"]}</code></td><td>{esc(f["label"])}</td>'
+        f'<td style="text-align:center">v{f["version"]}</td>'
+        f'<td><code>{esc(f["source"])}</code></td>'
+        f'<td class="t-small t-soft">{esc(f["note"])}</td></tr>'
+        for f in SITE_FEATURES)
+    feature_table = (
+        '<div class="scroll-x"><table class="spec-table" style="min-width:760px">'
+        '<thead><tr><th>ID</th><th>機能</th><th>現行版</th><th>単一ソース</th><th>版の履歴</th></tr></thead>'
+        f'<tbody>{feature_rows}</tbody></table></div>')
     pre_style = ("background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);"
                  "padding:18px;overflow-x:auto;font-size:.85rem;line-height:1.9;color:var(--text-soft)")
     body = f"""
@@ -5790,6 +5838,12 @@ def build_dev_hub():
   <div class="section-head"><p class="eyebrow">2ND WAVE — STAGING</p><h2 class="t-h2">第2弾 発表ステージ(正式運用版)の点検</h2>
   <p class="t-soft">カウントダウン終了後に本番導線へ載る正式ページとティザー保存版。発表前は通常導線から辿れない(noindex)ため、点検はここから。</p></div>
   <div class="grid grid--2 grid--cards">{wave2_cards}</div>
+</div></section>
+
+<section class="section--sm"><div class="container">
+  <div class="section-head"><p class="eyebrow">FEATURE VERSIONS</p><h2 class="t-h2">機能バージョン一覧</h2>
+  <p class="t-soft">サイト主要機能の現行版と単一ソースの台帳(gen.py の SITE_FEATURES)。実行時は <code>window.SZ.features</code> から同じ版数を参照できます。機能に実質的な変更を入れたら版を上げること。</p></div>
+  {feature_table}
 </div></section>
 
 <div class="band-light" data-theme="light"><section class="section--sm"><div class="container container--narrow">

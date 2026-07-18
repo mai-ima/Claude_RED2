@@ -124,12 +124,40 @@ WAI-ARIA Tabsパターン(自動アクティベーション・roving tabindex・
 設定ページ(`src/pages/settings.html`)側は `data-pref` / `data-pref-value`
 属性だけで動く汎用配線のため、HTMLにグループを追加するだけで新項目に対応できる。
 
-### カラーテーマの単一ソース
+### カラーテーマの単一ソース(テーマシステム v3)
 
-テーマ選択肢は `scripts/gen.py` の `THEME_OPTS` にのみ定義し、
-ヘッダーのドロップダウン(`theme_menu_buttons()`)とドロワーの
-セグメント切替(`theme_seg_buttons()`)を同じ配列から生成する。
-テーマを追加・変更する場合は `THEME_OPTS` だけを編集すればよい。
+テーマは `scripts/data_themes.py` の `THEMES` にのみ定義する。`gen.py` がそこから
+
+- `assets/css/themes.css`(`[data-theme=...]` の変数ブロック。**自動生成・手編集禁止**)
+- ヘッダードロップダウン / ドロワー / 設定ページ(`<!--THEME_SEG-->`)のボタン
+- 早期適用スクリプト(`window.SZ_THEMES`。FOUC対策+`meta theme-color` 同期)
+
+をすべて生成する。`kind: "virtual"` の `auto`(ページ既定)/`system`(OS連動。
+`prefers-color-scheme` に追従)はJSが実テーマへ解決し、`kind: "concrete"` の
+light / dark / g / suzaku がCSS変数を持つ。`status: "planned"` の予約枠
+(現在: `endfield`)は **CSS・UI・JSのどこにも出力されない**(`validate.py` の
+`check_themes()` が機械検査)。基礎トークンは `assets/css/tokens.css` に残り、
+テーマ差分だけが `themes.css` に載る。
+
+### 拡張ポイント(整備の手引き)
+
+よくある拡張は、いずれも**単一ソースを1箇所編集して再生成するだけ**で全体に反映される:
+
+- **テーマを追加する** — `data_themes.py` の `THEMES` に dict を1つ足す
+  (`THEME_VAR_KEYS` の16変数が必須。欠落・書式は `validate.py` が検出)。
+  CSS・切替UI・早期適用・設定ページへ自動反映。予約枠の実装手順の実例は
+  `project-notes/theme-endfield-plan.md` を参照
+- **Cookie同意カテゴリを追加する** — `data_consent.py` の `CONSENT_CATEGORIES` に
+  dict を1つ足し、`CONSENT_VERSION` を +1 する(版が変わると全利用者に
+  再同意バナーが出る。意図的な仕様)。バナー・モーダル・`/legal/cookie/` の表・
+  `window.SZ.consent` へ自動反映
+- **表示設定の項目を追加する** — `main.js` の `PREF_SCHEMA` に `{ default, apply }`
+  を1行(前節参照)
+- **localStorage キーを追加する** — `assets/js/keys.js` の `window.szKeys` に追記
+  (管理ボードのバックアップ/リセット対象に自動編入)
+- **機能の版を上げる** — `gen.py` の `SITE_FEATURES` の該当項目の `version` を上げ、
+  `note` に履歴を書き足す(Cookie同意の版だけは `CONSENT_VERSION` が原本)。
+  `/dev/` の「機能バージョン一覧」表と `window.SZ.features` へ自動反映
 
 ### キャッシュバスティング
 

@@ -58,3 +58,25 @@
 - **未使用アーカイブ**: 発表LPの旧・実機SVG呼び出し(svg_phone "kudo"/"seiki")は
   H-2-1 で仮SVGに置換した。実機デザイン確定時は svg_phone の _PHONE_CUSTOM に
   専用描画を実装して戻す。
+
+## H-9 の設計メモ(2026-07-18)— テーマ/Cookie刷新・endfield予約枠・機能台帳
+
+- **テーマシステム v3(H-9-1/2)**: 定義を `data_themes.py` に単一ソース化し、
+  `gen.py write_themes_css()` が `assets/css/themes.css` を自動生成(ASSET_V 計算より
+  先に書き出す順序制約あり)。`auto`(ページ既定)に加え `system`(OS連動)を新設。
+  早期適用スクリプト(`window.SZ_THEMES`)で FOUC と meta theme-color を描画前に解決。
+  磨き直しは WCAG AA 実測に基づく最小修正のみ(light/dark の text-faint)。
+- **Cookie同意 v3(H-9-3)**: `data_consent.py` に CONSENT_VERSION=3 と4カテゴリ
+  (必須/機能/分析/マーケティング)。保存形式 `{version, date, choices}`。旧v2は読み取り
+  正規化しつつ、**版不一致でバナー再表示=意図的な再同意**。機能Cookie拒否時は
+  テーマ・表示設定を適用のみ(保存スキップ+トースト)。撤回ボタンあり。
+- **endfield テーマ予約枠(H-9-4)**: `data_themes.py` に `status:"planned"` の枠のみ。
+  planned は CSS/UI/JS へ一切出力されず、validate(vars 持ち込み NG)と
+  interact(ボタン非存在)が機械担保。実装手順は `theme-endfield-plan.md`
+  (**collab-endfield.css 流用禁止**・参考資料待ち。資料はフェーズ終了後にユーザーへ確認)。
+  ニュース告知 `/news/2026-07-endfield-site-theme/` は**新規記事のため
+  NEWS_BODY_ARCHIVE への旧本文アーカイブは不要**(アーカイブ方針は「置換時に旧を残す」)。
+- **機能台帳(H-9-5)**: `gen.py SITE_FEATURES` が主要機能の現行版を明示
+  (theme v3 / consent v3 / prefs v2 / search v2 / compare v2 / reveal v1 / store v1 / auth v1)。
+  /dev/ の一覧表と `window.SZ.features` に反映。consent の版だけは
+  CONSENT_VERSION が原本(二重管理しない)。README に「拡張ポイント」章を追加。
