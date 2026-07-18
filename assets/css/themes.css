@@ -14,7 +14,7 @@
   --text: var(--n-10);
   --text-strong: #ffffff;
   --text-soft: var(--n-8);
-  --text-faint: var(--n-7);
+  --text-faint: #7a7a90;
   --accent: var(--su-vermilion);
   --accent-hover: var(--su-vermilion-bright);
   --accent-contrast: #ffffff;
@@ -35,7 +35,7 @@
   --text: #2c2c38;
   --text-strong: #101018;
   --text-soft: #5c5c6e;
-  --text-faint: #85859a;
+  --text-faint: #70708a;
   --accent: #d43a24;
   --accent-hover: #e8442e;
   --accent-contrast: #ffffff;

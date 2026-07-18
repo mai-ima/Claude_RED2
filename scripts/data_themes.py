@@ -54,7 +54,8 @@ THEMES = [
             "surface": "#ffffff", "surface-2": "#f4f4f8", "surface-3": "#ebebf1",
             "line": "rgba(10, 10, 20, 0.1)", "line-strong": "rgba(10, 10, 20, 0.22)",
             "text": "#2c2c38", "text-strong": "#101018",
-            "text-soft": "#5c5c6e", "text-faint": "#85859a",
+            # text-faint はコントラスト比 4.6:1(旧 #85859a は 3.5:1 で WCAG AA 未達)
+            "text-soft": "#5c5c6e", "text-faint": "#70708a",
             "accent": "#d43a24", "accent-hover": "#e8442e", "accent-contrast": "#ffffff",
             "header-bg": "rgba(250, 250, 252, 0.8)",
             "card-hover-line": "rgba(212, 58, 36, 0.4)",
@@ -76,7 +77,9 @@ THEMES = [
             "surface": "var(--n-3)", "surface-2": "var(--n-4)", "surface-3": "var(--n-5)",
             "line": "rgba(255, 255, 255, 0.09)", "line-strong": "rgba(255, 255, 255, 0.18)",
             "text": "var(--n-10)", "text-strong": "#ffffff",
-            "text-soft": "var(--n-8)", "text-faint": "var(--n-7)",
+            # text-faint は n-7(3.8:1・AA未達)から独立させ 4.7:1 の専用値に
+            # (n-7 自体は装飾用途で他所からも参照されるため触らない)
+            "text-soft": "var(--n-8)", "text-faint": "#7a7a90",
             "accent": "var(--su-vermilion)", "accent-hover": "var(--su-vermilion-bright)",
             "accent-contrast": "#ffffff",
             "header-bg": "rgba(11, 11, 16, 0.72)",
