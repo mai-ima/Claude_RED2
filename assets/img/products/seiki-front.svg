@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="星軌 SEIKI 正面">
+<defs>
+<linearGradient id="framefseikireal" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ecd9a0"/><stop offset="0.5" stop-color="#9a7a2e"/><stop offset="1" stop-color="#e0c887"/>
+</linearGradient>
+<linearGradient id="scrfseikireal" x1="0" y1="0" x2="0.8" y2="1">
+  <stop offset="0" stop-color="#0d1430"/><stop offset="0.5" stop-color="#080d20"/><stop offset="1" stop-color="#050813"/>
+</linearGradient>
+<radialGradient id="flarefseikireal" cx="0.5" cy="0.3" r="0.85">
+  <stop offset="0" stop-color="#b48cff" stop-opacity="0.2"/>
+  <stop offset="0.55" stop-color="#d8b45c" stop-opacity="0.07"/>
+  <stop offset="1" stop-color="#d8b45c" stop-opacity="0"/>
+</radialGradient>
+<filter id="softfseikireal" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<clipPath id="clipfseikireal"><rect x="54" y="41" width="232" height="518" rx="37"/></clipPath>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.4" filter="url(#softfseikireal)"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#framefseikireal)"/>
+<rect x="48" y="35" width="244" height="530" rx="42" fill="#04060e"/>
+<rect x="54" y="41" width="232" height="518" rx="37" fill="url(#scrfseikireal)"/>
+<g clip-path="url(#clipfseikireal)">
+<ellipse cx="170" cy="200" rx="180" ry="200" fill="url(#flarefseikireal)"/>
+<rect x="80" y="120" width="180" height="196" rx="16" fill="none" stroke="#d8b45c" stroke-width="1.8"/>
+<rect x="86" y="126" width="168" height="184" rx="11" fill="none" stroke="#d8b45c" stroke-opacity="0.4" stroke-width="0.9"/>
+<circle cx="100" cy="180" r="1.2" fill="#ffffff" opacity="0.85"/><circle cx="140" cy="152" r="0.9" fill="#ffffff" opacity="0.6"/><circle cx="206" cy="190" r="1.1" fill="#ffffff" opacity="0.7"/><circle cx="238" cy="158" r="0.8" fill="#ffffff" opacity="0.6"/><circle cx="122" cy="236" r="0.8" fill="#ffffff" opacity="0.5"/><circle cx="218" cy="246" r="1" fill="#ffffff" opacity="0.6"/><circle cx="166" cy="208" r="0.7" fill="#ffffff" opacity="0.5"/><circle cx="88" cy="282" r="0.9" fill="#ffffff" opacity="0.5"/><circle cx="248" cy="292" r="0.8" fill="#ffffff" opacity="0.5"/>
+<path d="M90 200 h26" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1" stroke-linecap="round"/><path d="M180 168 h34" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1" stroke-linecap="round"/><path d="M130 262 h30" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1" stroke-linecap="round"/>
+<path d="M100 180 L140 152 L166 208 L206 190" fill="none" stroke="#d8b45c" stroke-width="0.7" opacity="0.45"/>
+<text x="170" y="368" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="46" font-weight="800" fill="#eef0ff" text-anchor="middle" letter-spacing="4">20:00</text>
+<path d="M118 388 h104" stroke="#d8b45c" stroke-opacity="0.55" stroke-width="1"/>
+<path d="M170 396 l5 7 l-5 7 l-5 -7 z" fill="none" stroke="#b48cff" stroke-width="1.2"/>
+<text x="170" y="426" font-family="monospace" font-size="9" fill="#9aa0c8" text-anchor="middle" letter-spacing="3">車窓AOD — 銀河標準(デモ表記)</text>
+<text x="170" y="474" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="10" fill="#d8b45c" text-anchor="middle" letter-spacing="6">次の停車駅、まもなく。</text>
+<rect x="125" y="544" width="90" height="4.5" rx="2.25" fill="#ffffff" opacity="0.45"/>
+<path d="M54 41 L206 41 L84 559 L54 559 Z" fill="#ffffff" opacity="0.05"/>
+</g>
+<rect x="54.8" y="41.8" width="230.4" height="516.4" rx="37" fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1.4"/>
+<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="#9a7a2e"/>
+<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="#9a7a2e"/>
+</svg>

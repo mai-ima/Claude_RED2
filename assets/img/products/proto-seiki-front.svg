@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="星軌 SEIKI 正面(仮デザイン)">
+<defs><radialGradient id="pgfprotofseikin38" cx="0.5" cy="0.35" r="0.85">
+<stop offset="0" stop-color="#d8b45c" stop-opacity="0.13"/><stop offset="1" stop-color="#d8b45c" stop-opacity="0"/>
+</radialGradient></defs>
+<rect width="340" height="600" fill="url(#pgfprotofseikin38)"/>
+<path d="M316 85 L317.5 88.5 L321 90 L317.5 91.5 L316 95 L314.5 91.5 L311 90 L314.5 88.5 Z" fill="#d8b45c" opacity="0.6"/><path d="M26 398 L27.2 400.8 L30 402 L27.2 403.2 L26 406 L24.8 403.2 L22 402 L24.8 400.8 Z" fill="#d8b45c" opacity="0.6"/><path d="M314 465.6 L315.32 468.68 L318.4 470 L315.32 471.32 L314 474.4 L312.68 471.32 L309.6 470 L312.68 468.68 Z" fill="#d8b45c" opacity="0.6"/>
+<path d="M12 30 v-16 h16 M328 30 v-16 h-16 M12 570 v16 h16 M328 570 v16 h-16" stroke="#d8b45c" stroke-width="1.4" fill="none" opacity="0.8"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="#d8b45c" stroke-width="2" stroke-dasharray="10 7" opacity="0.9"/>
+<rect x="54" y="41" width="232" height="518" rx="37" fill="none" stroke="#eef0f4" stroke-opacity="0.3" stroke-width="1.3" stroke-dasharray="6 5"/>
+<path d="M170 41 v518 M54 300 h232" stroke="#eef0f4" stroke-opacity="0.1" stroke-width="1"/>
+<circle cx="170" cy="64" r="6" fill="none" stroke="#d8b45c" stroke-width="1.4" stroke-dasharray="3 3"/>
+<text x="170" y="86" font-family="monospace" font-size="7" fill="#eef0f4" opacity="0.5" text-anchor="middle" letter-spacing="1.5">CAMERA — 位置検討中</text>
+<rect x="98" y="200" width="144" height="60" rx="8" fill="none" stroke="#d8b45c" stroke-opacity="0.7" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="170" y="234" font-family="monospace" font-size="10" fill="#d8b45c" text-anchor="middle" letter-spacing="3">DISPLAY</text>
+<text x="170" y="250" font-family="monospace" font-size="7.5" fill="#eef0f4" opacity="0.55" text-anchor="middle" letter-spacing="2">パネル調整中 — 6.9インチ(設計値)</text>
+<path d="M98 340 H242 M98 372 H242 M98 404 H210" stroke="#eef0f4" stroke-opacity="0.16" stroke-width="8" stroke-linecap="round"/>
+<text x="170" y="452" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="15" font-weight="800" fill="#eef0f4" opacity="0.85" text-anchor="middle" letter-spacing="2.5">星軌 SEIKI</text>
+<text x="170" y="472" font-family="monospace" font-size="9" fill="#eef0f4" opacity="0.45" text-anchor="middle" letter-spacing="4">せいき</text>
+<rect x="84" y="496" width="172" height="40" rx="6" fill="none" stroke="#d8b45c" stroke-width="2.2" opacity="0.95"/>
+<text x="170" y="514" font-family="monospace" font-size="14" font-weight="800" fill="#d8b45c" text-anchor="middle" letter-spacing="4">PROTOTYPE</text>
+<text x="170" y="529" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="#d8b45c" text-anchor="middle" letter-spacing="1.5">正面 仮デザイン — 量産版と異なります</text>
+<rect x="125" y="546" width="90" height="4" rx="2" fill="#eef0f4" opacity="0.3"/>
+</svg>

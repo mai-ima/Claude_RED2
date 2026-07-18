@@ -3927,6 +3927,7 @@ def _reveal_lp_zzz(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <div class="zz-cards">{feats}</div>
     <h2 class="zz-h2" style="margin-top:46px">TVモード・テーマパックの中身。</h2>
     <p class="zz-lead">同梱テーマパックは「置き換え」ではなく「改装」です。OSの標準機能はそのまま、見た目と音だけがあのブラウン管に変わります(すべてデモ表記)。</p>
+    <div class="zz-front"><img src="{w2img("kudo-front")}" alt="空洞 KUDO 正面(TVモードのロック画面)" width="340" height="600" loading="lazy"><p class="zz-note" style="text-align:center">正面 — TVモードのロック画面(本レンダリング)</p></div>
     <div class="zz-boxlist">
       <div class="zz-boxitem"><span class="zz-boxitem__no">A</span><b>ロック画面「放送休止」</b><p>待受はカラーバーとノイズの狭間。持ち上げると「放送再開」のカットインで解錠画面へ。時計はテロップ風に流れます。</p></div>
       <div class="zz-boxitem"><span class="zz-boxitem__no">B</span><b>ホーム「チャンネル一覧」</b><p>アプリ一覧を番組表として再構成。よく使うアプリほど太いチャンネル枠になります。フォルダは「録画一覧」。</p></div>
@@ -4143,6 +4144,7 @@ def _reveal_lp_srail(cfg, rv, sib_links, reveal_ymd, standalone=False):
     <div class="sr-cards">{feats}</div>
     <div class="sr-head" style="margin-top:46px"><p class="sr-eyebrow">WINDOW AOD</p><h2 class="sr-h2">車窓のバリエーション。</h2>
     <p class="sr-kick">常時表示は3つの車窓から選べます(すべてデモ表記)。</p></div>
+    <div class="sr-front"><img src="{w2img("seiki-front")}" alt="星軌 SEIKI 正面(車窓AOD)" width="340" height="600" loading="lazy"><p class="sr-note" style="text-align:center">正面 — 車窓AOD「銀河標準」(本レンダリング)</p></div>
     <div class="sr-frame sr-pad"><div class="sr-boxlist">
       <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>銀河標準</b><p>星が右から左へゆっくり流れる標準の車窓。通知が来ると、ひとつだけ星が明るく瞬きます。時刻は窓枠の隅に小さく。</p></div>
       <div class="sr-boxitem"><span class="sr-boxitem__mark" aria-hidden="true">◆</span><b>雪の都</b><p>永冬 EITOと連動する車窓。端末温度が低いほど雪が静かに降り、負荷が上がると吹雪きます。温度計としても読める画面です。</p></div>
@@ -5478,10 +5480,15 @@ def build_assets():
     # ページからは <img src> で参照する(画像単体のURLを持たせる)。
     wave2_arts = {
         "kudo": svg_art.svg_kudo(),
+        "kudo-front": svg_art.svg_kudo_front(),
         "seiki": svg_art.svg_seiki(),
+        "seiki-front": svg_art.svg_seiki_front(),
         "proto-generic": svg_art.svg_prototype("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic"),
+        "proto-generic-front": svg_art.svg_prototype_front("generic-demo", "#e8442e", "SUZAKU NEXT", "すざく ねくすと", style="generic"),
         "proto-kudo": svg_art.svg_prototype("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz"),
+        "proto-kudo-front": svg_art.svg_prototype_front("kudo", "#d4fa4c", "空洞 KUDO", "くうどう", style="zzz"),
         "proto-seiki": svg_art.svg_prototype("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail"),
+        "proto-seiki-front": svg_art.svg_prototype_front("seiki", "#d8b45c", "星軌 SEIKI", "せいき", style="srail"),
     }
     for c in COLLABS:
         rv = c.get("reveal") or {}
@@ -5713,16 +5720,18 @@ def build_svg_gallery():
         ("星軌 SEIKI 仮デザイン(深紺×金)", "proto-seiki"),
     ]
     proto_cells = "".join(
-        f'<figure class="svgg-proto"><div class="svgg-proto__art">'
-        f'<img src="{w2img(name)}" alt="{esc(t)}" loading="lazy" width="340" height="600"></div>'
-        f'<figcaption>{esc(t)} <code>{name}.svg</code></figcaption></figure>'
+        f'<figure class="svgg-proto"><div class="svgg-proto__art svgg-proto__art--pair">'
+        f'<img src="{w2img(name)}" alt="{esc(t)} 背面" loading="lazy" width="340" height="600">'
+        f'<img src="{w2img(name + "-front")}" alt="{esc(t)} 正面" loading="lazy" width="340" height="600"></div>'
+        f'<figcaption>{esc(t)} — 背面+正面 <code>{name}.svg</code></figcaption></figure>'
         for t, name in protos)
-    # 第2弾の本レンダリング(H-4-1: LPヒーローで使用中)
+    # 第2弾の本レンダリング(H-4-1: LPヒーローで使用中。背面+正面ペア)
     reals = [("空洞 KUDO 本レンダリング", "kudo"), ("星軌 SEIKI 本レンダリング", "seiki")]
     real_cells = "".join(
-        f'<figure class="svgg-proto"><div class="svgg-proto__art">'
-        f'<img src="{w2img(name)}" alt="{esc(t)}" loading="lazy" width="340" height="600"></div>'
-        f'<figcaption>{esc(t)} <code>{name}.svg</code></figcaption></figure>'
+        f'<figure class="svgg-proto"><div class="svgg-proto__art svgg-proto__art--pair">'
+        f'<img src="{w2img(name)}" alt="{esc(t)} 背面" loading="lazy" width="340" height="600">'
+        f'<img src="{w2img(name + "-front")}" alt="{esc(t)} 正面" loading="lazy" width="340" height="600"></div>'
+        f'<figcaption>{esc(t)} — 背面+正面 <code>{name}.svg</code></figcaption></figure>'
         for t, name in reals)
     # 第2弾コラボアクセサリの本レンダリング(svg_wave2_acc)
     w2acc_cells = ""
@@ -5748,6 +5757,8 @@ def build_svg_gallery():
 .svgg-proto {{ margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px; }}
 .svgg-proto__art {{ background: #0e0e12; border-radius: var(--r-md); padding: 10px; }}
 .svgg-proto__art svg, .svgg-proto__art img {{ width: 100%; height: auto; display: block; }}
+.svgg-proto__art--pair {{ display: flex; gap: 8px; }}
+.svgg-proto__art--pair img {{ width: 50%; min-width: 0; }}
 .svgg-proto figcaption {{ margin-top: 8px; text-align: center; font-size: 0.82rem; color: var(--text-soft); }}
 .svgg-proto figcaption code {{ color: var(--accent); }}
 </style>

@@ -1,37 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label="車窓枠 SHASO-WAKU"><rect width="480" height="360" fill="#0a0e24"/><defs>
-<linearGradient id="abw2standsrailn40" x1="0" y1="0" x2="0.7" y2="1">
+<linearGradient id="abw2standsrailn43" x1="0" y1="0" x2="0.7" y2="1">
   <stop offset="0" stop-color="#767b8c"/>
   <stop offset="0.45" stop-color="#131b38"/>
   <stop offset="1" stop-color="#0b1022"/>
 </linearGradient>
-<linearGradient id="amw2standsrailn40" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="amw2standsrailn43" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#a1a4af"/>
   <stop offset="0.5" stop-color="#0d1327"/>
   <stop offset="1" stop-color="#5a5f74"/>
 </linearGradient>
-<radialGradient id="agw2standsrailn40" cx="0.5" cy="0.42" r="0.75">
+<radialGradient id="agw2standsrailn43" cx="0.5" cy="0.42" r="0.75">
   <stop offset="0" stop-color="#d8b45c" stop-opacity="0.2"/>
   <stop offset="1" stop-color="#d8b45c" stop-opacity="0"/>
 </radialGradient>
-<radialGradient id="alensw2standsrailn40" cx="0.38" cy="0.32" r="0.95">
+<radialGradient id="alensw2standsrailn43" cx="0.38" cy="0.32" r="0.95">
   <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
 </radialGradient>
-<filter id="asoftw2standsrailn40" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
-<filter id="agloww2standsrailn40" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/></filter>
-</defs><rect width="480" height="360" fill="url(#agw2standsrailn40)"/>
-<ellipse cx="246" cy="316" rx="160" ry="15" fill="#000000" opacity="0.5" filter="url(#asoftw2standsrailn40)"/>
-<rect x="152" y="82" width="192" height="146" rx="16" fill="#000000" opacity="0.4" transform="translate(5 7)" filter="url(#asoftw2standsrailn40)"/>
-<rect x="152" y="82" width="192" height="146" rx="16" fill="url(#amw2standsrailn40)"/>
+<filter id="asoftw2standsrailn43" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
+<filter id="agloww2standsrailn43" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs><rect width="480" height="360" fill="url(#agw2standsrailn43)"/>
+<ellipse cx="246" cy="316" rx="160" ry="15" fill="#000000" opacity="0.5" filter="url(#asoftw2standsrailn43)"/>
+<rect x="152" y="82" width="192" height="146" rx="16" fill="#000000" opacity="0.4" transform="translate(5 7)" filter="url(#asoftw2standsrailn43)"/>
+<rect x="152" y="82" width="192" height="146" rx="16" fill="url(#amw2standsrailn43)"/>
 <rect x="152" y="82" width="192" height="146" rx="16" fill="none" stroke="#d8b45c" stroke-width="2.2"/>
 <rect x="162" y="92" width="172" height="126" rx="10" fill="#070b1c" stroke="#d8b45c" stroke-opacity="0.6" stroke-width="1"/>
 <circle cx="196" cy="122" r="1.2" fill="#ffffff" opacity="0.8"/><circle cx="232" cy="104" r="0.9" fill="#ffffff" opacity="0.6"/><circle cx="286" cy="132" r="1.1" fill="#ffffff" opacity="0.7"/><circle cx="316" cy="110" r="0.8" fill="#ffffff" opacity="0.55"/><circle cx="214" cy="172" r="0.9" fill="#ffffff" opacity="0.6"/><circle cx="296" cy="188" r="1.2" fill="#ffffff" opacity="0.7"/><circle cx="256" cy="148" r="0.7" fill="#ffffff" opacity="0.5"/><circle cx="330" cy="168" r="0.9" fill="#ffffff" opacity="0.55"/>
 <path d="M196 122 L232 104 L256 148 L296 188" fill="none" stroke="#d8b45c" stroke-width="0.8" opacity="0.5"/>
 <path d="M248 92 V218 M162 155 H334" stroke="#d8b45c" stroke-opacity="0.65" stroke-width="1.6"/>
 <path d="M300 96 l60 30 l-24 46" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="14" stroke-linecap="round"/>
-<path d="M178 228 l-30 66 M318 228 l30 66 M138 294 h220" stroke="url(#amw2standsrailn40)" stroke-width="9" stroke-linecap="round"/>
+<path d="M178 228 l-30 66 M318 228 l30 66 M138 294 h220" stroke="url(#amw2standsrailn43)" stroke-width="9" stroke-linecap="round"/>
 <path d="M178 228 l-30 66 M318 228 l30 66" stroke="#d8b45c" stroke-opacity="0.4" stroke-width="1.4"/>
-<circle cx="178" cy="230" r="7" fill="url(#amw2standsrailn40)" stroke="#d8b45c" stroke-opacity="0.7" stroke-width="1.2"/>
-<circle cx="318" cy="230" r="7" fill="url(#amw2standsrailn40)" stroke="#d8b45c" stroke-opacity="0.7" stroke-width="1.2"/>
+<circle cx="178" cy="230" r="7" fill="url(#amw2standsrailn43)" stroke="#d8b45c" stroke-opacity="0.7" stroke-width="1.2"/>
+<circle cx="318" cy="230" r="7" fill="url(#amw2standsrailn43)" stroke="#d8b45c" stroke-opacity="0.7" stroke-width="1.2"/>
 <path d="M152 98 v-8 h10 M344 90 h-10 M344 90 v8 M152 212 v8 h10 M344 220 h-10 v-8" stroke="#d8b45c" stroke-width="1.8" fill="none"/>
 <text x="152" y="60" font-family="monospace" font-size="10" fill="#d8b45c" letter-spacing="3">SHASO-WAKU ・ WINDOW STAND</text>
 </svg>

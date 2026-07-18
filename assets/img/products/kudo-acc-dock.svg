@@ -1,41 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" role="img" aria-label="給電街区 KYUDEN-GAIKU"><rect width="480" height="360" fill="#0b0b0d"/><defs>
-<linearGradient id="abw2dockzzzn36" x1="0" y1="0" x2="0.7" y2="1">
+<linearGradient id="abw2dockzzzn39" x1="0" y1="0" x2="0.7" y2="1">
   <stop offset="0" stop-color="#78787b"/>
   <stop offset="0.45" stop-color="#17171b"/>
   <stop offset="1" stop-color="#0e0e10"/>
 </linearGradient>
-<linearGradient id="amw2dockzzzn36" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="amw2dockzzzn39" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#a2a2a4"/>
   <stop offset="0.5" stop-color="#101013"/>
   <stop offset="1" stop-color="#5d5d5f"/>
 </linearGradient>
-<radialGradient id="agw2dockzzzn36" cx="0.5" cy="0.42" r="0.75">
+<radialGradient id="agw2dockzzzn39" cx="0.5" cy="0.42" r="0.75">
   <stop offset="0" stop-color="#d4fa4c" stop-opacity="0.2"/>
   <stop offset="1" stop-color="#d4fa4c" stop-opacity="0"/>
 </radialGradient>
-<radialGradient id="alensw2dockzzzn36" cx="0.38" cy="0.32" r="0.95">
+<radialGradient id="alensw2dockzzzn39" cx="0.38" cy="0.32" r="0.95">
   <stop offset="0" stop-color="#3c4454"/><stop offset="0.35" stop-color="#141821"/><stop offset="1" stop-color="#04040a"/>
 </radialGradient>
-<filter id="asoftw2dockzzzn36" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
-<filter id="agloww2dockzzzn36" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/></filter>
-</defs><rect width="480" height="360" fill="url(#agw2dockzzzn36)"/>
-<ellipse cx="250" cy="308" rx="150" ry="16" fill="#000000" opacity="0.5" filter="url(#asoftw2dockzzzn36)"/>
-<rect x="120" y="256" width="250" height="40" rx="12" fill="url(#amw2dockzzzn36)"/>
+<filter id="asoftw2dockzzzn39" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
+<filter id="agloww2dockzzzn39" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs><rect width="480" height="360" fill="url(#agw2dockzzzn39)"/>
+<ellipse cx="250" cy="308" rx="150" ry="16" fill="#000000" opacity="0.5" filter="url(#asoftw2dockzzzn39)"/>
+<rect x="120" y="256" width="250" height="40" rx="12" fill="url(#amw2dockzzzn39)"/>
 <rect x="120" y="256" width="250" height="40" rx="12" fill="none" stroke="#8b8b8d" stroke-opacity="0.5" stroke-width="1.2"/>
 <rect x="128" y="262" width="234" height="6" rx="3" fill="#ffffff" opacity="0.08"/>
 <path d="M136 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M162 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M188 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M214 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M240 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M266 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M292 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M318 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/><path d="M344 294 h13 l7 -12 h-13 z" fill="#d4fa4c" opacity="0.9"/>
-<path d="M156 256 v-64 q0 -14 14 -14 h16" fill="none" stroke="url(#amw2dockzzzn36)" stroke-width="16" stroke-linecap="round"/>
+<path d="M156 256 v-64 q0 -14 14 -14 h16" fill="none" stroke="url(#amw2dockzzzn39)" stroke-width="16" stroke-linecap="round"/>
 <g transform="rotate(-8 262 168)">
-  <rect x="212" y="76" width="100" height="184" rx="16" fill="#000000" opacity="0.4" transform="translate(5 6)" filter="url(#asoftw2dockzzzn36)"/>
-  <rect x="212" y="76" width="100" height="184" rx="16" fill="url(#abw2dockzzzn36)" stroke="#979798" stroke-width="1.4"/>
+  <rect x="212" y="76" width="100" height="184" rx="16" fill="#000000" opacity="0.4" transform="translate(5 6)" filter="url(#asoftw2dockzzzn39)"/>
+  <rect x="212" y="76" width="100" height="184" rx="16" fill="url(#abw2dockzzzn39)" stroke="#979798" stroke-width="1.4"/>
   <rect x="220" y="86" width="84" height="150" rx="9" fill="#08080c"/>
   <rect x="220" y="86" width="84" height="150" rx="9" fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
-  <g filter="url(#agloww2dockzzzn36)"><path d="M268 128 l-14 30 h11 l-9 30 l27 -37 h-12 l11 -23 z" fill="#d4fa4c"/></g>
+  <g filter="url(#agloww2dockzzzn39)"><path d="M268 128 l-14 30 h11 l-9 30 l27 -37 h-12 l11 -23 z" fill="#d4fa4c"/></g>
   <path d="M268 128 l-14 30 h11 l-9 30 l27 -37 h-12 l11 -23 z" fill="#eaff9a"/>
   <text x="262" y="226" font-family="monospace" font-size="8" fill="#d4fa4c" text-anchor="middle" letter-spacing="2" opacity="0.85">CHARGING</text>
   <path d="M224 90 L250 86 L232 232 L222 230 Z" fill="#ffffff" opacity="0.06"/>
 </g>
-<g filter="url(#agloww2dockzzzn36)"><circle cx="150" cy="238" r="8" fill="#d4fa4c" opacity="0.8"/></g>
+<g filter="url(#agloww2dockzzzn39)"><circle cx="150" cy="238" r="8" fill="#d4fa4c" opacity="0.8"/></g>
 <circle cx="150" cy="238" r="8" fill="#0c0c0e" stroke="#d4fa4c" stroke-width="2"/>
 <circle cx="150" cy="238" r="3" fill="#d4fa4c"/>
 <path d="M370 288 q40 4 48 26" stroke="#747476" stroke-width="5" fill="none" stroke-linecap="round"/>

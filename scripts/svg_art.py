@@ -1675,6 +1675,179 @@ def svg_seiki(label="星軌 SEIKI", kana="せいき", hz="165Hz"):
 </svg>"""
 
 
+def svg_kudo_front(label="空洞 KUDO", hz="144Hz"):
+    """空洞 KUDO 正面ビュー(ディスプレイ点灯・TVモードのロック画面)。
+    ザッピング演出のカラーバー・HUDストリップ・シグナルストライプを画面内に描く。"""
+    body_hex = "#141417"
+    acc = "#d4fa4c"
+    gid = "fkudoreal"
+    dark2 = _shade(body_hex, -0.6)
+    bars = "".join(
+        f'<rect x="{104 + i * 22}" y="470" width="22" height="26" fill="{c}" opacity="0.85"/>'
+        for i, c in enumerate(("#e6e6dc", "#d4fa4c", "#4cc2f1", "#3fae62", "#c0429b", "#e8442e")))
+    scan = "".join(f'<path d="M54 {y} H286" stroke="#ffffff" stroke-opacity="0.025"/>' for y in range(48, 560, 6))
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label} 正面">
+<defs>
+<linearGradient id="frame{gid}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="{_shade(body_hex, 0.5)}"/>
+  <stop offset="0.12" stop-color="{_shade(body_hex, -0.15)}"/>
+  <stop offset="0.5" stop-color="{dark2}"/>
+  <stop offset="0.88" stop-color="{_shade(body_hex, -0.2)}"/>
+  <stop offset="1" stop-color="{_shade(body_hex, 0.35)}"/>
+</linearGradient>
+<linearGradient id="scr{gid}" x1="0" y1="0" x2="0.8" y2="1">
+  <stop offset="0" stop-color="#15151a"/><stop offset="0.5" stop-color="#0c0c10"/><stop offset="1" stop-color="#07070a"/>
+</linearGradient>
+<radialGradient id="flare{gid}" cx="0.5" cy="0.3" r="0.85">
+  <stop offset="0" stop-color="{acc}" stop-opacity="0.26"/>
+  <stop offset="0.55" stop-color="{acc}" stop-opacity="0.08"/>
+  <stop offset="1" stop-color="{acc}" stop-opacity="0"/>
+</radialGradient>
+<filter id="soft{gid}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<clipPath id="clip{gid}"><rect x="54" y="41" width="232" height="518" rx="37"/></clipPath>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.42" filter="url(#soft{gid})"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#frame{gid})"/>
+<rect x="48" y="35" width="244" height="530" rx="42" fill="#06060a"/>
+<rect x="54" y="41" width="232" height="518" rx="37" fill="url(#scr{gid})"/>
+<g clip-path="url(#clip{gid})">
+<ellipse cx="170" cy="200" rx="180" ry="200" fill="url(#flare{gid})"/>
+{scan}
+<text x="70" y="72" font-family="'Noto Sans JP',sans-serif" font-size="11" font-weight="700" fill="#e6e6ee">20:00</text>
+{"".join(f'<rect x="{222 + i * 6}" y="{70 - i * 2.5}" width="3.5" height="{5 + i * 2.5}" rx="1" fill="#c9c9d6" opacity="{0.55 + i * 0.15}"/>' for i in range(3))}
+<rect x="248" y="61.5" width="20" height="10" rx="3" fill="none" stroke="#c9c9d6" stroke-width="1.3"/>
+<rect x="250" y="63.5" width="13" height="6" rx="1.5" fill="{acc}"/>
+<rect x="268.6" y="64" width="2.4" height="5" rx="1" fill="#c9c9d6"/>
+<rect x="70" y="92" width="200" height="20" rx="5" fill="rgba(212,250,76,0.08)" stroke="{acc}" stroke-opacity="0.5" stroke-width="1"/>
+<text x="80" y="106" font-family="monospace" font-size="8" fill="{acc}" letter-spacing="2">HOLLOW HUD ・ READY</text>
+<circle cx="258" cy="102" r="3.4" fill="{acc}"/>
+<text x="170" y="238" font-family="'Noto Sans JP',sans-serif" font-size="64" font-weight="900" font-style="italic" fill="#f2f2f4" text-anchor="middle" letter-spacing="1">20:00</text>
+<text x="170" y="266" font-family="monospace" font-size="11" fill="{acc}" text-anchor="middle" letter-spacing="4">CH 00 — STANDBY</text>
+<g transform="translate(120 300)">
+  <rect width="100" height="42" rx="10" fill="rgba(255,255,255,0.05)" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1"/>
+  <path d="M34 8 l-8 14 h6 l-5 12 l14 -17 h-6 l6 -9 z" fill="{acc}"/>
+  <text x="62" y="26" font-family="monospace" font-size="10" fill="#e6e6ee" text-anchor="middle">86%</text>
+</g>
+<path d="M20 430 h150 l-22 22 h-150 z" fill="{acc}" opacity="0.16"/>
+<path d="M40 452 h150 l-22 22 h-150 z" fill="{acc}" opacity="0.08"/>
+{bars}
+<rect x="104" y="470" width="132" height="26" fill="none" stroke="#000000" stroke-opacity="0.4" stroke-width="1"/>
+<text x="170" y="516" font-family="monospace" font-size="8.5" fill="#9a9aa6" text-anchor="middle" letter-spacing="2">ザッピングで解錠(デモ表記)</text>
+<rect x="125" y="544" width="90" height="4.5" rx="2.25" fill="#ffffff" opacity="0.55"/>
+<path d="M54 41 L206 41 L84 559 L54 559 Z" fill="#ffffff" opacity="0.035"/>
+</g>
+<rect x="54.8" y="41.8" width="230.4" height="516.4" rx="37" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1.4"/>
+<rect x="292.5" y="112" width="5" height="44" rx="2.5" fill="{acc}"/>
+<rect x="292.5" y="172" width="5" height="44" rx="2.5" fill="{acc}"/>
+</svg>"""
+
+
+def svg_seiki_front(label="星軌 SEIKI", hz="165Hz"):
+    """星軌 SEIKI 正面ビュー(車窓AOD点灯状態)。
+    金枠の車窓に星が流れ、セリフ体の時刻と停車駅表示を描く。"""
+    body_hex = "#101830"
+    gold = "#d8b45c"
+    holo = "#b48cff"
+    gid = "fseikireal"
+    dark2 = _shade(body_hex, -0.6)
+    stars = "".join(
+        f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>'
+        for x, y, r, o in [(100, 180, 1.2, .85), (140, 152, .9, .6), (206, 190, 1.1, .7),
+                           (238, 158, .8, .6), (122, 236, .8, .5), (218, 246, 1, .6),
+                           (166, 208, .7, .5), (88, 282, .9, .5), (248, 292, .8, .5)])
+    streaks = "".join(
+        f'<path d="M{x} {y} h{w}" stroke="#ffffff" stroke-opacity="{o}" stroke-width="1" stroke-linecap="round"/>'
+        for x, y, w, o in [(90, 200, 26, .3), (180, 168, 34, .25), (130, 262, 30, .22)])
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label} 正面">
+<defs>
+<linearGradient id="frame{gid}" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ecd9a0"/><stop offset="0.5" stop-color="#9a7a2e"/><stop offset="1" stop-color="#e0c887"/>
+</linearGradient>
+<linearGradient id="scr{gid}" x1="0" y1="0" x2="0.8" y2="1">
+  <stop offset="0" stop-color="#0d1430"/><stop offset="0.5" stop-color="#080d20"/><stop offset="1" stop-color="#050813"/>
+</linearGradient>
+<radialGradient id="flare{gid}" cx="0.5" cy="0.3" r="0.85">
+  <stop offset="0" stop-color="{holo}" stop-opacity="0.2"/>
+  <stop offset="0.55" stop-color="{gold}" stop-opacity="0.07"/>
+  <stop offset="1" stop-color="{gold}" stop-opacity="0"/>
+</radialGradient>
+<filter id="soft{gid}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+<clipPath id="clip{gid}"><rect x="54" y="41" width="232" height="518" rx="37"/></clipPath>
+</defs>
+<ellipse cx="170" cy="577" rx="116" ry="13" fill="#000000" opacity="0.4" filter="url(#soft{gid})"/>
+<rect x="43" y="30" width="254" height="540" rx="47" fill="url(#frame{gid})"/>
+<rect x="48" y="35" width="244" height="530" rx="42" fill="#04060e"/>
+<rect x="54" y="41" width="232" height="518" rx="37" fill="url(#scr{gid})"/>
+<g clip-path="url(#clip{gid})">
+<ellipse cx="170" cy="200" rx="180" ry="200" fill="url(#flare{gid})"/>
+<rect x="80" y="120" width="180" height="196" rx="16" fill="none" stroke="{gold}" stroke-width="1.8"/>
+<rect x="86" y="126" width="168" height="184" rx="11" fill="none" stroke="{gold}" stroke-opacity="0.4" stroke-width="0.9"/>
+{stars}
+{streaks}
+<path d="M100 180 L140 152 L166 208 L206 190" fill="none" stroke="{gold}" stroke-width="0.7" opacity="0.45"/>
+<text x="170" y="368" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="46" font-weight="800" fill="#eef0ff" text-anchor="middle" letter-spacing="4">20:00</text>
+<path d="M118 388 h104" stroke="{gold}" stroke-opacity="0.55" stroke-width="1"/>
+<path d="M170 396 l5 7 l-5 7 l-5 -7 z" fill="none" stroke="{holo}" stroke-width="1.2"/>
+<text x="170" y="426" font-family="monospace" font-size="9" fill="#9aa0c8" text-anchor="middle" letter-spacing="3">車窓AOD — 銀河標準(デモ表記)</text>
+<text x="170" y="474" font-family="'Shippori Mincho','Noto Sans JP',serif" font-size="10" fill="{gold}" text-anchor="middle" letter-spacing="6">次の停車駅、まもなく。</text>
+<rect x="125" y="544" width="90" height="4.5" rx="2.25" fill="#ffffff" opacity="0.45"/>
+<path d="M54 41 L206 41 L84 559 L54 559 Z" fill="#ffffff" opacity="0.05"/>
+</g>
+<rect x="54.8" y="41.8" width="230.4" height="516.4" rx="37" fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1.4"/>
+<rect x="292.5" y="118" width="5" height="46" rx="2.5" fill="#9a7a2e"/>
+<rect x="292.5" y="178" width="5" height="46" rx="2.5" fill="#9a7a2e"/>
+</svg>"""
+
+
+def svg_prototype_front(pid, glow, label, kana="", style="generic"):
+    """仮デザインSVGの正面ビュー(ワイヤーフレーム・DISPLAY調整中)。
+    背面版(svg_prototype)と同じ設計言語の装飾で、画面領域とパンチ位置だけを示す。"""
+    global _UID_SEQ
+    _UID_SEQ += 1
+    u = f"protof{pid.replace('-', '')}n{_UID_SEQ}"
+    acc = glow
+    ink = "#eef0f4"
+    if style == "zzz":
+        stripes = "".join(
+            f'<rect x="{i * 26}" y="0" width="13" height="12" fill="{acc}" transform="skewX(-30)"/>'
+            for i in range(16))
+        deco = (f'<g transform="translate(6 4)" opacity="0.85">{stripes}</g>'
+                f'<g transform="translate(6 586)" opacity="0.85">{stripes}</g>')
+        stamp_font = "'Noto Sans JP',sans-serif"
+    elif style == "srail":
+        deco = ("".join(
+            f'<path d="M{x} {y - s} L{x + s * .3} {y - s * .3} L{x + s} {y} L{x + s * .3} {y + s * .3} '
+            f'L{x} {y + s} L{x - s * .3} {y + s * .3} L{x - s} {y} L{x - s * .3} {y - s * .3} Z" fill="{acc}" opacity="0.6"/>'
+            for x, y, s in [(316, 90, 5), (26, 402, 4), (314, 470, 4.4)]) + f"""
+<path d="M12 30 v-16 h16 M328 30 v-16 h-16 M12 570 v16 h16 M328 570 v16 h-16" stroke="{acc}" stroke-width="1.4" fill="none" opacity="0.8"/>""")
+        stamp_font = "'Shippori Mincho','Noto Sans JP',serif"
+    else:
+        deco = f'<path d="M14 26 v-12 h12 M326 14 h-12 v12 M14 574 v12 h12 M326 586 h-12 v-12" stroke="{ink}" stroke-opacity="0.35" stroke-width="1.4" fill="none"/>'
+        stamp_font = "'Noto Sans JP',sans-serif"
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 600" role="img" aria-label="{label} 正面(仮デザイン)">
+<defs><radialGradient id="pgf{u}" cx="0.5" cy="0.35" r="0.85">
+<stop offset="0" stop-color="{acc}" stop-opacity="0.13"/><stop offset="1" stop-color="{acc}" stop-opacity="0"/>
+</radialGradient></defs>
+<rect width="340" height="600" fill="url(#pgf{u})"/>
+{deco}
+<rect x="43" y="30" width="254" height="540" rx="47" fill="none" stroke="{acc}" stroke-width="2" stroke-dasharray="10 7" opacity="0.9"/>
+<rect x="54" y="41" width="232" height="518" rx="37" fill="none" stroke="{ink}" stroke-opacity="0.3" stroke-width="1.3" stroke-dasharray="6 5"/>
+<path d="M170 41 v518 M54 300 h232" stroke="{ink}" stroke-opacity="0.1" stroke-width="1"/>
+<circle cx="170" cy="64" r="6" fill="none" stroke="{acc}" stroke-width="1.4" stroke-dasharray="3 3"/>
+<text x="170" y="86" font-family="monospace" font-size="7" fill="{ink}" opacity="0.5" text-anchor="middle" letter-spacing="1.5">CAMERA — 位置検討中</text>
+<rect x="98" y="200" width="144" height="60" rx="8" fill="none" stroke="{acc}" stroke-opacity="0.7" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="170" y="234" font-family="monospace" font-size="10" fill="{acc}" text-anchor="middle" letter-spacing="3">DISPLAY</text>
+<text x="170" y="250" font-family="monospace" font-size="7.5" fill="{ink}" opacity="0.55" text-anchor="middle" letter-spacing="2">パネル調整中 — 6.9インチ(設計値)</text>
+<path d="M98 340 H242 M98 372 H242 M98 404 H210" stroke="{ink}" stroke-opacity="0.16" stroke-width="8" stroke-linecap="round"/>
+<text x="170" y="452" font-family="{stamp_font}" font-size="15" font-weight="800" fill="{ink}" opacity="0.85" text-anchor="middle" letter-spacing="2.5">{label}</text>
+{f'<text x="170" y="472" font-family="monospace" font-size="9" fill="{ink}" opacity="0.45" text-anchor="middle" letter-spacing="4">{kana}</text>' if kana else ''}
+<rect x="84" y="496" width="172" height="40" rx="6" fill="none" stroke="{acc}" stroke-width="2.2" opacity="0.95"/>
+<text x="170" y="514" font-family="monospace" font-size="14" font-weight="800" fill="{acc}" text-anchor="middle" letter-spacing="4">PROTOTYPE</text>
+<text x="170" y="529" font-family="'Noto Sans JP',sans-serif" font-size="8" fill="{acc}" text-anchor="middle" letter-spacing="1.5">正面 仮デザイン — 量産版と異なります</text>
+<rect x="125" y="546" width="90" height="4" rx="2" fill="{ink}" opacity="0.3"/>
+</svg>"""
+
+
 def _acc_defs(u, base, acc):
     """第2弾アクセサリ共通の材質定義(金属・ガラス・グロー・影)。"""
     return f"""<defs>

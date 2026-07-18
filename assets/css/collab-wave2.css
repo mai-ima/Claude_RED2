@@ -555,3 +555,11 @@
 @media (max-width: 760px) {
   .zz-accs, .sr-accs { grid-template-columns: 1fr; }
 }
+
+/* ==== H-5: LP内の正面ビュー(TVモード / 車窓AOD) ==== */
+.zz-front { max-width: 280px; margin: 30px auto 34px; }
+.zz-front img { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 34px rgba(212, 250, 76, 0.2)); }
+.zz-front .zz-note { margin-top: 12px; }
+.sr-front { max-width: 280px; margin: 30px auto 34px; }
+.sr-front img { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 34px rgba(216, 180, 92, 0.25)); }
+.sr-front .sr-note { margin-top: 12px; }
