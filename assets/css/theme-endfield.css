@@ -628,3 +628,93 @@
 [data-theme="endfield"] .drawer__group a:hover,
 [data-theme="endfield"] .drawer__direct a:hover { color: var(--ef-yellow); }
 [data-theme="endfield"] .drawer__summary { border-radius: 2px; }
+
+/* ==========================================================================
+   H-9-6g — ゲーム内メニューUIの再調査(資料1-8+動画メニュー場面)反映
+   タブバー(ピル)/ 黄チェックリスト /「//」パンくず / 検索バー / 行リスト等
+   ========================================================================== */
+
+/* ---- チェックリスト: 丸バッジ → 黄の角チェックマーカー(✓) ------------- */
+[data-theme="endfield"] .check-list li::before {
+  border-radius: 2px;
+  background: linear-gradient(135deg, rgba(244, 223, 0, 0.22), rgba(255, 122, 28, 0.08));
+  border: 1px solid rgba(244, 223, 0, 0.55);
+}
+/* ✓ を重ねる */
+[data-theme="endfield"] .check-list li::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 8px;
+  height: 5px;
+  border-left: 2px solid var(--ef-yellow);
+  border-bottom: 2px solid var(--ef-yellow);
+  transform: rotate(-45deg);
+}
+
+/* ---- パンくず:「//」前置 + 区切りを黄に ------------------------------- */
+[data-theme="endfield"] .breadcrumb { position: relative; }
+[data-theme="endfield"] .breadcrumb ol::before,
+[data-theme="endfield"] .breadcrumb > span:first-child::before {
+  content: "// ";
+  color: var(--ef-yellow);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+/* ---- ローカルナビ: ピルタブ(現在地=黄ベタ+黒文字)-------------------- */
+[data-theme="endfield"] .localnav__links a {
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
+[data-theme="endfield"] .localnav__links a:hover {
+  background: rgba(244, 223, 0, 0.1);
+  border-color: rgba(244, 223, 0, 0.4);
+  color: var(--text-strong);
+}
+[data-theme="endfield"] .localnav__links a[aria-current] {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+}
+
+/* ---- 検索バー: ダーク地 + 角 + 黄フォーカス + アイコン黄 -------------- */
+[data-theme="endfield"] .searchbar .input { border-radius: 3px; }
+[data-theme="endfield"] .searchbar svg { color: var(--ef-yellow); }
+
+/* ---- 行リスト(ストレージ/注文追跡/活動ログ): 左に黄チック --------- */
+[data-theme="endfield"] .storage-list__row,
+[data-theme="endfield"] .cart-line,
+[data-theme="endfield"] .activity-log__row { position: relative; }
+[data-theme="endfield"] .storage-list__row:hover,
+[data-theme="endfield"] .activity-log__row:hover {
+  background: rgba(244, 223, 0, 0.05);
+}
+
+/* ---- ページ内ヒーロー(hero--sub / hero--page)の eyebrow を黄アンダーバー付きに
+   既に .eyebrow は「//」前置。ここでは hero 見出しの下に細い黄バーを足す --- */
+[data-theme="endfield"] .hero--sub .hero__inner .eyebrow,
+[data-theme="endfield"] .hero--page .hero__inner .eyebrow { position: relative; }
+
+/* ---- 数量ステッパ / スイッチ / セレクトを角基調に --------------------- */
+[data-theme="endfield"] .qty,
+[data-theme="endfield"] .select,
+[data-theme="endfield"] .select--mini,
+[data-theme="endfield"] .switch__track { border-radius: 3px; }
+[data-theme="endfield"] .switch input:checked + .switch__track {
+  background: var(--ef-yellow);
+}
+
+/* ---- gen-rail の年ラベル(タイムライン)を黄角バッジに ---------------- */
+[data-theme="endfield"] .gen-rail__year {
+  color: var(--ef-yellow);
+  border-left: 3px solid var(--ef-yellow);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ---- 比較プリセットのチップを角+黄ホバー ----------------------------- */
+[data-theme="endfield"] .cmp-preset { border-radius: 2px; }
+[data-theme="endfield"] .cmp-preset:hover {
+  border-color: var(--ef-yellow);
+  color: var(--ef-yellow);
+}
