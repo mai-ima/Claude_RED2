@@ -336,3 +336,280 @@
       background-color var(--dur-fast);
   }
 }
+
+/* ==========================================================================
+   H-9-6d — 前線モードで「全パーツ」をオリジナル意匠へ刷新
+   (製品SVG等の画像は除く。表・グラフ・FAQ・サイドバー・統計・フッター・
+    パンくず・ステップ・バッジ・チップ・タブなど、共有コンポーネント全般)
+   すべて [data-theme="endfield"] スコープ。角を立て、黄アクセント+HUD装飾へ。
+   ========================================================================== */
+
+/* ---- 表(スペック表・比較表・クイック表)------------------------------- */
+[data-theme="endfield"] .spec-table,
+[data-theme="endfield"] .quick-table,
+[data-theme="endfield"] .compare-table {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+[data-theme="endfield"] .spec-table th[scope="row"],
+[data-theme="endfield"] .quick-table th {
+  background: rgba(244, 223, 0, 0.05);
+}
+/* 見出し行・見出しセルは黄の下線で締める */
+[data-theme="endfield"] .spec-table thead th,
+[data-theme="endfield"] .quick-table thead th,
+[data-theme="endfield"] .compare-table thead th,
+[data-theme="endfield"] .cmp-metric__head,
+[data-theme="endfield"] .spec-group-title {
+  border-bottom: 2px solid var(--ef-yellow);
+  color: var(--text-strong);
+}
+[data-theme="endfield"] .spec-table tbody tr:hover,
+[data-theme="endfield"] .quick-table tbody tr:hover {
+  background: rgba(244, 223, 0, 0.06);
+}
+[data-theme="endfield"] .spec-group-title::before { background: var(--ef-yellow); border-radius: 0; }
+/* 比較の最良セル・王冠は黄で */
+[data-theme="endfield"] td.cmp-best {
+  background: rgba(244, 223, 0, 0.12);
+  box-shadow: inset 3px 0 0 var(--ef-yellow);
+}
+[data-theme="endfield"] .cmp-crown { color: var(--ef-yellow); }
+
+/* ---- グラフ(棒・折れ線・レーダー・ドーナツ・凡例)--------------------- */
+[data-theme="endfield"] .chart {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 3px;
+  position: relative;
+}
+/* チャート枠の左上に黄チック(HUDパネル風) */
+[data-theme="endfield"] .chart::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  width: 30px;
+  height: 3px;
+  background: var(--ef-yellow);
+  opacity: 0.85;
+}
+[data-theme="endfield"] .chart__title { letter-spacing: 0.02em; }
+/* 棒グラフ: トラック=ダーク、フィル=黄→橙、角を立てる */
+[data-theme="endfield"] .chart-bar__track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+[data-theme="endfield"] .chart-bar__fill {
+  background: linear-gradient(90deg, var(--ef-yellow), var(--ef-orange)) !important;
+  border-radius: 0 2px 2px 0;
+}
+[data-theme="endfield"] .chart-bar__row.is-hi .chart-bar__fill {
+  box-shadow: 0 0 14px rgba(244, 223, 0, 0.5);
+}
+[data-theme="endfield"] .chart-bar__value { color: var(--ef-yellow); }
+/* 折れ線・レーダー・ドーナツの線色を黄基調へ */
+[data-theme="endfield"] .chart-line__grid,
+[data-theme="endfield"] .chart-radar__ring { stroke: rgba(255, 255, 255, 0.12); }
+[data-theme="endfield"] .chart-radar__ax { stroke: rgba(255, 255, 255, 0.16); }
+[data-theme="endfield"] .chart-line__tick { fill: var(--ef-yellow); }
+[data-theme="endfield"] .chart-line__end { fill: var(--ef-yellow); }
+[data-theme="endfield"] .chart-donut__fill { stroke: var(--ef-yellow); }
+[data-theme="endfield"] .chart-donut__center { fill: var(--text-strong); }
+[data-theme="endfield"] .chart__legend-item i { border-radius: 1px; }
+/* 凡例の展開表(chart__data table)も黄下線見出しに */
+[data-theme="endfield"] .chart__data th {
+  background: rgba(244, 223, 0, 0.06);
+  border-bottom: 2px solid rgba(244, 223, 0, 0.6);
+}
+
+/* ---- FAQ / アコーディオン ---------------------------------------------- */
+[data-theme="endfield"] .accordion { border-top-color: rgba(255, 255, 255, 0.12); }
+[data-theme="endfield"] .accordion__item { border-bottom-color: rgba(255, 255, 255, 0.09); }
+[data-theme="endfield"] .accordion__q { position: relative; padding-left: 18px; }
+/* 質問の左に黄の縦バー(開くと伸びる) */
+[data-theme="endfield"] .accordion__q::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  width: 3px;
+  height: 14px;
+  transform: translateY(-50%);
+  background: var(--ef-yellow);
+  opacity: 0.5;
+  transition: height var(--dur-mid) var(--ease-out), opacity var(--dur-mid);
+}
+[data-theme="endfield"] .accordion__item.is-open .accordion__q::before { height: 24px; opacity: 1; }
+[data-theme="endfield"] .accordion__q:hover { color: var(--ef-yellow); }
+[data-theme="endfield"] .accordion__q::after { border-color: var(--ef-yellow); }
+[data-theme="endfield"] .accordion__item.is-open { background: linear-gradient(90deg, rgba(244, 223, 0, 0.04), transparent 40%); }
+
+/* ---- サイドバー(ドキュメント・ローカルナビ)-------------------------- */
+[data-theme="endfield"] .doc-side__title,
+[data-theme="endfield"] .footer-map__title {
+  color: var(--ef-yellow);
+  position: relative;
+}
+[data-theme="endfield"] .doc-side__title::before {
+  content: "// ";
+  color: var(--ef-yellow);
+  font-weight: 900;
+}
+[data-theme="endfield"] .doc-side a.is-current-doc,
+[data-theme="endfield"] .doc-side a[aria-current] {
+  background: rgba(244, 223, 0, 0.1);
+  box-shadow: inset 3px 0 0 var(--ef-yellow);
+  color: var(--text-strong);
+  border-radius: 2px;
+}
+[data-theme="endfield"] .localnav { border-bottom: 2px solid rgba(244, 223, 0, 0.4); }
+[data-theme="endfield"] .localnav__links a:hover,
+[data-theme="endfield"] .localnav__links a[aria-current] { color: var(--ef-yellow); }
+
+/* ---- 統計(stat)------------------------------------------------------- */
+[data-theme="endfield"] .stat { position: relative; padding-left: 14px; }
+[data-theme="endfield"] .stat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: var(--ef-hazard);
+  background-size: 100% auto;
+  opacity: 0.7;
+}
+[data-theme="endfield"] .stat__value { color: var(--ef-yellow); }
+
+/* ---- フッター ---------------------------------------------------------- */
+[data-theme="endfield"] .site-footer { position: relative; }
+[data-theme="endfield"] .site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--ef-hazard);
+  background-size: auto 100%;
+  opacity: 0.45;
+}
+
+/* ---- パンくず ---------------------------------------------------------- */
+[data-theme="endfield"] .breadcrumb [aria-current],
+[data-theme="endfield"] .breadcrumb b { color: var(--ef-yellow); }
+
+/* ---- ステップ / 注文追跡 / フルショーケースの手順 --------------------- */
+[data-theme="endfield"] .fs-step__no,
+[data-theme="endfield"] .steps li::before,
+[data-theme="endfield"] .order-track__no {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+  border-radius: 2px;
+}
+[data-theme="endfield"] .fs-step__ic { color: var(--ef-yellow); }
+
+/* ---- バッジ・チップ(NEW/限定/金)------------------------------------ */
+[data-theme="endfield"] .badge { border-radius: 2px; letter-spacing: 0.08em; }
+[data-theme="endfield"] .badge--new { background: var(--ef-yellow); color: var(--ef-ink); }
+[data-theme="endfield"] .badge--limited { border-color: var(--ef-yellow); color: var(--ef-yellow); }
+
+/* ---- 選択カード / ファインダー(角を立て黄選択)---------------------- */
+[data-theme="endfield"] .choice,
+[data-theme="endfield"] .finder__opt { border-radius: 3px; }
+[data-theme="endfield"] .choice:has(:checked),
+[data-theme="endfield"] .finder__opt.is-active {
+  border-color: var(--ef-yellow);
+  box-shadow: inset 0 0 0 1px var(--ef-yellow), 0 0 18px rgba(244, 223, 0, 0.14);
+}
+
+/* ---- 要約ボックス / 注意書き / 空状態 --------------------------------- */
+[data-theme="endfield"] .summary-box { border-radius: 3px; border-top: 2px solid var(--ef-yellow); }
+[data-theme="endfield"] .summary-box__row--total { color: var(--ef-yellow); }
+[data-theme="endfield"] .notice { border-radius: 3px; border-left: 3px solid var(--ef-yellow); }
+[data-theme="endfield"] .empty__icon { color: var(--ef-yellow); }
+
+/* ---- タブ(管理ボード等)---------------------------------------------- */
+[data-theme="endfield"] .admin-tab[aria-selected="true"],
+[data-theme="endfield"] .admin-tab.is-active {
+  color: var(--ef-ink);
+  background: var(--ef-yellow);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ---- コードブロック(工業ターミナル調)------------------------------- */
+[data-theme="endfield"] .codeblock { border-radius: 3px; border: 1px solid rgba(244, 223, 0, 0.18); }
+[data-theme="endfield"] .codeblock__bar { border-bottom: 1px solid rgba(244, 223, 0, 0.25); }
+
+/* ==========================================================================
+   H-9-6e — 通知系・ブランド表示のオリジナル意匠(前線モード)
+   ========================================================================== */
+
+/* ---- トースト(操作フィードバック)— 工業ターミナル調 -------------------- */
+[data-theme="endfield"] .toast {
+  border-radius: 3px;
+  border: 1px solid rgba(244, 223, 0, 0.35);
+  border-left: 3px solid var(--ef-yellow);
+  background: rgba(20, 20, 22, 0.96);
+  color: var(--text-strong);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(244, 223, 0, 0.12);
+}
+/* 先頭ドット → 黄の小三角マーカーに */
+[data-theme="endfield"] .toast::before {
+  width: 0;
+  height: 0;
+  border-radius: 0;
+  background: none;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid var(--ef-yellow);
+}
+
+/* ---- お知らせバー / メンテナンスバー — ハザード基調 --------------------- */
+[data-theme="endfield"] .announce-bar--promo {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+}
+[data-theme="endfield"] .announce-bar--warn {
+  background: var(--ef-hazard);
+  background-size: auto 100%;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+[data-theme="endfield"] .announce-bar--info {
+  background: linear-gradient(90deg, #0a1116, #17242d);
+  color: var(--ef-cyan);
+  border-bottom: 1px solid rgba(63, 224, 224, 0.4);
+}
+[data-theme="endfield"] .maint-bar {
+  background: repeating-linear-gradient(-45deg, #2a2205 0 12px, #141001 12px 24px);
+  color: var(--ef-yellow);
+  border-bottom: 2px solid var(--ef-yellow);
+}
+
+/* ---- ヘッダーのブランド表示(架空 SUZAKU を工業的に。実在ロゴは複製しない)-- */
+[data-theme="endfield"] .brand {
+  position: relative;
+  letter-spacing: 0.02em;
+}
+/* ロゴ左に黄の縦バー + 上に「//SYSTEM」風の極小レジ十字(装飾) */
+[data-theme="endfield"] .brand::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  width: 3px;
+  height: 22px;
+  transform: translateY(-50%);
+  background: var(--ef-yellow);
+  opacity: 0.8;
+}
+/* SUZAKU のフレーム(逆三角の火袋)を黄グローで光らせる */
+[data-theme="endfield"] .brand:hover .brand-mark__flame {
+  filter: drop-shadow(0 0 6px rgba(244, 223, 0, 0.85));
+}
+
+/* ---- ドロワー(モバイルメニュー)も黄基調に ---------------------------- */
+[data-theme="endfield"] .drawer__group a:hover,
+[data-theme="endfield"] .drawer__direct a:hover { color: var(--ef-yellow); }
+[data-theme="endfield"] .drawer__summary { border-radius: 2px; }
