@@ -5550,6 +5550,23 @@ def faq_list_html():
     return f'<div class="accordion">{items}</div>'
 
 
+def news_latest3_html():
+    """ホーム用の最新ニュース3件(ビルド時にNEWSから自動描画)。
+    ハードコードだと記事追加のたびに古くなるため、単一ソースへ寄せる(H-8-3)。"""
+    items = sorted(NEWS, key=lambda n: n["date"], reverse=True)[:3]
+    cards = []
+    for n in items:
+        ex = n["excerpt"].split("。")[0]
+        ex = (ex[:64] + "…") if len(ex) > 64 else ex + "。"
+        cards.append(
+            f'<a class="card card--hover" href="/news/{n["id"]}/">'
+            f'<p class="t-micro t-faint">{n["date"].replace("-", ".")} <span class="badge" style="margin-left:8px">{esc(n["cat"])}</span></p>'
+            f'<h3 class="t-h4">{esc(n["title"])}</h3>'
+            f'<p class="t-small t-soft">{esc(ex)}</p>'
+            f'<p class="link-arrow">読む</p></a>')
+    return "".join(cards)
+
+
 def news_list_html():
     """ニュース一覧をサーバー描画。JS有効時は年・カテゴリフィルタで再描画される。"""
     items = sorted(NEWS, key=lambda n: n["date"], reverse=True)
@@ -5570,7 +5587,8 @@ def glossary_list_html():
     for t in sorted(GLOSSARY, key=lambda x: x["reading"]):
         link = f'<div style="margin-top:10px"><a class="link-arrow" href="{esc(t["link"])}">関連ページを見る</a></div>' if t.get("link") else ""
         cards.append(
-            f'<article class="card reveal" id="term-{slug(t["term"])}">'
+            # .reveal は付けない(JS再描画後のカードと表示条件を揃える。pages.js 側の注記参照)
+            f'<article class="card" id="term-{slug(t["term"])}">'
             f'<div class="spread" style="align-items:baseline;gap:10px"><h2 class="t-h4">{esc(t["term"])} '
             f'<small class="t-faint" style="font-weight:400">{esc(t["reading"])}</small></h2>'
             f'<span class="badge">{esc(t["cat"])}</span></div>'
@@ -5595,6 +5613,8 @@ def build_fragments():
             body = body.replace("<!--FAQ_LIST-->", faq_list_html())
         if "<!--NEWS_LIST-->" in body:
             body = body.replace("<!--NEWS_LIST-->", news_list_html())
+        if "<!--NEWS_LATEST3-->" in body:
+            body = body.replace("<!--NEWS_LATEST3-->", news_latest3_html())
         if "<!--GLOSSARY_LIST-->" in body:
             body = body.replace("<!--GLOSSARY_LIST-->", glossary_list_html())
         # 図版プレースホルダ <!--ART:kind:glow--> → svg_art 生成(手書き旧図版の一掃用)

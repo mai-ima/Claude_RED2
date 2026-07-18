@@ -239,7 +239,20 @@
       { display: "元素炉", variants: ["げんそろ", "元素炉", "gensoro"] },
       { display: "共振", variants: ["きょうしん", "共振", "kyoshin"] },
       { display: "夜想", variants: ["やそう", "夜想", "yaso"] },
-      { display: "基幹", variants: ["きかんえふわん", "基幹", "kikan-f1"] }
+      { display: "基幹", variants: ["きかんえふわん", "基幹", "kikan-f1"] },
+      { display: "氷刃", variants: ["ひょうじん", "氷刃", "hyojin"] },
+      { display: "旋風", variants: ["せんぷう", "旋風", "senpu"] },
+      { display: "液焔", variants: ["えきえん", "液焔", "ekien"] },
+      { display: "水龍", variants: ["すいりゅう", "水龍", "suiryu"] },
+      { display: "神楽", variants: ["かぐら", "神楽", "kagura"] },
+      { display: "陣", variants: ["じん", "陣", "jin"] },
+      { display: "焔", variants: ["ほむら", "焔", "homura"] },
+      { display: "疾風", variants: ["はやて", "疾風", "hayate"] },
+      { display: "瞬", variants: ["しゅん", "瞬", "shun"] },
+      { display: "天眼", variants: ["てんがん", "天眼", "tengan"] },
+      { display: "燐光", variants: ["りんこう", "燐光", "rinko"] },
+      { display: "KANAME", variants: ["かなめ", "要", "kaname"] },
+      { display: "IGNITE", variants: ["いぐないと", "ignite", "イグナイト"] }
     ].map(function (g) { return { display: g.display, nvar: g.variants.map(szNorm) }; });
 
     /* 生クエリの各語について、別表記なら代表表示名へ置換した提案文字列を返す(なければ null)。 */
@@ -611,7 +624,9 @@
       glossaryList.innerHTML = list.length
         ? list.map(function (t) {
             var link = t.link ? '<a class="link-arrow" href="' + esc(t.link) + '">関連ページを見る</a>' : "";
-            return '<article class="card reveal" id="term-' + slugify(t.term) + '">' +
+            // 注意: 再描画カードに .reveal を付けない(main.js の IntersectionObserver は
+            // 読込時の要素しか監視せず、後挿入の .reveal は永久に opacity:0 のままになる)
+            return '<article class="card" id="term-' + slugify(t.term) + '">' +
               '<div class="spread" style="align-items:baseline;gap:10px"><h2 class="t-h4">' + esc(t.term) +
               ' <small class="t-faint" style="font-weight:400">' + esc(t.reading) + "</small></h2>" +
               '<span class="badge">' + esc(t.cat) + "</span></div>" +
