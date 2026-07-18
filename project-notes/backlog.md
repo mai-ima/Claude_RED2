@@ -96,3 +96,21 @@
 - 付随更新: ニュース記事を「準備中」→「前線モードを公開」に、README テーマ章に endfield 追記、
   interact のテーマテストを「planned で非存在」→「live で切替・meta・早期適用」へ書換え。
 - collab-endfield.css(LP専用 `--cl-*`)は流用せず、基礎トークンを独立実装(手順書の方針通り)。
+
+## H-9-6 追補(2026-07-18)— 前線テーマの「全パーツ専用スキン」化
+
+- ユーザー要望「色だけでなくスタイルを全て専用に。まるで全てがコラボページになるように」。
+  参考動画5本を imageio-ffmpeg で 0.1秒刻み(fps=10・計1945枚)抽出→フレーム差分で
+  遷移ピークを検出し、ボタン/カード/背景/見出し/ヘッダ等のパーツ意匠を精査。
+- 新規 `assets/css/theme-endfield.css`(手書き)を全ページに読込。ただし
+  **[data-theme="endfield"] スコープ**で、選択時のみ適用・他テーマ非影響。gen.py の
+  head に link 追加(animations.css の後)。ASSET_V は assets/css/*.py glob で自動追従。
+- 実装したパーツ: 黄フラット角切りピルボタン(clip-path+drop-shadow影+末尾黒マーカー)/
+  副ボタン=チャコール+黄左エッジ/カード=上辺黄ヘアライン+右上HUDブラケット(ホバー点灯)/
+  見出し eyebrow に「//」前置/背景=微グリッド+斜めハッチ+隅グロー(body::before は
+  z-index:-1 固定でレイアウト不干渉)/チップ・フォーム・スクロールバー・フォーカス・選択色。
+- ハマり: 当初 body::before を z-index:0 にし content を position:relative で持ち上げた際、
+  **.drawer(通常 position:fixed のモバイルメニュー)まで relative 化して通常フローに入り、
+  ヒーロー上に約1084pxの空白**が発生。→ body::before を z-index:-1 にし、持ち上げ規則を撤去して解決。
+- 検証: 標準監査(デフォルトテーマ)に加え、endfield テーマを localStorage 注入した
+  横スクロール検査(代表15ページ×375/1440px)を別途実施。

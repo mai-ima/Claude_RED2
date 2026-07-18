@@ -1,0 +1,318 @@
+/* ==========================================================================
+   前線モード(endfield)専用スキン — H-9-6
+   --------------------------------------------------------------------------
+   すべて [data-theme="endfield"] スコープ。テーマ選択時にのみ適用され、
+   他テーマ・他ページには一切影響しない(themes.css の色変数に加えて、
+   ボタン・カード・見出し・背景など「形とスタイル」まで作品意匠へ寄せる)。
+
+   意匠の出典: 『アークナイツ: エンドフィールド』ゲーム内UIの参考資料
+   (project-notes/theme-endfield-plan.md の 0-A〜0-E)。要素:
+   - 極暗チャコール地 × 鮮烈イエロー(黄の上の文字は黒)+ 橙の副光
+   - 等高線(トポ)+ 斜めハッチ + 微グリッド + 超大ゴースト英字の背景
+   - 黄フラットの角切りピルボタン(末尾マーカー付き)/ チャコールの副ボタン
+   - HUD隅ブラケット・レジストレーション十字・ハザードのカード装飾
+   - 「//」前置の工業セクション見出し・ハッチ下線
+   コラボ特設 collab-endfield.css(--cl-* / LP専用)は流用しない。
+   ========================================================================== */
+
+[data-theme="endfield"] {
+  /* スキン専用トークン(themes.css の色変数を土台に、形の素材を足す) */
+  --ef-yellow: #f4df00;
+  --ef-orange: #ff7a1c;
+  --ef-ink: #141414;
+  --ef-hazard: repeating-linear-gradient(-45deg, #f4df00 0 9px, #141414 9px 18px);
+  --ef-hatch: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 6px);
+  --ef-notch: polygon(0 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%);
+  --ef-notch-tl: polygon(9px 0, 100% 0, 100% 100%, 0 100%, 0 9px);
+}
+
+/* --------------------------------------------------------------------------
+   背景 — 等高線 + 斜めハッチ + 微グリッド + 超大ゴースト英字(固定レイヤー)
+   固定配置なので横スクロールを生まない(overflow-x:hidden は body 既定)。
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 7px);
+  background-size: 46px 46px, 46px 46px, auto;
+  background-attachment: fixed;
+}
+
+/* 画面隅に固定するトポ地紋のゴースト(装飾・操作不可)。
+   z-index:-1 で全コンテンツの背面・body背景の前面に置く(レイアウトに不干渉)。 */
+[data-theme="endfield"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(244, 223, 0, 0.05), transparent 42%),
+    radial-gradient(120% 80% at 0% 100%, rgba(255, 122, 28, 0.045), transparent 45%);
+}
+
+/* --------------------------------------------------------------------------
+   セクション見出し(eyebrow)—「//」前置 + 黄チック
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .eyebrow {
+  font-style: normal;
+  gap: 8px;
+}
+[data-theme="endfield"] .eyebrow::before {
+  content: "//";
+  width: auto;
+  height: auto;
+  background: none;
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 1.05em;
+  letter-spacing: -0.04em;
+  color: var(--ef-yellow);
+  -webkit-text-fill-color: var(--ef-yellow);
+}
+[data-theme="endfield"] .eyebrow--center::after {
+  content: "//";
+  width: auto;
+  height: auto;
+  background: none;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--ef-yellow);
+}
+
+/* 見出し(h2 等)に工業的な左チック */
+[data-theme="endfield"] .section-head .t-h2,
+[data-theme="endfield"] .section-head .t-hero {
+  position: relative;
+}
+
+/* グラデ文字は黄→橙で焼き込む(themes.css の --grad-flame と整合) */
+[data-theme="endfield"] .grad-text {
+  filter: saturate(1.05);
+}
+
+/* --------------------------------------------------------------------------
+   ボタン — 黄フラットの角切りピル / チャコールの副ボタン
+   clip-path で角を切り、影は drop-shadow(clip に追従)で出す。
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .btn {
+  border-radius: 3px;
+  letter-spacing: 0.09em;
+  font-weight: 800;
+  clip-path: var(--ef-notch);
+}
+
+/* 主ボタン: 黄ベタ + 黒文字 + 末尾の角マーカー */
+[data-theme="endfield"] .btn--primary {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+  box-shadow: none;
+  filter: drop-shadow(0 6px 16px rgba(244, 223, 0, 0.28));
+}
+[data-theme="endfield"] .btn--primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  filter: drop-shadow(0 10px 22px rgba(244, 223, 0, 0.42));
+}
+[data-theme="endfield"] .btn--primary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  background: var(--ef-ink);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  flex: 0 0 auto;
+}
+
+/* 副ボタン: チャコール + 白文字 + 黄の左エッジ */
+[data-theme="endfield"] .btn--ghost,
+[data-theme="endfield"] .btn--soft {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--ef-yellow);
+  color: var(--text-strong);
+}
+[data-theme="endfield"] .btn--ghost:hover,
+[data-theme="endfield"] .btn--soft:hover {
+  background: rgba(244, 223, 0, 0.08);
+  border-color: var(--ef-yellow);
+  border-left-color: var(--ef-yellow);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* アイコンボタン(ヘッダの検索・カート等)は角を少し立てる */
+[data-theme="endfield"] .icon-btn {
+  border-radius: 3px;
+}
+[data-theme="endfield"] .icon-btn:hover {
+  background: rgba(244, 223, 0, 0.12);
+  color: var(--ef-yellow);
+}
+
+/* --------------------------------------------------------------------------
+   カード — HUD隅ブラケット + 上辺の黄ヘアライン + ハザードのホバー
+   clip-path は使わず(バッジ等の食み出しを守るため)、擬似要素で装飾。
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .card {
+  border-radius: 3px;
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(244, 223, 0, 0.028), transparent 34%),
+    var(--surface);
+}
+/* 上辺左の細い黄アクセント(標識帯) */
+[data-theme="endfield"] .card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  width: 34px;
+  height: 3px;
+  background: var(--ef-yellow);
+  opacity: 0.85;
+  transition: width var(--dur-mid) var(--ease-out);
+}
+[data-theme="endfield"] a.card:hover::before,
+[data-theme="endfield"] .card--hover:hover::before {
+  width: 64px;
+}
+/* 右上の HUD 隅ブラケット(ホバーで点灯) */
+[data-theme="endfield"] .card::after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 13px;
+  height: 13px;
+  border-top: 2px solid var(--ef-yellow);
+  border-right: 2px solid var(--ef-yellow);
+  opacity: 0.28;
+  transition: opacity var(--dur-mid);
+}
+[data-theme="endfield"] a.card:hover::after,
+[data-theme="endfield"] .card--hover:hover::after { opacity: 0.9; }
+[data-theme="endfield"] a.card:hover,
+[data-theme="endfield"] .card--hover:hover {
+  border-color: var(--card-hover-line);
+  box-shadow: var(--shadow-md), 0 0 26px rgba(244, 223, 0, 0.14);
+}
+/* カード内アイコンは黄基調に */
+[data-theme="endfield"] .card__icon {
+  border-radius: 3px;
+  background: linear-gradient(140deg, rgba(244, 223, 0, 0.2), rgba(255, 122, 28, 0.06));
+  border-color: rgba(244, 223, 0, 0.35);
+  color: var(--ef-yellow);
+}
+
+/* --------------------------------------------------------------------------
+   ヘッダー / ナビ — 工業的なダーク + 下辺ハザードのヘアライン
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .site-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(var(--header-bg), var(--header-bg));
+  backdrop-filter: blur(14px) saturate(1.1);
+}
+[data-theme="endfield"] .site-header.is-scrolled {
+  box-shadow: 0 1px 0 rgba(244, 223, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+/* ナビ現在地/ホバーに黄アンダーティック */
+[data-theme="endfield"] .nav-link,
+[data-theme="endfield"] .main-nav a { position: relative; }
+[data-theme="endfield"] .main-nav a:hover,
+[data-theme="endfield"] .main-nav a[aria-current],
+[data-theme="endfield"] .nav-link:hover,
+[data-theme="endfield"] .nav-link[aria-current] { color: var(--ef-yellow); }
+
+/* --------------------------------------------------------------------------
+   チップ・タグ・バッジ・ピル — 角を立て黄で縁取る
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .chip,
+[data-theme="endfield"] .tag,
+[data-theme="endfield"] .badge,
+[data-theme="endfield"] .pill {
+  border-radius: 2px;
+}
+[data-theme="endfield"] .dym-chip {
+  border-radius: 2px;
+  border: 1px solid rgba(244, 223, 0, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   リンク(本文)・フォーカス・選択・スクロールバー
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .prose a,
+[data-theme="endfield"] .link-arrow {
+  color: var(--ef-yellow);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+[data-theme="endfield"] :focus-visible {
+  outline: 2px solid var(--ef-yellow);
+  outline-offset: 2px;
+}
+[data-theme="endfield"] ::selection {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+}
+[data-theme="endfield"] * {
+  scrollbar-color: var(--ef-yellow) transparent;
+}
+[data-theme="endfield"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ef-yellow), var(--ef-orange));
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   フォーム(入力・セレクト)— ダーク地 + 黄フォーカス
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="endfield"] select,
+[data-theme="endfield"] textarea {
+  border-radius: 3px;
+}
+[data-theme="endfield"] input:focus,
+[data-theme="endfield"] select:focus,
+[data-theme="endfield"] textarea:focus {
+  border-color: var(--ef-yellow);
+  box-shadow: 0 0 0 3px rgba(244, 223, 0, 0.18);
+}
+
+/* テーマ選択セグメント(設定/ドロワー)の選択中は黄ベタ+黒文字 */
+[data-theme="endfield"] .seg-btn[aria-pressed="true"],
+[data-theme="endfield"] .theme-seg [aria-pressed="true"] {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   同意バナー / モーダル — 「すべて同意」は黄ピル、他はチャコール
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .cookie-banner,
+[data-theme="endfield"] .modal {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid var(--ef-yellow);
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   ヒーローの黄スラッシュ(斜め帯)— 中央寄せの eyebrow まわりに 1 本
+   overflow:hidden のヒーロー内のみ。装飾・操作不可。
+   -------------------------------------------------------------------------- */
+[data-theme="endfield"] .hero { position: relative; }
+[data-theme="endfield"] .hero__inner { position: relative; z-index: 1; }
+
+/* --------------------------------------------------------------------------
+   モーション: reduced-motion 尊重。ホバーの発光パルスなど。
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="endfield"] .btn--primary {
+    transition: transform var(--dur-fast) var(--ease-out),
+      filter var(--dur-mid) var(--ease-out),
+      background-color var(--dur-fast);
+  }
+}

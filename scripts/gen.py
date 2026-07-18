@@ -1064,6 +1064,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 <link rel="stylesheet" href="/assets/css/base.css?v={ASSET_V}">
 <link rel="stylesheet" href="/assets/css/components.css?v={ASSET_V}">
 <link rel="stylesheet" href="/assets/css/animations.css?v={ASSET_V}">
+<link rel="stylesheet" href="/assets/css/theme-endfield.css?v={ASSET_V}">
 {collab_head}
 </head>
 <body class="page{url.rstrip('/').replace('/', '-') or '-home'}{collab_body_class}"{collab_body_attr}>
