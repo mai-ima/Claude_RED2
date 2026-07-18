@@ -725,6 +725,7 @@ def header_html():
 <header class="site-header" id="siteHeader">
   <div class="site-header__inner">
     <a class="brand" href="/" aria-label="SUZAKU ホーム">{svg_art.BRAND_MARK}<span>SUZAKU</span></a>
+    <span class="ef-collab" aria-hidden="true"><span class="ef-collab__x">✕</span><span class="ef-collab__mk">{svg_art.EF_EMBLEM}</span><span class="ef-collab__t">前線</span></span>
     <nav class="gnav" aria-label="グローバルナビゲーション">
       <div class="gnav__item"><a class="gnav__link" href="/products/">製品</a>{mega_products()}</div>
       <div class="gnav__item"><a class="gnav__link" href="/tech/">テクノロジー</a>{mega_tech()}</div>

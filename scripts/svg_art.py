@@ -2676,6 +2676,14 @@ BRAND_MARK = """<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/20
 
 FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="#0b0b10"/><path d="M24 6 C21.4 16.5 12 21 12 30 a12 12 0 0 0 24 0 C36 21 26.6 16.5 24 6 Z" fill="none" stroke="#e8442e" stroke-width="3" stroke-linejoin="round"/><circle cx="24" cy="31.5" r="3.6" fill="#ff6a3c"/></svg>"""
 
+# 前線モード(endfield)専用の独自コラボ標識エンブレム。
+# 実在ロゴの複製ではなく、工業HUD調の角形マーク(六角コア+下向きシェブロン)を独自に作図。
+EF_EMBLEM = """<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M7 9 L12 13 L17 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 13 V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+</svg>"""
+
 ICONS = {
     "search": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
     "cart": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h13l-1.5 9h-10z"/><path d="M6 7L5 4H2.5"/><circle cx="9" cy="20" r="1.6"/><circle cx="16" cy="20" r="1.6"/></svg>',

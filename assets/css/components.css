@@ -2630,3 +2630,6 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
 }
 .card--news__ec::after { content: ""; position: absolute; inset: 0; background: radial-gradient(64% 130% at 84% 4%, color-mix(in srgb, var(--c1, #e8442e) 55%, transparent), transparent 70%); }
 .card--news__ec b { position: absolute; left: 14px; bottom: 11px; z-index: 1; font-size: .64rem; font-weight: 800; letter-spacing: .22em; color: #fff; }
+
+/* 前線モード専用の独自コラボ標識。既定は非表示、theme-endfield.css で表示・装飾する */
+.ef-collab { display: none; }
