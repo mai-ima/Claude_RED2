@@ -107,9 +107,14 @@
       opt.addEventListener("click", function () {
         var name = opt.getAttribute("data-theme-opt");
         if (THEMES.indexOf(name) === -1) return;
-        lsSet("sz_theme", name);
         applyTheme(name);
         closeMenu();
+        // 機能Cookie拒否時は適用のみ行い、端末への保存はスキップする(H-9-3)
+        if (window.szConsent && !window.szConsent.allows("functional")) {
+          window.szToast("機能Cookieが無効のため、テーマは保存されません(このページ表示中のみ有効)");
+          return;
+        }
+        lsSet("sz_theme", name);
         window.szToast("テーマ: " + (opt.getAttribute("data-theme-label") || opt.textContent.trim()));
       });
     });
@@ -153,6 +158,12 @@
   }
   function setPref(key, value) {
     if (!PREF_SCHEMA[key]) return;
+    // 機能Cookie拒否時は適用のみ(その場では効くが保存しない。H-9-3)
+    if (window.szConsent && !window.szConsent.allows("functional")) {
+      if (typeof PREF_SCHEMA[key].apply === "function") PREF_SCHEMA[key].apply(value);
+      window.szToast("機能Cookieが無効のため、この設定は保存されません");
+      return;
+    }
     var saved = lsGet("sz_prefs", {});
     saved[key] = value;
     lsSet("sz_prefs", saved);
@@ -358,26 +369,87 @@
   }
   window.addEventListener("resize", syncCookieH);
 
-  function saveConsent(analytics, marketing) {
-    lsSet(CONSENT_KEY, {
-      necessary: true,
-      analytics: !!analytics,
-      marketing: !!marketing,
-      date: new Date().toISOString(),
-      version: 2
+  /* カテゴリ定義と同意バージョンの単一ソースは data_consent.py
+     (gen.py が data/products.js の window.SZ.consent として注入する)。
+     ここでの再定義は products.js 欠落時のフォールバックのみ。 */
+  var CONSENT_CFG = (window.SZ && window.SZ.consent) || {
+    version: 3,
+    categories: [
+      { id: "necessary", label: "必須Cookie", required: true, "default": true },
+      { id: "functional", label: "機能Cookie", required: false, "default": true },
+      { id: "analytics", label: "分析Cookie", required: false, "default": false },
+      { id: "marketing", label: "マーケティングCookie", required: false, "default": false }
+    ]
+  };
+
+  /* 保存レコードの読み取り(旧v2形式 {analytics, marketing, version:2} も正規化して受ける)。
+     戻り値: {version, date, choices:{id:bool,...}} / 未保存は null */
+  function readConsent() {
+    var c = lsGet(CONSENT_KEY, null);
+    if (!c || typeof c !== "object") return null;
+    if (c.choices) return c;
+    // 旧形式: functional は存在しなかったため true 扱い(テーマ等の保存を壊さない)
+    var choices = {};
+    CONSENT_CFG.categories.forEach(function (cat) {
+      choices[cat.id] = cat.required ? true :
+        (cat.id in c) ? !!c[cat.id] :
+        (cat.id === "functional") ? true : false;
     });
+    return { version: c.version || 1, date: c.date || null, choices: choices };
+  }
+  function consentAllows(id) {
+    var c = readConsent();
+    // 未保存(バナー表示中)や旧版は、既存挙動を壊さないため許可扱い
+    if (!c || c.version !== CONSENT_CFG.version) return true;
+    return c.choices[id] !== false;
+  }
+  window.szConsent = { get: readConsent, allows: consentAllows, version: CONSENT_CFG.version };
+
+  function saveConsent(choices) {
+    var out = {};
+    CONSENT_CFG.categories.forEach(function (cat) {
+      out[cat.id] = cat.required ? true : !!choices[cat.id];
+    });
+    lsSet(CONSENT_KEY, { version: CONSENT_CFG.version, date: new Date().toISOString(), choices: out });
     if (banner) banner.classList.remove("is-visible");
     syncCookieH();
     closeModal();
     window.szToast("Cookie設定を保存しました");
     renderConsentState();
   }
+  function allChoices(value) {
+    var out = {};
+    CONSENT_CFG.categories.forEach(function (cat) { out[cat.id] = value; });
+    return out;
+  }
+  function withdrawConsent() {
+    try { localStorage.removeItem(CONSENT_KEY); } catch (e) { /* noop */ }
+    closeModal();
+    window.szToast("Cookie同意を撤回しました");
+    renderConsentState();
+    if (banner) { banner.classList.add("is-visible"); syncCookieH(); }
+  }
   function openModal() {
     if (!modal) return;
-    var c = lsGet(CONSENT_KEY, null) || {};
-    var an = $("#consentAnalytics"), mk = $("#consentMarketing");
-    if (an) an.checked = !!c.analytics;
-    if (mk) mk.checked = !!c.marketing;
+    var c = readConsent();
+    $$("[data-consent-cat]", modal).forEach(function (input) {
+      if (input.disabled) return;
+      var id = input.getAttribute("data-consent-cat");
+      if (c) { input.checked = !!c.choices[id]; return; }
+      var cat = null;
+      CONSENT_CFG.categories.forEach(function (x) { if (x.id === id) cat = x; });
+      input.checked = !!(cat && cat["default"]);
+    });
+    var savedAt = $("#consentSavedAt");
+    if (savedAt) {
+      if (c && c.date) {
+        savedAt.hidden = false;
+        savedAt.textContent = "保存日時: " + new Date(c.date).toLocaleString("ja-JP")
+          + "(同意バージョン v" + c.version + (c.version === CONSENT_CFG.version ? "・最新" : "・旧版") + ")";
+      } else {
+        savedAt.hidden = true;
+      }
+    }
     modal.classList.add("is-visible");
     modal.setAttribute("aria-hidden", "false");
   }
@@ -392,18 +464,26 @@
     // /legal/cookie/ の現在設定表示
     var box = $("#consentStateBox");
     if (!box) return;
-    var c = lsGet(CONSENT_KEY, null);
+    var c = readConsent();
     if (!c) {
       box.innerHTML = "<p>現在、Cookie設定は保存されていません(バナー表示中)。</p>";
       return;
     }
+    var parts = CONSENT_CFG.categories.map(function (cat) {
+      var st = cat.required ? "有効(常時)" : (c.choices[cat.id] ? "同意" : "拒否");
+      return "<strong>" + cat.label.replace("Cookie", "") + ":</strong> " + st;
+    });
+    var ver = "v" + c.version + (c.version === CONSENT_CFG.version
+      ? "(最新)" : "(旧版 — カテゴリ構成が変わったため再同意をお願いしています)");
     box.innerHTML =
-      "<p><strong>保存日時:</strong> " + new Date(c.date).toLocaleString("ja-JP") + "</p>" +
-      "<p><strong>必須Cookie:</strong> 有効(常時) / <strong>分析:</strong> " + (c.analytics ? "同意" : "拒否") +
-      " / <strong>マーケティング:</strong> " + (c.marketing ? "同意" : "拒否") + "</p>";
+      "<p><strong>保存日時:</strong> " + (c.date ? new Date(c.date).toLocaleString("ja-JP") : "—") +
+      " / <strong>同意バージョン:</strong> " + ver + "</p>" +
+      "<p>" + parts.join(" / ") + "</p>";
   }
 
-  if (!lsGet(CONSENT_KEY, null) && banner) {
+  /* バナー表示条件: 未保存、または保存版が現行 CONSENT_VERSION と不一致(=再同意) */
+  var savedConsent = readConsent();
+  if ((!savedConsent || savedConsent.version !== CONSENT_CFG.version) && banner) {
     setTimeout(function () { banner.classList.add("is-visible"); syncCookieH(); }, 900);
   }
   var btnA = $("#consentAcceptAll");
@@ -411,21 +491,29 @@
   var btnO = $("#consentOpenSettings");
   var btnS = $("#consentSave");
   var btnC = $("#consentModalClose");
+  var btnW = $("#consentWithdraw");
   var btnF = $("#cookieSettingsBtn");
-  if (btnA) btnA.addEventListener("click", function () { saveConsent(true, true); });
-  if (btnR) btnR.addEventListener("click", function () { saveConsent(false, false); });
+  if (btnA) btnA.addEventListener("click", function () { saveConsent(allChoices(true)); });
+  if (btnR) btnR.addEventListener("click", function () { saveConsent(allChoices(false)); });
   if (btnO) btnO.addEventListener("click", openModal);
   if (btnF) btnF.addEventListener("click", openModal);
   if (btnS) btnS.addEventListener("click", function () {
-    saveConsent($("#consentAnalytics").checked, $("#consentMarketing").checked);
+    var choices = {};
+    $$("[data-consent-cat]", modal).forEach(function (input) {
+      choices[input.getAttribute("data-consent-cat")] = input.checked;
+    });
+    saveConsent(choices);
   });
   if (btnC) btnC.addEventListener("click", closeModal);
+  if (btnW) btnW.addEventListener("click", withdrawConsent);
   if (modal) modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
   renderConsentState();
   document.addEventListener("click", function (e) {
     var t = e.target.closest("[data-open-cookie-settings]");
-    if (t) { e.preventDefault(); openModal(); }
+    if (t) { e.preventDefault(); openModal(); return; }
+    var w = e.target.closest("[data-consent-withdraw]");
+    if (w) { e.preventDefault(); withdrawConsent(); }
   });
 
   /* ---------- キャッシュの手動削除(Cookie設定ページ・Cookie設定モーダルの両方に配置) ---------- */

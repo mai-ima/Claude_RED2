@@ -95,6 +95,44 @@ const BASE = process.env.AUDIT_BASE || 'http://localhost:8930';
   ok('OS連動テーマがメニューに存在する', sysBtn !== null);
   await page.evaluate(() => localStorage.removeItem('sz_theme'));
 
+  // 7) Cookie再同意(H-9-3: 旧v2保存 → バナー再表示 → v3で保存 → 撤回)
+  // 既存テストとの干渉を避けるため独立コンテキストで実施する
+  const ctx2 = await browser.newContext();
+  // 注意: addInitScript は遷移のたびに走るため、sessionStorage で1回だけ注入する
+  await ctx2.addInitScript(() => {
+    try {
+      if (!sessionStorage.getItem('szTestSeeded')) {
+        sessionStorage.setItem('szTestSeeded', '1');
+        localStorage.setItem('sz_consent', JSON.stringify({
+          necessary: true, analytics: true, marketing: false,
+          date: '2026-06-01T00:00:00.000Z', version: 2
+        }));
+      }
+    } catch (e) {}
+  });
+  const p2 = await ctx2.newPage();
+  await p2.goto(BASE + '/', { waitUntil: 'networkidle' });
+  await p2.waitForTimeout(1300);
+  const bannerShown = await p2.$eval('#cookieBanner', el => el.classList.contains('is-visible'));
+  ok('旧v2同意で再同意バナーが表示される', bannerShown);
+  await p2.click('#consentAcceptAll');
+  await p2.waitForTimeout(300);
+  const saved = await p2.evaluate(() => JSON.parse(localStorage.getItem('sz_consent')));
+  ok('すべて同意でv3形式(4カテゴリ)が保存される',
+    saved && saved.version === 3 && saved.choices &&
+    saved.choices.functional === true && saved.choices.marketing === true, JSON.stringify(saved && saved.version));
+  const bannerGone = await p2.$eval('#cookieBanner', el => !el.classList.contains('is-visible'));
+  ok('同意後にバナーが消える', bannerGone);
+  await p2.goto(BASE + '/legal/cookie/', { waitUntil: 'networkidle' });
+  const stateTxt = (await p2.textContent('#consentStateBox')) || '';
+  ok('Cookieポリシーに保存日時と最新版表示', /保存日時/.test(stateTxt) && stateTxt.indexOf('v3(最新)') !== -1);
+  await p2.click('[data-consent-withdraw]');
+  await p2.waitForTimeout(300);
+  const withdrawn = await p2.evaluate(() => localStorage.getItem('sz_consent'));
+  const bannerBack = await p2.$eval('#cookieBanner', el => el.classList.contains('is-visible'));
+  ok('撤回で記録が消えバナーが再表示される', withdrawn === null && bannerBack);
+  await ctx2.close();
+
   console.log(results.join('\n'));
   const failed = results.filter(r => r.startsWith('FAIL'));
   await browser.close();

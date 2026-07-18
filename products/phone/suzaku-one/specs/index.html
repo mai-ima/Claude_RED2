@@ -22,11 +22,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=80455f5f4f">
-<link rel="stylesheet" href="/assets/css/themes.css?v=80455f5f4f">
-<link rel="stylesheet" href="/assets/css/base.css?v=80455f5f4f">
-<link rel="stylesheet" href="/assets/css/components.css?v=80455f5f4f">
-<link rel="stylesheet" href="/assets/css/animations.css?v=80455f5f4f">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=0a3d10fda9">
+<link rel="stylesheet" href="/assets/css/themes.css?v=0a3d10fda9">
+<link rel="stylesheet" href="/assets/css/base.css?v=0a3d10fda9">
+<link rel="stylesheet" href="/assets/css/components.css?v=0a3d10fda9">
+<link rel="stylesheet" href="/assets/css/animations.css?v=0a3d10fda9">
 
 </head>
 <body class="page-products-phone-suzaku-one-specs">
@@ -319,41 +319,30 @@
       <h2 class="t-h3" id="consentModalTitle">Cookie設定</h2>
       <p class="t-small t-soft">カテゴリごとにCookie等の利用可否を選択できます。選択内容はこの端末に保存され、<a href="/legal/cookie/" style="color:var(--accent);text-decoration:underline">Cookieポリシー</a>のページからいつでも変更できます。</p>
     </div>
-    <div>
-      <div class="consent-row">
-        <div><p class="consent-row__title">必須Cookie</p><p>カート、ログイン状態、Cookie同意の記録など、サイトの動作に不可欠なもの。無効にできません。</p></div>
-        <label class="switch"><input type="checkbox" checked disabled><span class="switch__track"></span></label>
-      </div>
-      <div class="consent-row">
-        <div><p class="consent-row__title">分析Cookie</p><p>ページの利用状況を統計的に把握し、サイト改善に役立てます(アクセス解析)。</p></div>
-        <label class="switch"><input type="checkbox" id="consentAnalytics"><span class="switch__track"></span></label>
-      </div>
-      <div class="consent-row">
-        <div><p class="consent-row__title">マーケティングCookie</p><p>興味・関心に基づく情報提供や、広告効果の測定に使用します。</p></div>
-        <label class="switch"><input type="checkbox" id="consentMarketing"><span class="switch__track"></span></label>
-      </div>
-    </div>
+    <div><div class="consent-row"><div><p class="consent-row__title">必須Cookie</p><p>カート、ログイン状態、Cookie同意の記録など、サイトの動作に不可欠なもの。無効にできません。</p></div><label class="switch"><input type="checkbox" data-consent-cat="necessary" checked disabled><span class="switch__track"></span></label></div><div class="consent-row"><div><p class="consent-row__title">機能Cookie</p><p>カラーテーマ・文字サイズなどの表示設定を、この端末に保存します。無効にすると設定は保存されません。</p></div><label class="switch"><input type="checkbox" data-consent-cat="functional" id="consentCat-functional" checked><span class="switch__track"></span></label></div><div class="consent-row"><div><p class="consent-row__title">分析Cookie</p><p>ページの利用状況を統計的に把握し、サイト改善に役立てます(アクセス解析)。</p></div><label class="switch"><input type="checkbox" data-consent-cat="analytics" id="consentCat-analytics"><span class="switch__track"></span></label></div><div class="consent-row"><div><p class="consent-row__title">マーケティングCookie</p><p>興味・関心に基づく情報提供や、広告効果の測定に使用します。</p></div><label class="switch"><input type="checkbox" data-consent-cat="marketing" id="consentCat-marketing"><span class="switch__track"></span></label></div></div>
+    <p class="t-micro t-faint" id="consentSavedAt" hidden></p>
     <div class="cluster">
       <button class="btn btn--primary" id="consentSave">選択を保存</button>
       <button class="btn btn--ghost" id="consentModalClose">閉じる</button>
+      <button class="btn btn--soft" id="consentWithdraw" type="button">同意をすべて撤回</button>
     </div>
     <p class="t-micro t-faint">表示が崩れる、更新した内容が反映されない場合は<button type="button" class="cookie-settings-link clear-cache-trigger">キャッシュを削除</button>できます。</p>
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="/assets/js/keys.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/fmt.js?v=80455f5f4f" defer></script>
-<script src="/data/products.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/main.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/charts.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/store.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/biz.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/pages.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/auth-core.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/auth-guard.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/auth-account.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/auth-admin.js?v=80455f5f4f" defer></script>
-<script src="/assets/js/auth-status.js?v=80455f5f4f" defer></script>
+<script src="/assets/js/keys.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/fmt.js?v=0a3d10fda9" defer></script>
+<script src="/data/products.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/main.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/charts.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/store.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/biz.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/pages.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/auth-core.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/auth-guard.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/auth-account.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/auth-admin.js?v=0a3d10fda9" defer></script>
+<script src="/assets/js/auth-status.js?v=0a3d10fda9" defer></script>
 
 </body>
 </html>

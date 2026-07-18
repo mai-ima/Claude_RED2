@@ -26,6 +26,7 @@ from data_tech import TECHS, OS_VERSIONS  # noqa: E402
 from data_misc import NEWS, FAQ, HISTORY, GLOSSARY  # noqa: E402
 from data_docs import DOCS  # noqa: E402
 from data_themes import THEMES, THEME_VAR_KEYS  # noqa: E402
+from data_consent import CONSENT_VERSION, CONSENT_CATEGORIES  # noqa: E402
 import svg_art  # noqa: E402
 from lib import esc, yen, num, slugify  # noqa: E402,F401
 from validate import validate_all  # noqa: E402
@@ -639,6 +640,34 @@ def mega_company():
 _LIVE_THEMES = [t for t in THEMES if t.get("status") == "live"]
 
 
+def consent_rows_html():
+    """同意モーダルのカテゴリ行(単一ソース: data_consent.py)。
+    required は checked+disabled、その他は id="consentCat-{id}" のスイッチになり
+    main.js がループで保存・復元する(カテゴリ追加時のJS改修は不要)。"""
+    rows = []
+    for c in CONSENT_CATEGORIES:
+        attr = (' checked disabled' if c["required"]
+                else f' id="consentCat-{c["id"]}"' + (" checked" if c["default"] else ""))
+        rows.append(
+            f'<div class="consent-row">'
+            f'<div><p class="consent-row__title">{esc(c["label"])}</p><p>{esc(c["desc"])}</p></div>'
+            f'<label class="switch"><input type="checkbox" data-consent-cat="{c["id"]}"{attr}><span class="switch__track"></span></label>'
+            f'</div>')
+    return "".join(rows)
+
+
+def consent_table_html():
+    """/legal/cookie/ のカテゴリ説明テーブル(<!--CONSENT_TABLE-->)。"""
+    rows = "".join(
+        f'<tr><th scope="row">{esc(c["label"])}</th>'
+        f'<td>{esc(c["legal_desc"])}</td>'
+        f'<td>{"不要(常時有効)" if c["required"] else "必要"}</td></tr>'
+        for c in CONSENT_CATEGORIES)
+    return (f'<div class="scroll-x"><table class="spec-table">'
+            f'<thead><tr><th>カテゴリ</th><th>目的</th><th>同意</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table></div>')
+
+
 def theme_menu_buttons():
     """ヘッダーのテーマドロップダウン用ボタン列。"""
     return "".join(
@@ -885,23 +914,12 @@ def footer_html():
       <h2 class="t-h3" id="consentModalTitle">Cookie設定</h2>
       <p class="t-small t-soft">カテゴリごとにCookie等の利用可否を選択できます。選択内容はこの端末に保存され、<a href="/legal/cookie/" style="color:var(--accent);text-decoration:underline">Cookieポリシー</a>のページからいつでも変更できます。</p>
     </div>
-    <div>
-      <div class="consent-row">
-        <div><p class="consent-row__title">必須Cookie</p><p>カート、ログイン状態、Cookie同意の記録など、サイトの動作に不可欠なもの。無効にできません。</p></div>
-        <label class="switch"><input type="checkbox" checked disabled><span class="switch__track"></span></label>
-      </div>
-      <div class="consent-row">
-        <div><p class="consent-row__title">分析Cookie</p><p>ページの利用状況を統計的に把握し、サイト改善に役立てます(アクセス解析)。</p></div>
-        <label class="switch"><input type="checkbox" id="consentAnalytics"><span class="switch__track"></span></label>
-      </div>
-      <div class="consent-row">
-        <div><p class="consent-row__title">マーケティングCookie</p><p>興味・関心に基づく情報提供や、広告効果の測定に使用します。</p></div>
-        <label class="switch"><input type="checkbox" id="consentMarketing"><span class="switch__track"></span></label>
-      </div>
-    </div>
+    <div>{consent_rows_html()}</div>
+    <p class="t-micro t-faint" id="consentSavedAt" hidden></p>
     <div class="cluster">
       <button class="btn btn--primary" id="consentSave">選択を保存</button>
       <button class="btn btn--ghost" id="consentModalClose">閉じる</button>
+      <button class="btn btn--soft" id="consentWithdraw" type="button">同意をすべて撤回</button>
     </div>
     <p class="t-micro t-faint">表示が崩れる、更新した内容が反映されない場合は<button type="button" class="cookie-settings-link clear-cache-trigger">キャッシュを削除</button>できます。</p>
   </div>
@@ -5490,6 +5508,13 @@ def build_client_data():
                      "qty": c["limited"]["qty"], "sold": c["limited"]["sold"]}
                     for c in COLLABS if c.get("active")],
         "pages": PAGES,
+        # Cookie同意のランタイム定義(単一ソース: data_consent.py)。main.js が参照する
+        "consent": {
+            "version": CONSENT_VERSION,
+            "categories": [{"id": c["id"], "label": c["label"],
+                            "required": c["required"], "default": c["default"]}
+                           for c in CONSENT_CATEGORIES],
+        },
         "assetV": ASSET_V,
         "tax": 0.10,
         "freeShipping": 5000,
@@ -5670,6 +5695,8 @@ def build_fragments():
             body = body.replace("<!--NEWS_LATEST3-->", news_latest3_html())
         if "<!--THEME_SEG-->" in body:
             body = body.replace("<!--THEME_SEG-->", theme_seg_buttons())
+        if "<!--CONSENT_TABLE-->" in body:
+            body = body.replace("<!--CONSENT_TABLE-->", consent_table_html())
         if "<!--GLOSSARY_LIST-->" in body:
             body = body.replace("<!--GLOSSARY_LIST-->", glossary_list_html())
         # 図版プレースホルダ <!--ART:kind:glow--> → svg_art 生成(手書き旧図版の一掃用)
