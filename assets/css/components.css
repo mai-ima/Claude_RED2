@@ -2651,3 +2651,7 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
   background: var(--accent);
   color: var(--accent-contrast);
 }
+
+/* 表の横スクロール枠(狭幅で列がはみ出す表に付ける) */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.table-wrap > table { min-width: 30rem; }
