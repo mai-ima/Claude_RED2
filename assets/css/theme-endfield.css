@@ -1112,3 +1112,68 @@
 [data-theme="endfield"] .header-actions .icon-btn[href="/store/cart/"] {
   --ef-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='miter'%3E%3Cpath d='M3 6h3l1.6 9h10.4'/%3E%3Cpath d='M6.4 8H21l-1.6 6H8'/%3E%3Cpath d='M9 8v6M14 8v6' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='19' r='1.3'/%3E%3Ccircle cx='17' cy='19' r='1.3'/%3E%3C/svg%3E");
 }
+
+/* ============================================================
+   前線モード 追補(H-9-16)— HUD的な追加演出
+   ・ロードマップの現在フェーズ(is-active)ノードを鼓動させる
+   ・サマリ/保存一覧の各行に黄ティックのHUDマーカーを付与
+   ・「現在」バッジの後ろに明滅するステータスキャレット
+   すべて reduced-motion / 設定「アニメーション低減」で無効化。
+   ============================================================ */
+
+/* 現在フェーズのノードを鼓動(注視を誘導) */
+[data-theme="endfield"] .roadmap__item.is-active::after {
+  animation: efNodePulse 1.9s ease-in-out infinite;
+}
+@keyframes efNodePulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(244,223,0,0.18), 0 0 10px rgba(244,223,0,0.35); }
+  50% { box-shadow: 0 0 0 7px rgba(244,223,0,0.06), 0 0 16px rgba(244,223,0,0.6); }
+}
+
+/* サマリ/保存一覧の各行に黄の技術ティック(HUDらしさ) */
+[data-theme="endfield"] #prefSummary .storage-list__row,
+[data-theme="endfield"] #storageInfo .storage-list__row { position: relative; padding-left: 22px; }
+[data-theme="endfield"] #prefSummary .storage-list__row::before,
+[data-theme="endfield"] #storageInfo .storage-list__row::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  transform: translateY(-50%) rotate(45deg);
+  background: var(--ef-yellow);
+  opacity: 0.7;
+}
+/* サマリの値は等幅で計器パネル風に */
+[data-theme="endfield"] #prefSummary .storage-list__row > span:last-child {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.02em;
+}
+
+/* 「現在」バッジの後ろに明滅するステータスキャレット */
+[data-theme="endfield"] .badge--new::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 5px;
+  border-radius: 1px;
+  background: var(--ef-ink);
+  vertical-align: middle;
+  animation: efBlink 1s steps(1) infinite;
+}
+@keyframes efBlink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0.15; } }
+
+/* 書き出し・読み込みのテキストエリアを計器パネル風に(角+黄フォーカスは既存) */
+[data-theme="endfield"] #prefIO {
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--ef-yellow-b);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="endfield"] .roadmap__item.is-active::after,
+  [data-theme="endfield"] .badge--new::after { animation: none; }
+}
+:root[data-motion="reduce"] [data-theme="endfield"] .roadmap__item.is-active::after,
+:root[data-motion="reduce"] [data-theme="endfield"] .badge--new::after { animation: none; }

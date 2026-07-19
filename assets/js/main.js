@@ -153,11 +153,17 @@
       apply: function (v) { htmlEl.setAttribute("data-ef-deco", v); }
     }
   };
+  /* 実効プリファレンス層。機能Cookie拒否などで localStorage に保存できない場合も、
+     「今この表示に適用されている値」をここで保持する。これにより設定ページの
+     選択ハイライト(is-active)が、保存の可否にかかわらず正しく追従する。 */
+  var runtimePrefs = {};
   function getPrefs() {
     var saved = lsGet("sz_prefs", {});
     var out = {};
     for (var k in PREF_SCHEMA) {
-      out[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : PREF_SCHEMA[k]["default"];
+      if (Object.prototype.hasOwnProperty.call(runtimePrefs, k)) out[k] = runtimePrefs[k];
+      else if (Object.prototype.hasOwnProperty.call(saved, k)) out[k] = saved[k];
+      else out[k] = PREF_SCHEMA[k]["default"];
     }
     return out;
   }
@@ -170,10 +176,12 @@
   }
   function setPref(key, value) {
     if (!PREF_SCHEMA[key]) return;
+    // 実効値は常に更新(保存の可否に関係なく、選択表示と適用を即座に反映する)
+    runtimePrefs[key] = value;
     // 機能Cookie拒否時は適用のみ(その場では効くが保存しない。H-9-3)
     if (window.szConsent && !window.szConsent.allows("functional")) {
-      if (typeof PREF_SCHEMA[key].apply === "function") PREF_SCHEMA[key].apply(value);
-      window.szToast("機能Cookieが無効のため、この設定は保存されません");
+      applyPrefs();
+      window.szToast("機能Cookieが無効のため、この設定は保存されません(この表示中のみ有効)");
       return;
     }
     var saved = lsGet("sz_prefs", {});
@@ -183,6 +191,7 @@
   }
   function resetPrefs() {
     try { localStorage.removeItem("sz_prefs"); } catch (e) { /* noop */ }
+    runtimePrefs = {};
     applyPrefs();
   }
   window.szPrefs = { get: getPrefs, set: setPref, apply: applyPrefs, reset: resetPrefs, schema: PREF_SCHEMA };
