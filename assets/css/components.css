@@ -2633,3 +2633,6 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
 
 /* 前線モード専用の独自コラボ標識。既定は非表示、theme-endfield.css で表示・装飾する */
 .ef-collab { display: none; }
+
+/* 前線モードのページ遷移スイープ。既定は非表示、theme-endfield.css で再生 */
+.ef-wipe { display: none; }

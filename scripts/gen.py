@@ -1069,6 +1069,7 @@ def render_page(url, title, desc, body, theme="dark", crumbs=None, group="その
 {collab_head}
 </head>
 <body class="page{url.rstrip('/').replace('/', '-') or '-home'}{collab_body_class}"{collab_body_attr}>
+<div class="ef-wipe" aria-hidden="true"></div>
 {jsonld_html}
 {header_html()}
 {crumb_html}

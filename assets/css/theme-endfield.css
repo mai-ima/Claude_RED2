@@ -904,3 +904,58 @@
   color: var(--ef-ink);
   border-radius: 2px;
 }
+
+/* ==========================================================================
+   H-9-6j — ページ遷移アニメーション(前線モード限定・reduced-motion 尊重)
+   ページ読込ごとに:コンテンツの立ち上がり + 黄のローディング・スイープ幕
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  /* 本文の立ち上がり(下から少し上がりつつフェードイン) */
+  [data-theme="endfield"] main {
+    animation: ef-page-in 0.5s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+  @keyframes ef-page-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ローディング・スイープ幕(黄の斜めバンドが1回横切って消える) */
+  [data-theme="endfield"] .ef-wipe {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background:
+      linear-gradient(115deg,
+        transparent 0 38%,
+        rgba(244, 223, 0, 0.0) 38%,
+        var(--ef-yellow) 43%,
+        #101013 47%,
+        #101013 53%,
+        var(--ef-yellow) 57%,
+        transparent 62% 100%);
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    animation: ef-wipe 0.72s var(--ease-out, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
+  }
+  @keyframes ef-wipe {
+    0% { background-position: 130% 0; opacity: 1; }
+    72% { opacity: 1; }
+    100% { background-position: -110% 0; opacity: 0; }
+  }
+  /* 幕の前縁に走る細い黄ライン(HUDスキャン) */
+  [data-theme="endfield"] .ef-wipe::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 0 46%, rgba(244, 223, 0, 0.9) 47% 48%, transparent 49% 100%);
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    animation: ef-wipe-line 0.72s var(--ease-out, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
+  }
+  @keyframes ef-wipe-line {
+    0% { background-position: 130% 0; opacity: 1; }
+    100% { background-position: -110% 0; opacity: 0; }
+  }
+}
