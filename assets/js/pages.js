@@ -143,7 +143,7 @@
     } else {
       document.title = ca.title + " | SUZAKU(朱雀)";
       customArticle.innerHTML =
-        '<p class="t-micro t-faint">' + ca.date.replace(/-/g, ".") + ' <span class="badge" style="margin-left:8px">' + esc(ca.cat) + "</span></p>" +
+        '<p class="t-micro t-faint">' + esc(String(ca.date || "").replace(/-/g, ".")) + ' <span class="badge" style="margin-left:8px">' + esc(ca.cat) + "</span></p>" +
         '<h1 class="t-h2" style="margin:10px 0 24px">' + esc(ca.title) + "</h1>" +
         '<div class="prose">' + ca.body.split(/\n{2,}|\n/).filter(Boolean).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") + "</div>" +
         '<p class="t-micro t-faint" style="margin-top:28px">この記事は管理ボードから作成されたデモ記事です(この端末のブラウザ内にのみ保存されています)。</p>' +
