@@ -5726,6 +5726,26 @@ def glossary_list_html():
     return "".join(cards)
 
 
+# 法的情報ページ末尾の標準注記(全法的ページで統一する専門的な一文)。
+# 砕けた「架空のデモ」表現を、実在の法務ページに倣った参考例としての注記へ統一する。
+LEGAL_STD_NOTE = (
+    "本ページは、日本法(個人情報保護法・電気通信事業法・特定商取引法・消費者契約法等)に"
+    "基づく一般的な法務文書の構成に倣って作成した参考例です。株式会社朱雀は本デモにおける"
+    "架空の事業者であり、記載の社名・所在地・連絡先・数値等は例示です。具体的な運用にあたっては、"
+    "実際の事業内容に即した内容へ調整し、必要に応じて専門家の確認を受けてください。"
+)
+
+
+def _normalize_legal(body):
+    """法的情報ページの文体を専門的・現実的に統一する。
+    - 砕けた「(架空の設定です)」等の挿入注記を除去
+    - 末尾のデモ注記(表現ゆれあり)を LEGAL_STD_NOTE に統一"""
+    body = body.replace("(架空の設定です)", "").replace("(架空の設定です)", "")
+    body = re.sub(r"※\s*本(?:文書|表記|ページ)は架空企業のデモ(?:コンテンツ|ンストレーション)?です。[^<]*",
+                  LEGAL_STD_NOTE, body)
+    return body
+
+
 def build_fragments():
     if not SRC.exists():
         return
@@ -5736,6 +5756,8 @@ def build_fragments():
             raise SystemExit(f"METAコメントがありません: {f}")
         meta = json.loads(m.group(1))
         body = text[m.end():]
+        if meta.get("group") == "法的情報":
+            body = _normalize_legal(body)
         # ビルド時プレースホルダ(データ駆動セクションのサーバー描画)
         if "<!--HISTORY_TIMELINE-->" in body:
             body = body.replace("<!--HISTORY_TIMELINE-->", history_timeline_html())
