@@ -923,6 +923,8 @@ def footer_html():
         ("販売条件", "/legal/sales/"),
         ("特定商取引法に基づく表記", "/legal/tokushoho/"),
         ("保証規定", "/legal/warranty-policy/"),
+        ("開発者向け利用規約", "/legal/developer-terms/"),
+        ("法人向けサービス利用規約", "/legal/enterprise-terms/"),
         ("情報セキュリティ基本方針", "/legal/security/"),
         ("脆弱性開示ポリシー", "/legal/vulnerability-disclosure/"),
         ("AI利用方針", "/legal/ai/"),
@@ -930,7 +932,9 @@ def footer_html():
         ("反社会的勢力への対応", "/legal/anti-social/"),
         ("アクセシビリティ", "/legal/accessibility/"),
         ("知的財産", "/legal/ip/"),
-        ("法的情報", "/legal/"),
+        ("コラボ作品の権利表示", "/legal/collab-notices/"),
+        ("試験的機能(β)", "/legal/experimental-features/"),
+        ("法的情報一覧", "/legal/"),
     ]
     legal = "".join(f'<a href="{u}">{t}</a>' for t, u in legal_links)
     return f"""
@@ -5736,13 +5740,41 @@ LEGAL_STD_NOTE = (
 )
 
 
+# 共通末尾条項(内容補充)。準拠法・管轄を自前で持たないポリシー系ページへ付与する。
+LEGAL_COMMON_CLAUSES = """
+<section class="section--sm"><div class="container container--text"><div class="prose">
+  <h2>共通事項</h2>
+  <p><strong>準拠法・裁判管轄</strong> — 本ページに関する事項は日本法に準拠します。本ページに関して当社と利用者との間に紛争が生じた場合は、当社の本店所在地を管轄する地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+  <p><strong>改定</strong> — 当社は、法令の改正や運用の変更等に応じて、本ページの内容を改定することがあります。重要な変更を行う場合は、本サイト上で相当な方法により事前に告知するよう努めます。改定後の内容は、本サイトに掲示した時点から適用されます。</p>
+  <p><strong>分離可能性</strong> — 本ページのいずれかの条項が法令により無効または執行不能と判断された場合であっても、その余の条項は引き続き完全に効力を有します。</p>
+  <p><strong>準拠言語</strong> — 本ページは日本語を正文とします。参考のために他の言語による訳文が提供される場合において、当該訳文と日本語正文との間に相違があるときは、日本語正文が優先します。</p>
+  <p><strong>お問い合わせ</strong> — 本ページに関するご照会は<a href="/support/contact/">お問い合わせ窓口</a>へ、当社の事業者情報は<a href="/legal/tokushoho/">特定商取引法に基づく表記</a>をご確認ください。</p>
+</div></div></section>
+"""
+
+
+def _strip_demo_note(m):
+    """デモ注記段落から注記文だけを除去し、先頭の本文(リンク等)は残す。"""
+    lead = (m.group(1) or "").strip()
+    return f'<p class="t-micro t-faint">{lead}</p>' if lead else ""
+
+
 def _normalize_legal(body):
-    """法的情報ページの文体を専門的・現実的に統一する。
+    """法的情報ページの文体を専門的・現実的に統一し、共通条項を補充する。
     - 砕けた「(架空の設定です)」等の挿入注記を除去
-    - 末尾のデモ注記(表現ゆれあり)を LEGAL_STD_NOTE に統一"""
+    - 旧デモ注記段落から注記文を除去(先頭の本文・リンクは保持)
+    - 準拠法等の共通条項を付与(既に「準拠法」を持つ規約系は重複回避)
+    - 末尾に標準注記 LEGAL_STD_NOTE を1つだけ付す"""
     body = body.replace("(架空の設定です)", "").replace("(架空の設定です)", "")
-    body = re.sub(r"※\s*本(?:文書|表記|ページ)は架空企業のデモ(?:コンテンツ|ンストレーション)?です。[^<]*",
-                  LEGAL_STD_NOTE, body)
+    body = re.sub(
+        r'<p class="t-micro t-faint">(.*?)※\s*本(?:文書|表記|ページ)は架空企業のデモ(?:コンテンツ|ンストレーション)?です。[^<]*</p>',
+        _strip_demo_note, body, flags=re.S)
+    if "準拠法" not in body:
+        body += LEGAL_COMMON_CLAUSES
+    body += (
+        '<section class="section--sm section--flush-top"><div class="container container--text">'
+        f'<p class="t-micro t-faint">{LEGAL_STD_NOTE}</p></div></section>'
+    )
     return body
 
 
