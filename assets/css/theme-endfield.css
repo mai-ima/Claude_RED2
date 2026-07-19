@@ -959,3 +959,89 @@
     100% { background-position: -110% 0; opacity: 0; }
   }
 }
+
+/* ==========================================================================
+   H-9-11 — 未対応パーツの専用仕様化(ロードマップ/設定カード/セグメント 他)
+   ========================================================================== */
+
+/* ---- β機能ロードマップ(縦タイムライン)を HUD 調に ---------------------- */
+[data-theme="endfield"] .roadmap__item::before {
+  background: repeating-linear-gradient(180deg, var(--ef-yellow) 0 4px, transparent 4px 8px);
+  opacity: 0.6;
+}
+[data-theme="endfield"] .roadmap__item::after {
+  border-radius: 1px;                 /* 丸 → 角(HUDノード) */
+  border-color: var(--line-strong);
+  background: var(--surface);
+  transform: rotate(45deg);           /* ダイヤ型ノード */
+}
+[data-theme="endfield"] .roadmap__item.is-done::after {
+  background: var(--ef-yellow);
+  border-color: var(--ef-yellow);
+}
+[data-theme="endfield"] .roadmap__item.is-active::after {
+  border-color: var(--ef-yellow);
+  box-shadow: 0 0 0 4px rgba(244, 223, 0, 0.2), 0 0 12px rgba(244, 223, 0, 0.4);
+}
+[data-theme="endfield"] .roadmap__badge {
+  font-style: normal;
+}
+[data-theme="endfield"] .roadmap__badge::before {
+  content: "// ";
+  color: var(--ef-yellow);
+  font-weight: 900;
+}
+[data-theme="endfield"] .roadmap__item.is-done .roadmap__badge,
+[data-theme="endfield"] .roadmap__item.is-active .roadmap__badge { color: var(--ef-yellow); }
+
+/* ---- 設定カード(setting-card)を .card と同じHUD意匠に -------------------- */
+[data-theme="endfield"] .setting-card {
+  position: relative;
+  border-radius: 3px;
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(244, 223, 0, 0.025), transparent 26%),
+    var(--surface);
+}
+[data-theme="endfield"] .setting-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  width: 38px;
+  height: 3px;
+  background: var(--ef-yellow);
+  opacity: 0.85;
+}
+[data-theme="endfield"] .setting-card::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 13px;
+  height: 13px;
+  border-top: 2px solid var(--ef-yellow);
+  border-right: 2px solid var(--ef-yellow);
+  opacity: 0.3;
+}
+
+/* ---- セグメント(opt-group)を角+黄フラットの選択に ---------------------- */
+[data-theme="endfield"] .opt-group {
+  border-radius: 3px;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+[data-theme="endfield"] .opt-group button { border-radius: 2px; letter-spacing: 0.04em; }
+[data-theme="endfield"] .opt-group button:hover { color: var(--ef-yellow); }
+[data-theme="endfield"] .opt-group button.is-active {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
+}
+/* テーマ選択のスウォッチは選択時に黒縁で締める(黄地に映えるよう) */
+[data-theme="endfield"] .opt-group--theme button.is-active i { border-color: var(--ef-ink); }
+
+/* ---- 設定行の区切りを工業的なハザード極細に ----------------------------- */
+[data-theme="endfield"] .setting-row { border-top-color: rgba(255, 255, 255, 0.08); }
+
+/* ---- データ保存一覧(storage-list)の枠を角に --------------------------- */
+[data-theme="endfield"] .storage-list { border-radius: 3px; border-color: rgba(255, 255, 255, 0.1); }
