@@ -535,10 +535,113 @@
         window.szPrefs.set(key, b.getAttribute("data-pref-value"));
         sync();
         renderStorageInfo();
+        renderSummary();
         window.szToast("設定を保存しました");
       });
+      group.__sync = sync;
       sync();
     });
+
+    /* 各設定を人が読める形へ変換するための対応表(現在の表示状態サマリ用) */
+    var PREF_VALUE_LABELS = {
+      footerMode: { accordion: "折りたたみ式", expanded: "常時展開" },
+      density: { compact: "コンパクト", comfortable: "標準", large: "大きめ" },
+      motion: { auto: "自動", reduce: "低減する" },
+      underline: { auto: "自動", always: "常に表示" },
+      contrast: { normal: "標準", high: "高" },
+      efDeco: { full: "標準", reduced: "控えめ" }
+    };
+    var PREF_TITLES = {
+      footerMode: "フッターの表示",
+      density: "文字とUIの大きさ",
+      motion: "アニメーション",
+      underline: "本文リンクの下線",
+      contrast: "コントラスト",
+      efDeco: "前線モードの装飾密度"
+    };
+    var THEME_TITLES = {
+      auto: "ページ既定", system: "OS連動", light: "ライト", dark: "ダーク",
+      g: "グラファイト", suzaku: "朱雀", endfield: "前線モード(β)"
+    };
+    function renderSummary() {
+      var box = $("#prefSummary", settingsPage);
+      if (!box) return;
+      var p = window.szPrefs.get();
+      var rows = [];
+      // カラーテーマ(sz_theme は szPrefs 管轄外なので別途取得)
+      var th = "auto";
+      try { th = JSON.parse(localStorage.getItem("sz_theme") || '"auto"'); } catch (e) { th = "auto"; }
+      var resolved = document.documentElement.getAttribute("data-theme") || "";
+      rows.push('<div class="storage-list__row"><span>カラーテーマ</span><span class="t-small">' +
+        esc(THEME_TITLES[th] || th) + (resolved && resolved !== th ? ' <span class="t-micro t-faint">(表示: ' + esc(resolved) + ')</span>' : "") + "</span></div>");
+      Object.keys(PREF_TITLES).forEach(function (k) {
+        if (!(k in p)) return;
+        var lbl = (PREF_VALUE_LABELS[k] && PREF_VALUE_LABELS[k][p[k]]) || p[k];
+        rows.push('<div class="storage-list__row"><span>' + esc(PREF_TITLES[k]) +
+          '</span><span class="t-small">' + esc(lbl) + "</span></div>");
+      });
+      box.innerHTML = rows.join("");
+    }
+    renderSummary();
+
+    /* 設定の書き出し・読み込み(JSON)。書き出すのは表示設定(sz_prefs)＋テーマのみ。 */
+    var ioField = $("#prefIO", settingsPage);
+    function currentExport() {
+      var th = "auto";
+      try { th = JSON.parse(localStorage.getItem("sz_theme") || '"auto"'); } catch (e) { th = "auto"; }
+      return JSON.stringify({ v: 1, prefs: window.szPrefs.get(), theme: th });
+    }
+    var exportBtn = $("#prefExport", settingsPage);
+    if (exportBtn && ioField) {
+      exportBtn.addEventListener("click", function () {
+        ioField.value = currentExport();
+        window.szToast("現在の設定を書き出しました");
+      });
+    }
+    var copyBtn = $("#prefCopy", settingsPage);
+    if (copyBtn && ioField) {
+      copyBtn.addEventListener("click", function () {
+        if (!ioField.value) ioField.value = currentExport();
+        var done = function () { window.szToast("クリップボードにコピーしました"); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(ioField.value).then(done, function () {
+            ioField.select(); done();
+          });
+        } else {
+          ioField.select();
+          try { document.execCommand("copy"); } catch (e) { /* noop */ }
+          done();
+        }
+      });
+    }
+    var importBtn = $("#prefImport", settingsPage);
+    if (importBtn && ioField) {
+      importBtn.addEventListener("click", function () {
+        var data;
+        try { data = JSON.parse(ioField.value); } catch (e) { data = null; }
+        if (!data || typeof data !== "object") { window.szToast("設定データの形式が正しくありません"); return; }
+        var schema = window.szPrefs.schema || {};
+        var applied = 0;
+        if (data.prefs && typeof data.prefs === "object") {
+          Object.keys(data.prefs).forEach(function (k) {
+            if (schema[k]) { window.szPrefs.set(k, data.prefs[k]); applied++; }
+          });
+        }
+        // テーマは data-theme-opt ボタンが存在する既知IDのみ許可し、
+        // 既存のテーマ選択処理(適用・保存・同意配慮)を再利用してクリックで反映する
+        if (typeof data.theme === "string") {
+          var themeBtn = $$("[data-theme-opt]").filter(function (b) {
+            return b.getAttribute("data-theme-opt") === data.theme;
+          })[0];
+          if (themeBtn) { themeBtn.click(); applied++; }
+        }
+        // UIの選択状態を再同期
+        $$("[data-pref]", settingsPage).forEach(function (g) { if (g.__sync) g.__sync(); });
+        renderStorageInfo();
+        renderSummary();
+        window.szToast(applied ? "設定を読み込みました(" + applied + "項目)" : "反映できる設定がありませんでした");
+      });
+    }
 
     /* 保存データ一覧(localStorage 使用状況) */
     var STORAGE_LABELS = {

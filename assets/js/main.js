@@ -139,6 +139,18 @@
     density: {
       "default": "comfortable",
       apply: function (v) { htmlEl.setAttribute("data-density", v); }
+    },
+    underline: {
+      "default": "auto",
+      apply: function (v) { htmlEl.setAttribute("data-underline", v); }
+    },
+    contrast: {
+      "default": "normal",
+      apply: function (v) { htmlEl.setAttribute("data-contrast", v); }
+    },
+    efDeco: {
+      "default": "full",
+      apply: function (v) { htmlEl.setAttribute("data-ef-deco", v); }
     }
   };
   function getPrefs() {

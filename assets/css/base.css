@@ -391,3 +391,26 @@ h1, h2, h3, h4, h5 {
   .pc-only { display: none; }
   .sp-only { display: initial; }
 }
+
+/* ============================================================
+   ユーザー表示設定(設定ページ / <html data-*> で切替)
+   - data-underline="always" … 本文リンクを常に下線表示(可読性・a11y)
+   - data-contrast="high"     … 補助テキスト・境界線のコントラストを強調
+   これらは端末のブラウザにのみ保存される表示設定(sz_prefs)。
+   ============================================================ */
+:root[data-underline="always"] .prose a,
+:root[data-underline="always"] p a:not(.btn):not(.link-arrow),
+:root[data-underline="always"] li a:not(.btn):not(.link-arrow) {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+:root[data-contrast="high"] {
+  --text-soft: var(--text-strong);
+  --text-faint: var(--text);
+  --line: var(--line-strong);
+}
+:root[data-contrast="high"] .t-soft,
+:root[data-contrast="high"] .t-faint { color: var(--text); }
+:root[data-contrast="high"] .btn--ghost,
+:root[data-contrast="high"] .btn--soft { border-width: 2px; }

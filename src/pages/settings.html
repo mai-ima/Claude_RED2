@@ -46,6 +46,17 @@
         <div class="opt-group opt-group--theme" role="group" aria-label="カラーテーマ"><!--THEME_SEG--></div>
         <p class="t-micro t-faint" style="margin-top:10px"><b style="color:var(--accent)">β</b> の付いたテーマ(前線モード)は<b>試験的機能(ベータ版)</b>です。予告なく仕様変更・提供終了(削除)となる場合があり、一部ページで表示が崩れることがあります。通常のご利用にはダーク/ライト等の標準テーマを推奨します。方針は<a href="/legal/experimental-features/">試験的機能(ベータ版)に関する方針</a>をご覧ください。</p>
       </div>
+
+      <div class="setting-row">
+        <div class="setting-row__label">
+          <p class="setting-row__title">前線モードの装飾密度 <span class="theme-beta" aria-label="ベータ版">β</span></p>
+          <p class="t-micro t-faint">試験テーマ「前線モード」の背景ゴースト文字・画面枠・エッジ装飾の量を選べます。「控えめ」は視認性とパフォーマンスを優先します。他のテーマでは効果はありません。</p>
+        </div>
+        <div class="opt-group" data-pref="efDeco" role="group" aria-label="前線モードの装飾密度">
+          <button type="button" data-pref-value="full">標準</button>
+          <button type="button" data-pref-value="reduced">控えめ</button>
+        </div>
+      </div>
     </div>
 
     <div class="setting-card" id="frontlineRoadmap">
@@ -97,6 +108,28 @@
           <button type="button" data-pref-value="reduce">低減する</button>
         </div>
       </div>
+
+      <div class="setting-row">
+        <div class="setting-row__label">
+          <p class="setting-row__title">本文リンクの下線</p>
+          <p class="t-micro t-faint">記事や説明文の中のリンクに、常に下線を表示します。リンクを見分けやすくなります。</p>
+        </div>
+        <div class="opt-group" data-pref="underline" role="group" aria-label="本文リンクの下線">
+          <button type="button" data-pref-value="auto">自動</button>
+          <button type="button" data-pref-value="always">常に表示</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-row__label">
+          <p class="setting-row__title">コントラスト</p>
+          <p class="t-micro t-faint">補助的な文字や境界線の色を濃くして、文字を読みやすくします。</p>
+        </div>
+        <div class="opt-group" data-pref="contrast" role="group" aria-label="コントラスト">
+          <button type="button" data-pref-value="normal">標準</button>
+          <button type="button" data-pref-value="high">高</button>
+        </div>
+      </div>
     </div>
 
     <div class="setting-card">
@@ -107,7 +140,28 @@
         <button class="btn btn--soft btn--sm" type="button" id="prefReset">表示設定を初期化する</button>
         <a class="btn btn--ghost btn--sm" href="/legal/cookie/">Cookie設定・キャッシュ削除</a>
       </div>
-      <p class="t-micro t-faint" style="margin-top:14px">※「表示設定を初期化する」は、このページの設定(フッター表示・文字サイズ・テーマ・アニメーション)のみを初期化します。カート・注文履歴・ログイン状態は削除されません。</p>
+      <p class="t-micro t-faint" style="margin-top:14px">※「表示設定を初期化する」は、このページの設定(フッター表示・文字サイズ・テーマ・アニメーション等)のみを初期化します。カート・注文履歴・ログイン状態は削除されません。</p>
+    </div>
+
+    <div class="setting-card">
+      <div class="section-head"><p class="eyebrow">SUMMARY</p><h2 class="t-h3">現在の表示状態</h2></div>
+      <p class="t-small t-soft">この端末で現在適用されている表示設定の一覧です。設定を変更すると即座に更新されます。</p>
+      <div id="prefSummary" class="storage-list" aria-live="polite"></div>
+    </div>
+
+    <div class="setting-card">
+      <div class="section-head"><p class="eyebrow">BACKUP</p><h2 class="t-h3">設定の書き出し・読み込み</h2></div>
+      <p class="t-small t-soft">表示設定を文字列(JSON)として書き出し、別の端末やブラウザに読み込めます。書き出される内容はこのページの表示設定のみで、個人情報は含まれません。</p>
+      <label class="field" style="margin-top:16px;display:block">
+        <span class="t-micro t-faint">設定データ(JSON)</span>
+        <textarea id="prefIO" class="input" rows="3" spellcheck="false" style="font-family:var(--font-mono,monospace);font-size:var(--fs-micro);width:100%;resize:vertical" aria-label="設定データ(JSON)"></textarea>
+      </label>
+      <div class="cluster" style="margin-top:14px">
+        <button class="btn btn--soft btn--sm" type="button" id="prefExport">現在の設定を書き出す</button>
+        <button class="btn btn--primary btn--sm" type="button" id="prefImport">この内容を読み込む</button>
+        <button class="btn btn--ghost btn--sm" type="button" id="prefCopy">クリップボードにコピー</button>
+      </div>
+      <p class="t-micro t-faint" style="margin-top:14px">※ 読み込みは、正しい形式で、既知の設定項目のみを反映します。不明な項目は無視されます。機能Cookieを無効にしている場合、読み込んだ設定はこのページ表示中のみ有効で、保存はされません。</p>
     </div>
 
   </div>

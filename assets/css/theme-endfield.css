@@ -1012,6 +1012,7 @@
   height: 3px;
   background: var(--ef-yellow);
   opacity: 0.85;
+  pointer-events: none;
 }
 [data-theme="endfield"] .setting-card::after {
   content: "";
@@ -1023,6 +1024,7 @@
   border-top: 2px solid var(--ef-yellow);
   border-right: 2px solid var(--ef-yellow);
   opacity: 0.3;
+  pointer-events: none;
 }
 
 /* ---- セグメント(opt-group)を角+黄フラットの選択に ---------------------- */
@@ -1036,7 +1038,18 @@
 [data-theme="endfield"] .opt-group button.is-active {
   background: var(--ef-yellow);
   color: var(--ef-ink);
+  animation: efOptPop var(--dur-med, 240ms) cubic-bezier(.22,1,.36,1);
 }
+/* 前線モードは選択時にHUD風のイエローグローを一瞬だけ焚く */
+@keyframes efOptPop {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(244,223,0,0.55); }
+  55% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(244,223,0,0.12); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244,223,0,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="endfield"] .opt-group button.is-active { animation: none; }
+}
+:root[data-motion="reduce"] [data-theme="endfield"] .opt-group button.is-active { animation: none; }
 /* テーマ選択のスウォッチは選択時に黒縁で締める(黄地に映えるよう) */
 [data-theme="endfield"] .opt-group--theme button.is-active i { border-color: var(--ef-ink); }
 
@@ -1045,3 +1058,57 @@
 
 /* ---- データ保存一覧(storage-list)の枠を角に --------------------------- */
 [data-theme="endfield"] .storage-list { border-radius: 3px; border-color: rgba(255, 255, 255, 0.1); }
+
+/* ============================================================
+   前線モードの装飾密度(設定: efDeco = full / reduced)
+   「控えめ」を選ぶと、背景ゴースト文字・画面外周フレーム・エッジの
+   バーコード/CMYK等の重い装飾を抑え、視認性とパフォーマンスを優先する。
+   Phase 3(安定化・アクセシビリティ強化)の装飾密度最適化に対応。
+   ============================================================ */
+[data-theme="endfield"][data-ef-deco="reduced"] body::before { opacity: 0.4; }
+[data-theme="endfield"][data-ef-deco="reduced"] body::after {
+  border-width: 1px;
+  opacity: 0.45;
+}
+[data-theme="endfield"][data-ef-deco="reduced"] .site-header::after,
+[data-theme="endfield"][data-ef-deco="reduced"] .site-footer::before { opacity: 0.35; }
+[data-theme="endfield"][data-ef-deco="reduced"] .hero__inner .t-hero::after,
+[data-theme="endfield"][data-ef-deco="reduced"] .ef-collab::after { display: none; }
+
+/* ============================================================
+   前線モード専用アイコン — ヘッダー操作アイコンを独自の角張ったHUD
+   グリフへ置換(参考資料のインダストリアルUIの意匠に基づく独自制作)。
+   既存のインラインSVGは隠し、CSSマスク(currentColor塗り)で描画する。
+   ハンバーガー(.nav-toggle)は対象外。IP制約順守=独自意匠のみ。
+   ============================================================ */
+[data-theme="endfield"] .header-actions .icon-btn:not(.nav-toggle) > svg,
+[data-theme="endfield"] #themeBtn > svg { display: none; }
+
+[data-theme="endfield"] .header-actions .icon-btn:not(.nav-toggle)::before {
+  content: "";
+  display: block;
+  width: 21px;
+  height: 21px;
+  background: currentColor;
+  -webkit-mask: var(--ef-ic, none) center / 21px 21px no-repeat;
+  mask: var(--ef-ic, none) center / 21px 21px no-repeat;
+  transition: transform var(--dur-fast);
+}
+[data-theme="endfield"] .header-actions .icon-btn:not(.nav-toggle):hover::before { transform: translateY(-1px); }
+
+/* テーマ切替 — 六角セル半充填(コントラスト/配色の暗喩) */
+[data-theme="endfield"] #themeBtn {
+  --ef-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l7 4v10l-7 4-7-4V7z' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Cpath d='M12 3l7 4v10l-7 4z' fill='%23fff'/%3E%3C/svg%3E");
+}
+/* 検索 — 角型レンズ + 照準ハンドル */
+[data-theme="endfield"] .header-actions .icon-btn[href="/search/"] {
+  --ef-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='miter'%3E%3Crect x='4' y='4' width='11' height='11'/%3E%3Cpath d='M9.5 7v5M7 9.5h5' stroke-width='1.3'/%3E%3Cpath d='M15 15l5 5'/%3E%3C/svg%3E");
+}
+/* アカウント — 菱形ヘッド + 台形ショルダー(オペレーター章) */
+[data-theme="endfield"] #accountLink {
+  --ef-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='miter'%3E%3Cpath d='M8 6.5l4-2.5 4 2.5v3l-4 2.5-4-2.5z'/%3E%3Cpath d='M4.5 20c1.2-4 4-5.5 7.5-5.5s6.3 1.5 7.5 5.5'/%3E%3C/svg%3E");
+}
+/* カート — 角型サプライケース(補給コンテナ) */
+[data-theme="endfield"] .header-actions .icon-btn[href="/store/cart/"] {
+  --ef-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='miter'%3E%3Cpath d='M3 6h3l1.6 9h10.4'/%3E%3Cpath d='M6.4 8H21l-1.6 6H8'/%3E%3Cpath d='M9 8v6M14 8v6' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='19' r='1.3'/%3E%3Ccircle cx='17' cy='19' r='1.3'/%3E%3C/svg%3E");
+}
