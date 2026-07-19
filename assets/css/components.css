@@ -2636,3 +2636,18 @@ a.collab-tabcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-l
 
 /* 前線モードのページ遷移スイープ。既定は非表示、theme-endfield.css で再生 */
 .ef-wipe { display: none; }
+
+/* テーマ選択の「β」バッジ(試験的機能の明示) */
+.theme-beta {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  vertical-align: 1px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}

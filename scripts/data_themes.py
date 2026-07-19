@@ -137,7 +137,7 @@ THEMES = [
     # 注意: コラボ特設 collab-endfield.css(特設LP専用スコープ・--cl-* 系)の流用はしない。
     #        本テーマは基礎トークン(--bg/--surface/--text/--accent…)を独立実装したもの。
     {
-        "id": "endfield", "status": "live", "kind": "concrete",
+        "id": "endfield", "status": "live", "kind": "concrete", "beta": True,
         "label": "前線モード", "short": "前線",
         "swatch": "linear-gradient(135deg,#f4df00,#ff7a1c)", "meta": "#0e0e11", "color_scheme": "dark",
         "desc": "エンドフィールド工業の設計言語。極暗チャコールに鮮烈イエローの標識色を差した配色です。",

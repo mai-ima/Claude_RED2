@@ -703,10 +703,21 @@ def consent_table_html():
             f'<tbody>{rows}</tbody></table></div>')
 
 
+def _theme_beta_tag(t):
+    """β版(試験的)テーマにだけ付ける小さな「β」バッジ。"""
+    return '<span class="theme-beta" aria-label="ベータ版">β</span>' if t.get("beta") else ""
+
+
+def _theme_beta_attr(t):
+    """β版テーマに付ける data 属性(文字列。f-string 外で組み立てる)。"""
+    return ' data-theme-beta="1"' if t.get("beta") else ""
+
+
 def theme_menu_buttons():
     """ヘッダーのテーマドロップダウン用ボタン列。"""
     return "".join(
-        f'<button type="button" data-theme-opt="{t["id"]}" role="menuitemradio"><i style="background:{t["swatch"]}"></i>{t["label"]}</button>'
+        f'<button type="button" data-theme-opt="{t["id"]}" role="menuitemradio"{_theme_beta_attr(t)}>'
+        f'<i style="background:{t["swatch"]}"></i>{t["label"]}{_theme_beta_tag(t)}</button>'
         for t in _LIVE_THEMES
     )
 
@@ -714,7 +725,8 @@ def theme_menu_buttons():
 def theme_seg_buttons():
     """ドロワー(モバイル)/設定ページのテーマセグメント用ボタン列。"""
     return "".join(
-        f'<button type="button" data-theme-opt="{t["id"]}" data-theme-label="{t["label"]}"><i style="background:{t["swatch"]}"></i>{t["short"]}</button>'
+        f'<button type="button" data-theme-opt="{t["id"]}" data-theme-label="{t["label"]}"{_theme_beta_attr(t)}>'
+        f'<i style="background:{t["swatch"]}"></i>{t["short"]}{_theme_beta_tag(t)}</button>'
         for t in _LIVE_THEMES
     )
 
