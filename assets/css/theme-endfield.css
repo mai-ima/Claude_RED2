@@ -677,6 +677,12 @@
   font-weight: 900;
   letter-spacing: -0.03em;
 }
+/* パンくずの視認性を底上げ(暗地でリンクが沈まないように) */
+[data-theme="endfield"] .breadcrumb { color: var(--text-soft); }
+[data-theme="endfield"] .breadcrumb a { color: var(--text-soft); }
+[data-theme="endfield"] .breadcrumb a:hover { color: var(--ef-yellow); }
+[data-theme="endfield"] .breadcrumb li + li::before { color: var(--ef-yellow); opacity: 0.55; }
+[data-theme="endfield"] .breadcrumb [aria-current] { color: var(--ef-yellow-b); }
 
 /* ---- ローカルナビ: ピルタブ(現在地=黄ベタ+黒文字)-------------------- */
 [data-theme="endfield"] .localnav__links a {
@@ -1242,4 +1248,57 @@
   -webkit-mask: var(--ef-lens) center / contain no-repeat;
   mask: var(--ef-lens) center / contain no-repeat;
   --ef-lens: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='miter'%3E%3Crect x='4' y='4' width='11' height='11'/%3E%3Cpath d='M9.5 7v5M7 9.5h5' stroke-width='1.3'/%3E%3Cpath d='M15 15l5 5'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   前線モード 品質向上(H-9-18)— ニュースのアイキャッチを前線意匠へ調和
+   カテゴリ色のままだと紫等が黄/黒テーマから浮くため、前線モードでは
+   イエロー基調のHUDバナー/黄ウォッシュへ寄せる。
+   ============================================================ */
+/* 一覧カードのアイキャッチ帯(ニュース一覧・ホーム最新・各所) */
+[data-theme="endfield"] .card--news__ec {
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px),
+    linear-gradient(120deg, rgba(244,223,0,0.24) 0%, rgba(255,122,28,0.08) 44%, var(--surface) 100%);
+  border-bottom: 2px solid rgba(244, 223, 0, 0.55);
+  border-radius: 3px 3px 0 0;
+}
+[data-theme="endfield"] .card--news__ec::after {
+  background:
+    radial-gradient(60% 130% at 86% 2%, rgba(244,223,0,0.4), transparent 68%),
+    /* 上辺のバーコード列(HUDらしさ) */
+    repeating-linear-gradient(90deg, var(--ef-yellow) 0 2px, transparent 2px 5px) left 14px top 12px / 74px 3px no-repeat;
+}
+[data-theme="endfield"] .card--news__ec b {
+  color: var(--ef-yellow);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+[data-theme="endfield"] .card--news__ec b::before { content: "// "; color: var(--ef-yellow); }
+
+/* 記事ページの大アイキャッチ(インラインSVG)は黄ウォッシュ+減彩でテーマへ調和 */
+[data-theme="endfield"] .news-ec {
+  position: relative;
+  border-color: rgba(244, 223, 0, 0.4);
+  border-radius: 4px;
+}
+[data-theme="endfield"] .news-ec svg { filter: saturate(0.5) brightness(0.92) contrast(1.05); }
+[data-theme="endfield"] .news-ec::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(244, 223, 0, 0.16), transparent 55%);
+  mix-blend-mode: overlay;
+}
+/* 記事アイキャッチの四隅に黄のL字ブラケット(HUD額装) */
+[data-theme="endfield"] .news-ec::before {
+  content: "";
+  position: absolute;
+  top: 8px; left: 8px;
+  width: 16px; height: 16px;
+  border-top: 2px solid var(--ef-yellow);
+  border-left: 2px solid var(--ef-yellow);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 1;
 }
