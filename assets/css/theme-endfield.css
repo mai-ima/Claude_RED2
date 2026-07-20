@@ -567,6 +567,33 @@
   border-radius: 2px 2px 0 0;
 }
 
+/* ---- フィルタタブ(ニュース年・カテゴリ / FAQ / 用語集)を角+黄フラットへ -- */
+[data-theme="endfield"] .tab {
+  border-radius: 2px;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  letter-spacing: 0.03em;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%);
+}
+[data-theme="endfield"] .tab:hover {
+  border-color: rgba(244, 223, 0, 0.5);
+  color: var(--ef-yellow);
+  background: rgba(244, 223, 0, 0.08);
+}
+[data-theme="endfield"] .tab.is-active {
+  background: var(--ef-yellow);
+  border-color: var(--ef-yellow);
+  color: var(--ef-ink);
+  box-shadow: none;
+  font-weight: 800;
+}
+/* 選択中タブの先頭に「▸」の稼働マーカー(HUDらしさ) */
+[data-theme="endfield"] .tab.is-active::before {
+  content: "▸ ";
+  font-weight: 900;
+  margin-right: 1px;
+}
+
 /* ---- コードブロック(工業ターミナル調)------------------------------- */
 [data-theme="endfield"] .codeblock { border-radius: 3px; border: 1px solid rgba(244, 223, 0, 0.18); }
 [data-theme="endfield"] .codeblock__bar { border-bottom: 1px solid rgba(244, 223, 0, 0.25); }
@@ -1301,4 +1328,81 @@
   opacity: 0.7;
   pointer-events: none;
   z-index: 1;
+}
+
+/* ============================================================
+   前線モード 未専用パーツの専用化(H-9-19)
+   メガメニュー / テーマドロップダウン / 同意行 / 検索サジェスト等、
+   これまで基本トークン任せだった共通UIを前線意匠(角+黄+//)へ。
+   ============================================================ */
+
+/* ---- メガメニュー(製品/テクノロジー/企業情報のドロップダウン)---------- */
+[data-theme="endfield"] .mega {
+  border-top: 2px solid var(--ef-yellow);
+  border-bottom: 1px solid rgba(244, 223, 0, 0.25);
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px),
+    var(--header-bg);
+}
+[data-theme="endfield"] .mega__group-title {
+  color: var(--ef-yellow);
+  position: relative;
+  padding-left: 14px;
+}
+[data-theme="endfield"] .mega__group-title::before {
+  content: "//";
+  position: absolute;
+  left: 0;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--ef-yellow);
+}
+[data-theme="endfield"] .mega__list a:hover { color: var(--ef-yellow); }
+
+/* ---- テーマ切替ドロップダウン(ヘッダー)------------------------------- */
+[data-theme="endfield"] .theme-menu__panel {
+  border-radius: 3px;
+  border: 1px solid rgba(244, 223, 0, 0.28);
+  border-top: 2px solid var(--ef-yellow);
+}
+[data-theme="endfield"] .theme-menu__title {
+  color: var(--ef-yellow);
+  letter-spacing: 0.1em;
+}
+[data-theme="endfield"] .theme-menu__panel [data-theme-opt] { border-radius: 2px; }
+[data-theme="endfield"] .theme-menu__panel [data-theme-opt][aria-checked="true"] {
+  background: rgba(244, 223, 0, 0.14);
+  color: var(--ef-yellow);
+}
+
+/* ---- Cookie同意モーダルの各カテゴリ行(consent-row)-------------------- */
+[data-theme="endfield"] .consent-row {
+  position: relative;
+  padding-left: 14px;
+}
+[data-theme="endfield"] .consent-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: var(--ef-yellow);
+  opacity: 0.7;
+}
+[data-theme="endfield"] .consent-row__title { color: var(--text-strong); }
+
+/* ---- 検索の「もしかして」サジェスト(did-you-mean / dym-chip)---------- */
+[data-theme="endfield"] .did-you-mean { color: var(--text-soft); }
+[data-theme="endfield"] .dym-chip {
+  border-radius: 2px;
+  border: 1px solid rgba(244, 223, 0, 0.4);
+  background: rgba(244, 223, 0, 0.08);
+  color: var(--ef-yellow);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
+}
+[data-theme="endfield"] .dym-chip:hover {
+  background: var(--ef-yellow);
+  color: var(--ef-ink);
 }
