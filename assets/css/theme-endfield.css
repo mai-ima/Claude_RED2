@@ -1406,3 +1406,82 @@
   background: var(--ef-yellow);
   color: var(--ef-ink);
 }
+
+/* ============================================================
+   前線モード UI精緻化(H-9-20)— 操作の手応えとフォーカス視認性
+   1) clip-path で切り欠いた要素は outline が切り取られて
+      キーボードフォーカスが「見えなくなる」ため、内側リング
+      (inset box-shadow)で必ず可視化する(WCAG 2.4.7 フォーカスの可視化)。
+   2) 押下(:active)の手応えを全操作要素へ付与。ホバーで浮き、
+      押下で沈む一貫した挙動にする。
+   3) 減光設定・reduced-motion では動きを止める。
+   ============================================================ */
+
+/* ---- (1) 切り欠き要素のフォーカスを内側リングで可視化 ------------------- */
+[data-theme="endfield"] .btn:focus-visible,
+[data-theme="endfield"] .tab:focus-visible,
+[data-theme="endfield"] .dym-chip:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 2px var(--ef-ink),
+    inset 0 0 0 4px var(--ef-yellow);
+}
+/* 黄ベタのボタンは内側リングを黒→白の順にして黄地でも視認できるように */
+[data-theme="endfield"] .btn--primary:focus-visible,
+[data-theme="endfield"] .tab.is-active:focus-visible {
+  box-shadow:
+    inset 0 0 0 2px var(--ef-ink),
+    inset 0 0 0 4px #fff;
+}
+
+/* ---- (2) 押下(:active)の手応え ---------------------------------------- */
+[data-theme="endfield"] .btn:active {
+  transform: translateY(0) scale(0.985);
+  filter: none;
+}
+[data-theme="endfield"] .btn--primary:active { background: var(--ef-yellow); }
+[data-theme="endfield"] .btn--ghost:active,
+[data-theme="endfield"] .btn--soft:active { background: rgba(244, 223, 0, 0.14); }
+[data-theme="endfield"] .icon-btn:active { transform: scale(0.9); }
+[data-theme="endfield"] .tab:active { transform: scale(0.96); }
+[data-theme="endfield"] .dym-chip:active { transform: scale(0.95); }
+[data-theme="endfield"] a.card:active,
+[data-theme="endfield"] .card--hover:active { transform: translateY(-2px) scale(0.996); }
+/* リンク矢印は押下でシェブロンが一歩踏み込む */
+[data-theme="endfield"] .link-arrow:active { gap: 6px; }
+
+/* 押下・ホバーの遷移をなめらかに(transform/filter を明示) */
+[data-theme="endfield"] .btn,
+[data-theme="endfield"] .tab,
+[data-theme="endfield"] .dym-chip,
+[data-theme="endfield"] .icon-btn {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    filter var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast),
+    border-color var(--dur-fast),
+    color var(--dur-fast),
+    box-shadow var(--dur-fast);
+}
+
+/* ---- (3) リンク矢印のホバーを黄グローで強調 ---------------------------- */
+[data-theme="endfield"] .link-arrow:hover { color: var(--ef-yellow-b); }
+[data-theme="endfield"] .link-arrow:hover::after {
+  filter: drop-shadow(0 0 5px rgba(244, 223, 0, 0.7));
+}
+
+/* 動きを止める設定では transform 系の演出を無効化(見た目の状態変化は維持) */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="endfield"] .btn:active,
+  [data-theme="endfield"] .icon-btn:active,
+  [data-theme="endfield"] .tab:active,
+  [data-theme="endfield"] .dym-chip:active,
+  [data-theme="endfield"] a.card:active,
+  [data-theme="endfield"] .card--hover:active { transform: none; }
+}
+:root[data-motion="reduce"] [data-theme="endfield"] .btn:active,
+:root[data-motion="reduce"] [data-theme="endfield"] .icon-btn:active,
+:root[data-motion="reduce"] [data-theme="endfield"] .tab:active,
+:root[data-motion="reduce"] [data-theme="endfield"] .dym-chip:active,
+:root[data-motion="reduce"] [data-theme="endfield"] a.card:active,
+:root[data-motion="reduce"] [data-theme="endfield"] .card--hover:active { transform: none; }
